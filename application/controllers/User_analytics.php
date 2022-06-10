@@ -1,0 +1,652 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class User_analytics extends CI_Controller
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->helper('base');
+    }
+
+
+    private function js_path()
+    {
+        return base_url() . 'assets/admin/scripts/';
+    }
+
+
+
+    /* ======  LAYOUT PAGE ====== */
+    function chart_all($year)
+    {
+
+        $data['items'] = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $month = sprintf("%02s", $i);
+            // $year = date('Y');
+            $result = $month . '-' . $year;
+            $query = $this->query->get_query("SELECT COUNT(t.`user_id`) AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE DATE_FORMAT(t.tgl_pembelian, '%m-%Y') = '$result' AND k.is_delete = '0' AND t.`status`='paid'")->row();
+            // print_r($query);
+            switch ($i) {
+                case '1':
+                    $bulan = 'Januari';
+                    break;
+                case '2':
+                    $bulan = 'Februari';
+                    break;
+                case '3':
+                    $bulan = 'Maret';
+                    break;
+                case '4':
+                    $bulan = 'April';
+                    break;
+                case '5':
+                    $bulan = 'Mei';
+                    break;
+                case '6':
+                    $bulan = 'Juni';
+                    break;
+                case '7':
+                    $bulan = 'Juli';
+                    break;
+                case '8':
+                    $bulan = 'Agustus';
+                    break;
+                case '9':
+                    $bulan = 'September';
+                    break;
+                case '10':
+                    $bulan = 'Oktober';
+                    break;
+                case '11':
+                    $bulan = 'November';
+                    break;
+                case '12':
+                    $bulan = 'Desember';
+                    break;
+            }
+            $total['label'] = $bulan;
+            $total['data'] = $query->total_pembeli;
+
+            array_push($data['items'], $total);
+        }
+
+        echo json_encode($data);
+    }
+    function chart_asclepedia($year)
+    {
+
+        $data['items'] = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $month = sprintf("%02s", $i);
+            // $year = date('Y');
+            $result = $month . '-' . $year;
+            $query_gmk = $this->query->get_query("SELECT COUNT(t.`user_id`) AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.kategori_kelas = 'good morning knowledge' AND DATE_FORMAT(t.tgl_pembelian, '%m-%Y') = '$result' AND k.is_delete = '0' AND t.`status`='paid'")->row();
+            $query_skill = $this->query->get_query("SELECT COUNT(t.`user_id`) AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.kategori_kelas = 'skill labs' AND DATE_FORMAT(t.tgl_pembelian, '%m-%Y') = '$result' AND k.is_delete = '0' AND t.`status`='paid'")->row();
+            // print_r($query);
+            switch ($i) {
+                case '1':
+                    $bulan = 'Januari';
+                    break;
+                case '2':
+                    $bulan = 'Februari';
+                    break;
+                case '3':
+                    $bulan = 'Maret';
+                    break;
+                case '4':
+                    $bulan = 'April';
+                    break;
+                case '5':
+                    $bulan = 'Mei';
+                    break;
+                case '6':
+                    $bulan = 'Juni';
+                    break;
+                case '7':
+                    $bulan = 'Juli';
+                    break;
+                case '8':
+                    $bulan = 'Agustus';
+                    break;
+                case '9':
+                    $bulan = 'September';
+                    break;
+                case '10':
+                    $bulan = 'Oktober';
+                    break;
+                case '11':
+                    $bulan = 'November';
+                    break;
+                case '12':
+                    $bulan = 'Desember';
+                    break;
+            }
+            $total['label'] = $bulan;
+            $total['gmk'] = $query_gmk->total_pembeli;
+            $total['skills_lab'] = $query_skill->total_pembeli;
+
+            array_push($data['items'], $total);
+        }
+
+        echo json_encode($data);
+    }
+    function chart_asclepiogo($year)
+    {
+
+        $data['items'] = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $month = sprintf("%02s", $i);
+            // $year = date('Y');
+            $result = $month . '-' . $year;
+            $query_open = $this->query->get_query("SELECT COUNT(t.`user_id`) AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.kategori_go = 'open' AND DATE_FORMAT(t.tgl_pembelian, '%m-%Y') = '$result' AND k.is_delete = '0' AND t.`status`='paid'")->row();
+            $query_expert = $this->query->get_query("SELECT COUNT(t.`user_id`) AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.kategori_go = 'expert' AND DATE_FORMAT(t.tgl_pembelian, '%m-%Y') = '$result' AND k.is_delete = '0' AND t.`status`='paid'")->row();
+            // print_r($query);
+            switch ($i) {
+                case '1':
+                    $bulan = 'Januari';
+                    break;
+                case '2':
+                    $bulan = 'Februari';
+                    break;
+                case '3':
+                    $bulan = 'Maret';
+                    break;
+                case '4':
+                    $bulan = 'April';
+                    break;
+                case '5':
+                    $bulan = 'Mei';
+                    break;
+                case '6':
+                    $bulan = 'Juni';
+                    break;
+                case '7':
+                    $bulan = 'Juli';
+                    break;
+                case '8':
+                    $bulan = 'Agustus';
+                    break;
+                case '9':
+                    $bulan = 'September';
+                    break;
+                case '10':
+                    $bulan = 'Oktober';
+                    break;
+                case '11':
+                    $bulan = 'November';
+                    break;
+                case '12':
+                    $bulan = 'Desember';
+                    break;
+            }
+            $total['label'] = $bulan;
+            $total['open'] = $query_open->total_pembeli;
+            $total['expert'] = $query_expert->total_pembeli;
+
+            array_push($data['items'], $total);
+        }
+
+        echo json_encode($data);
+    }
+
+    // kelas asclepedia
+    function chart_kelas_asclepedia_year()
+    {
+        $data['items'] = [];
+
+
+        $query = $this->query->get_data_simple('kelas', ['jenis_kelas' => 'asclepedia', 'is_delete' => '0'])->result();
+        $list = array();
+        // $month = date('m');
+        $year = date('Y');
+
+        for ($d = $year - 1; $d <= $year + 2; $d++) {
+            $list[] = $d;
+        }
+
+        foreach ($query as $q) {
+            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
+
+            $datas = [];
+            for ($d = $year - 1; $d <= $year + 2; $d++) {
+                // $tgl_beli = date('Y-m-d', $time);
+                $querys = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE_FORMAT(tgl_pembelian, '%Y') = '$d' AND t.`status` = 'paid'")->row()->total_pembeli;
+                array_push($datas, (int)$querys);
+            }
+
+            $item['label'] = $q->judul_kelas;
+            $item['data'] = $datas;
+            $item['backgroundColor'] = $color;
+            $item['borderColor'] = $color;
+            array_push($data['items'], $item);
+        }
+
+        $data['labels'] = $list;
+
+        echo json_encode($data);
+    }
+    function chart_kelas_asclepedia_month()
+    {
+        $data['items'] = [];
+
+
+        $query = $this->query->get_data_simple('kelas', ['jenis_kelas' => 'asclepedia', 'is_delete' => '0'])->result();
+        $list = array();
+        for ($d = 1; $d <= 12; $d++) {
+            switch ($d) {
+                case '1':
+                    $bulan = 'Januari';
+                    break;
+                case '2':
+                    $bulan = 'Februari';
+                    break;
+                case '3':
+                    $bulan = 'Maret';
+                    break;
+                case '4':
+                    $bulan = 'April';
+                    break;
+                case '5':
+                    $bulan = 'Mei';
+                    break;
+                case '6':
+                    $bulan = 'Juni';
+                    break;
+                case '7':
+                    $bulan = 'Juli';
+                    break;
+                case '8':
+                    $bulan = 'Agustus';
+                    break;
+                case '9':
+                    $bulan = 'September';
+                    break;
+                case '10':
+                    $bulan = 'Oktober';
+                    break;
+                case '11':
+                    $bulan = 'November';
+                    break;
+                case '12':
+                    $bulan = 'Desember';
+                    break;
+            }
+            $list[] = $bulan . ' ' . date('Y');
+            // $time = mktime(12, 0, 0, $month, $d, $year);
+            // if (date('m', $time) == $month) {
+
+            //     $list[] = format_indo(date('Y-m-d', $time));
+            // }
+        }
+
+
+        foreach ($query as $q) {
+            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
+
+            $datas = [];
+            for ($d = 1; $d <= 12; $d++) {
+                $month = sprintf("%02s", $d);
+                $year = date('Y');
+                $result = $month . '-' . $year;
+                $querys = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE_FORMAT(tgl_pembelian, '%m-%Y') = '$result' AND t.`status` = 'paid'")->row()->total_pembeli;
+                array_push($datas, $querys);
+            }
+
+            $item['label'] = $q->judul_kelas;
+            $item['data'] = $datas;
+            $item['backgroundColor'] = $color;
+            $item['borderColor'] = $color;
+            array_push($data['items'], $item);
+        }
+
+        $data['labels'] = $list;
+
+        echo json_encode($data);
+    }
+    function chart_kelas_asclepedia_week()
+    {
+        $data['items'] = [];
+
+
+        $query = $this->query->get_data_simple('kelas', ['jenis_kelas' => 'asclepedia', 'is_delete' => '0'])->result();
+        $list = array();
+        $month = date('m');
+        $year = date('Y');
+
+        for ($d = 1; $d <= 4; $d++) {
+            $list[] = 'Minggu ' . $d;
+        }
+
+        // for ($d = 1; $d <= 31; $d++) {
+
+        //     $time = mktime(12, 0, 0, $month, $d, $year);
+        //     if (date('m', $time) == $month) {
+
+        //         $list[] = format_indo(date('Y-m-d', $time));
+
+
+        //     }
+        // }
+
+        foreach ($query as $q) {
+            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
+
+            $datas = [];
+
+            $week_1 = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND (DATE(t.`tgl_pembelian`) BETWEEN '$year-$month-1' AND '$year-$month-7') AND t.`status` = 'paid'")->row()->total_pembeli;
+            $week_2 = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND (DATE(t.`tgl_pembelian`) BETWEEN '$year-$month-8' AND '$year-$month-14') AND t.`status` = 'paid'")->row()->total_pembeli;
+            $week_3 = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND (DATE(t.`tgl_pembelian`) BETWEEN '$year-$month-15' AND '$year-$month-21') AND t.`status` = 'paid'")->row()->total_pembeli;
+            $week_4 = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND (DATE(t.`tgl_pembelian`) BETWEEN '$year-$month-22' AND '$year-$month-31') AND t.`status` = 'paid'")->row()->total_pembeli;
+            // for ($d = 1; $d <= 31; $d++) {
+
+            //     $time = mktime(12, 0, 0, $month, $d, $year);
+            //     if (date('m', $time) == $month) {
+            //         $tgl_beli = date('Y-m-d', $time);
+            //         $querys = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE(t.`tgl_pembelian`) = '$tgl_beli' AND t.`status` = 'paid'")->row()->total_pembeli;
+            //         array_push($datas, $querys);
+            //     }
+            // }
+            $datas = [
+                (int)$week_1,
+                (int)$week_2,
+                (int)$week_3,
+                (int)$week_4,
+            ];
+
+            $item['label'] = $q->judul_kelas;
+            $item['data'] = $datas;
+            $item['backgroundColor'] = $color;
+            $item['borderColor'] = $color;
+            array_push($data['items'], $item);
+        }
+
+        $data['labels'] = $list;
+
+        echo json_encode($data);
+    }
+    function chart_kelas_asclepedia_day()
+    {
+        $data['items'] = [];
+
+
+        $query = $this->query->get_data_simple('kelas', ['jenis_kelas' => 'asclepedia', 'is_delete' => '0'])->result();
+        $list = array();
+        $month = date('m');
+        $year = date('Y');
+
+        for ($d = 1; $d <= 31; $d++) {
+
+            $time = mktime(12, 0, 0, $month, $d, $year);
+            if (date('m', $time) == $month) {
+
+                $list[] = format_indo(date('Y-m-d', $time));
+
+                // $get_date[] = "OR DATE(t.`tgl_pembelian`) = '" . date('Y-m-d', $time) . "'";
+                // $querys[] = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE(t.`tgl_pembelian`) = '$tgl_beli' AND t.`status` = 'paid'")->row()->total_pembeli;
+            }
+        }
+
+        foreach ($query as $q) {
+            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
+
+            $datas = [];
+            for ($d = 1; $d <= 31; $d++) {
+
+                $time = mktime(12, 0, 0, $month, $d, $year);
+                if (date('m', $time) == $month) {
+                    $tgl_beli = date('Y-m-d', $time);
+                    $querys = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE(t.`tgl_pembelian`) = '$tgl_beli' AND t.`status` = 'paid'")->row()->total_pembeli;
+                    array_push($datas, $querys);
+                }
+            }
+
+            $item['label'] = $q->judul_kelas;
+            $item['data'] = $datas;
+            $item['backgroundColor'] = $color;
+            $item['borderColor'] = $color;
+            array_push($data['items'], $item);
+        }
+
+        $data['labels'] = $list;
+
+        echo json_encode($data);
+    }
+
+    // end asclepedia
+
+    function chart_kelas_asclepiogo_year()
+    {
+        $data['items'] = [];
+
+
+        $query = $this->query->get_data_simple('kelas', ['jenis_kelas' => 'asclepio_go', 'is_delete' => '0'])->result();
+        $list = array();
+        // $month = date('m');
+        $year = date('Y');
+
+        for ($d = $year - 1; $d <= $year + 2; $d++) {
+            $list[] = $d;
+        }
+
+        foreach ($query as $q) {
+            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
+
+            $datas = [];
+            for ($d = $year - 1; $d <= $year + 2; $d++) {
+                // $tgl_beli = date('Y-m-d', $time);
+                $querys = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE_FORMAT(tgl_pembelian, '%Y') = '$d' AND t.`status` = 'paid'")->row()->total_pembeli;
+                array_push($datas, (int)$querys);
+            }
+
+            $item['label'] = $q->judul_kelas;
+            $item['data'] = $datas;
+            $item['backgroundColor'] = $color;
+            $item['borderColor'] = $color;
+            array_push($data['items'], $item);
+        }
+
+        $data['labels'] = $list;
+
+        echo json_encode($data);
+    }
+    function chart_kelas_asclepiogo_month()
+    {
+        $data['items'] = [];
+
+
+        $query = $this->query->get_data_simple('kelas', ['jenis_kelas' => 'asclepio_go', 'is_delete' => '0'])->result();
+        $list = array();
+        for ($d = 1; $d <= 12; $d++) {
+            switch ($d) {
+                case '1':
+                    $bulan = 'Januari';
+                    break;
+                case '2':
+                    $bulan = 'Februari';
+                    break;
+                case '3':
+                    $bulan = 'Maret';
+                    break;
+                case '4':
+                    $bulan = 'April';
+                    break;
+                case '5':
+                    $bulan = 'Mei';
+                    break;
+                case '6':
+                    $bulan = 'Juni';
+                    break;
+                case '7':
+                    $bulan = 'Juli';
+                    break;
+                case '8':
+                    $bulan = 'Agustus';
+                    break;
+                case '9':
+                    $bulan = 'September';
+                    break;
+                case '10':
+                    $bulan = 'Oktober';
+                    break;
+                case '11':
+                    $bulan = 'November';
+                    break;
+                case '12':
+                    $bulan = 'Desember';
+                    break;
+            }
+            $list[] = $bulan . ' ' . date('Y');
+            // $time = mktime(12, 0, 0, $month, $d, $year);
+            // if (date('m', $time) == $month) {
+
+            //     $list[] = format_indo(date('Y-m-d', $time));
+            // }
+        }
+
+
+        foreach ($query as $q) {
+            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
+
+            $datas = [];
+            for ($d = 1; $d <= 12; $d++) {
+                $month = sprintf("%02s", $d);
+                $year = date('Y');
+                $result = $month . '-' . $year;
+                $querys = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE_FORMAT(tgl_pembelian, '%m-%Y') = '$result' AND t.`status` = 'paid'")->row()->total_pembeli;
+                array_push($datas, $querys);
+            }
+
+            $item['label'] = $q->judul_kelas;
+            $item['data'] = $datas;
+            $item['backgroundColor'] = $color;
+            $item['borderColor'] = $color;
+            array_push($data['items'], $item);
+        }
+
+        $data['labels'] = $list;
+
+        echo json_encode($data);
+    }
+    function chart_kelas_asclepiogo_week()
+    {
+        $data['items'] = [];
+
+
+        $query = $this->query->get_data_simple('kelas', ['jenis_kelas' => 'asclepio_go', 'is_delete' => '0'])->result();
+        $list = array();
+        $month = date('m');
+        $year = date('Y');
+
+        for ($d = 1; $d <= 4; $d++) {
+            $list[] = 'Minggu ' . $d;
+        }
+
+        // for ($d = 1; $d <= 31; $d++) {
+
+        //     $time = mktime(12, 0, 0, $month, $d, $year);
+        //     if (date('m', $time) == $month) {
+
+        //         $list[] = format_indo(date('Y-m-d', $time));
+
+
+        //     }
+        // }
+
+        foreach ($query as $q) {
+            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
+
+            $datas = [];
+
+            $week_1 = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND (DATE(t.`tgl_pembelian`) BETWEEN '$year-$month-1' AND '$year-$month-7') AND t.`status` = 'paid'")->row()->total_pembeli;
+            $week_2 = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND (DATE(t.`tgl_pembelian`) BETWEEN '$year-$month-8' AND '$year-$month-14') AND t.`status` = 'paid'")->row()->total_pembeli;
+            $week_3 = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND (DATE(t.`tgl_pembelian`) BETWEEN '$year-$month-15' AND '$year-$month-21') AND t.`status` = 'paid'")->row()->total_pembeli;
+            $week_4 = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND (DATE(t.`tgl_pembelian`) BETWEEN '$year-$month-22' AND '$year-$month-31') AND t.`status` = 'paid'")->row()->total_pembeli;
+            // for ($d = 1; $d <= 31; $d++) {
+
+            //     $time = mktime(12, 0, 0, $month, $d, $year);
+            //     if (date('m', $time) == $month) {
+            //         $tgl_beli = date('Y-m-d', $time);
+            //         $querys = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE(t.`tgl_pembelian`) = '$tgl_beli' AND t.`status` = 'paid'")->row()->total_pembeli;
+            //         array_push($datas, $querys);
+            //     }
+            // }
+            $datas = [
+                (int)$week_1,
+                (int)$week_2,
+                (int)$week_3,
+                (int)$week_4,
+            ];
+
+            $item['label'] = $q->judul_kelas;
+            $item['data'] = $datas;
+            $item['backgroundColor'] = $color;
+            $item['borderColor'] = $color;
+            array_push($data['items'], $item);
+        }
+
+        $data['labels'] = $list;
+
+        echo json_encode($data);
+    }
+    function chart_kelas_asclepiogo_day()
+    {
+        $data['items'] = [];
+
+
+        $query = $this->query->get_data_simple('kelas', ['jenis_kelas' => 'asclepio_go', 'is_delete' => '0'])->result();
+        $list = array();
+        $month = date('m');
+        $year = date('Y');
+
+        for ($d = 1; $d <= 31; $d++) {
+
+            $time = mktime(12, 0, 0, $month, $d, $year);
+            if (date('m', $time) == $month) {
+
+                $list[] = format_indo(date('Y-m-d', $time));
+
+                // $get_date[] = "OR DATE(t.`tgl_pembelian`) = '" . date('Y-m-d', $time) . "'";
+                // $querys[] = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE(t.`tgl_pembelian`) = '$tgl_beli' AND t.`status` = 'paid'")->row()->total_pembeli;
+            }
+        }
+
+        foreach ($query as $q) {
+            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
+
+            $datas = [];
+            for ($d = 1; $d <= 31; $d++) {
+
+                $time = mktime(12, 0, 0, $month, $d, $year);
+                if (date('m', $time) == $month) {
+                    $tgl_beli = date('Y-m-d', $time);
+                    $querys = $this->query->get_query("SELECT COUNT('t.user_id') AS total_pembeli FROM transaksi t JOIN transaksi_detail d ON t.id = d.`transaksi_id` JOIN kelas k ON d.`product_id`=k.`id` WHERE d.`product_id` = $q->id AND DATE(t.`tgl_pembelian`) = '$tgl_beli' AND t.`status` = 'paid'")->row()->total_pembeli;
+                    array_push($datas, $querys);
+                }
+            }
+
+            $item['label'] = $q->judul_kelas;
+            $item['data'] = $datas;
+            $item['backgroundColor'] = $color;
+            $item['borderColor'] = $color;
+            array_push($data['items'], $item);
+        }
+
+        $data['labels'] = $list;
+
+        echo json_encode($data);
+    }
+}

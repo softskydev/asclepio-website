@@ -1,0 +1,3 @@
+INSERT INTO `item_menu` (`menu_id`, `menu_name`, `menu_url`, `icon`, `type`, `parent_id`) VALUES (NULL, 'Hutang', 'Hutang', '', 'child', '4'), (NULL, 'Piutang', 'Piutang', '', 'child', '4');
+INSERT INTO `user_akses` (`akses_id`, `role_id`, `do_read`, `do_create`, `do_update`, `do_delete`, `menu_id`) VALUES (NULL, '1', '1', '1', '1', '1', '18'), (NULL, '1', '1', '1', '1', '1', '19');
+UPDATE `user_akses` SET `menu_id` = '20' WHERE `user_akses`.`akses_id` = 230; UPDATE `user_akses` SET `menu_id` = '21' WHERE `user_akses`.`akses_id` = 229;	
