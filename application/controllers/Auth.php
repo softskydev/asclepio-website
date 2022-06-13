@@ -104,9 +104,9 @@ class Auth extends CI_Controller
 		$mail->SMTPSecure  = "tls"; // sets the prefix to the servier
 		$mail->Host        = "smtp.gmail.com"; // sets GMAIL as the SMTP server
 		$mail->Port        = 587; // set the SMTP port for the GMAIL server
-		$mail->Username    = 'asclepio.website@gmail.com'; // GMAIL username
+		$mail->Username    = ACCESS_EMAIL; // GMAIL username
 		// $mail->Password = 'websiteasclepiofamos'; // GMAIL password
-		$mail->Password    = 'ppnpapehyljmikvz'; // GMAIL App password
+		$mail->Password    = ACCESS_EMAIL_PASSWORD; // GMAIL App password
 		$mail->AddAddress($email);
 		$mail->SetFrom('asclepio.website@gmail.com', 'Asclepio');
 		$mail->Subject     = 'Verify Your Asclepio Account';
@@ -150,9 +150,9 @@ class Auth extends CI_Controller
 		$mail->SMTPSecure  = "tls"; // sets the prefix to the servier
 		$mail->Host        = "smtp.gmail.com"; // sets GMAIL as the SMTP server
 		$mail->Port        = 587; // set the SMTP port for the GMAIL server
-		$mail->Username    = 'asclepio.website@gmail.com'; // GMAIL username
+		$mail->Username    = ACCESS_EMAIL; // GMAIL username
 		// $mail->Password    = 'websiteasclepiofamos'; // GMAIL password
-		$mail->Password    = 'ppnpapehyljmikvz'; // GMAIL password
+		$mail->Password    = ACCESS_EMAIL_PASSWORD; // GMAIL password
 		$mail->AddAddress('mahmudrisna@gmail.com');
 		$mail->SetFrom('asclepio.website@gmail.com', 'Asclepio');
 		$mail->Subject     = 'Verify Your Asclepio Account';
@@ -333,8 +333,8 @@ class Auth extends CI_Controller
 		$mail->SMTPSecure = "tls"; // sets the prefix to the servier
 		$mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
 		$mail->Port = 587; // set the SMTP port for the GMAIL server
-		$mail->Username = 'asclepio.website@gmail.com'; // GMAIL username
-		$mail->Password = 'ppnpapehyljmikvz'; // GMAIL password
+		$mail->Username = ACCESS_EMAIL; // GMAIL username
+		$mail->Password = ACCESS_EMAIL_PASSWORD; // GMAIL password
 		$mail->AddAddress($email);
 		$mail->SetFrom('asclepio.website@gmail.com', 'Asclepio');
 		$mail->Subject = 'Lupa Kata Sandi';

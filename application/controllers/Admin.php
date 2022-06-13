@@ -327,8 +327,8 @@ class Admin extends CI_Controller
         $mail->SMTPSecure = "tls"; // sets the prefix to the servier
         $mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
         $mail->Port = 587; // set the SMTP port for the GMAIL server
-        $mail->Username = 'asclepio.website@gmail.com'; // GMAIL username
-        $mail->Password = 'websiteasclepiofamos'; // GMAIL password
+        $mail->Username = ACCESS_EMAIL; // GMAIL username
+        $mail->Password = ACCESS_EMAIL_PASSWORD; // GMAIL password
         foreach ($cek_trans as $ct) {
             // print_r($ct);
             if ($ct->jenis_kelas == 'asclepedia') {
