@@ -10,7 +10,7 @@
                                 <label>Email</label>
                                 <input class="form-control" type="email" name="email" placeholder="Email" value="<?= get_cookie('asclepio_email') ?>" />
                             </div>
-                            <input type="hidden" name="url" value="<?= $_GET['url'] ?>">
+                            <input type="hidden" name="url" value="<?= (isset($_GET['url'])) ? $_GET['url'] : '' ?>">
                             <div class="form-group">
                                 <label>Password</label>
                                 <!-- <input class="form-control" type="password" name="password" placeholder="Password" /> -->

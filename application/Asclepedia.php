@@ -35,6 +35,7 @@ class Asclepedia extends CI_Controller
     }
     function save_kelas()
     {
+
         $config['upload_path']   = './assets/uploads/kelas/asclepedia';
         $config['allowed_types'] = '*';
         $config['encrypt_name']  = true;

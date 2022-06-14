@@ -228,7 +228,7 @@ class Admin extends CI_Controller
 
             $finalDate1 = $date1[0] . '-' . $date1[1] . '-' . $date1[2];
             $finalDate2 = $date2[0] . '-' . $date2[1] . '-' . $date2[2];
-            $query .= "AND date(t.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
+            $query .= "AND date(t.tgl_pembelian) between'" . $finalDate1 . "' and '" . $finalDate2 . "'";
         }
         $data['data'] = $this->query->get_query($query)->row();
 

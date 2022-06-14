@@ -1,5 +1,6 @@
 $(document).ready(function () {
     // getPemateri(x);
+    $("#addAsclepedia").modal('show');
     getTopik();
     $("#box_materi").hide();
     $('#addAsclepedia').on('shown.bs.modal', function () {
@@ -12,6 +13,22 @@ $(document).ready(function () {
     getUpcoming();
     getFinished();
     getUnbenefit();
+
+    $("input[type=radio][name='tipe_kelas_sekali_or_banyak'").change(function() {
+        if (this.value == 'sekali_pertemuan') {
+             $(".hide_when_banyak").show();
+             $(".show_on_banyak").hide();
+        }
+        else if (this.value == 'banyak_pertemuan') {
+             $(".hide_when_banyak").hide();
+             $(".show_on_banyak").show();
+             
+        }
+    });
+
+    $('.daterange').daterangepicker();
+    $('.hide_when_banyak').show();
+    $('.show_on_banyak').hide();
 
 
 });
@@ -154,6 +171,18 @@ function editTopik(id) {
 var wrapper_materi = $(".main_materi"); //Input fields wrapper
 var add_materi = $("#add_materi"); //Add button class or ID
 var y = 1;
+var tambahan = `<div class="form-group show_on_banyak">
+                    <label>Link Materi </label>
+                    <input class="form-control" type="text" value="" name="link_materi[]" placeholder="Tuliskan Link Zoom untuk Materi ini" />
+                </div>
+                <div class="form-group show_on_banyak">
+                    <label>Tanggal Materi </label>
+                    <input class="form-control" type="date" value="" name="tanggal_materi[]" placeholder="Masukan Tanggal Materi" />
+                </div>
+                <div class="form-group show_on_banyak">
+                    <label>Waktu Materi </label>
+                    <input class="form-control" type="time" value="" name="time_materi[]"  />
+                </div>`;
 var max_fields = 10;
 //When user click on add input button
 $(add_materi).click(function (e) {
@@ -163,7 +192,7 @@ $(add_materi).click(function (e) {
         y++; //input field increment
         //add input field
         var input_materi = '<div class="box-form-materi">' +
-            '<h4>Materi ' + y + '<a class="delete-materi remove_field" href="#"><img src="' + global_url + 'assets/admin/images/ic-delete-grey.svg" /></a></h4>' +
+            '<h4>Materi ' + y + '<a class="delete-materi remove_field" href="javascript:void(0)"><img src="' + global_url + 'assets/admin/images/ic-delete-grey.svg" /></a></h4>' +
             '<div class="form-group">' +
             '<label>Judul materi</label>' +
             '<input class="form-control" type="text" value="" name="judul_materi[]" placeholder="Masukan judul materi" />' +
@@ -171,22 +200,25 @@ $(add_materi).click(function (e) {
             '<div class="form-group">' +
             '<label>Deskripsi</label>' +
             '<textarea class="form-control" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi[]"></textarea>' +
-            '</div>' +
-            '<div class="form-group waktu">' +
-            '<div class="row">' +
-            '<div class="col-3">' +
-            '<label>Durasi</label>' +
-            '<select class="select" name="durasi_materi[]">' +
-            '<option value="30">30 menit</option>' +
-            '<option value="40">40 menit</option>' +
-            '<option value="50">50 menit</option>' +
-            '<option value="60">60 menit</option>' +
-            '</select>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>';
+            '</div>' ;
+            
+            if ($("[name='tipe_kelas_sekali_or_banyak']:checked").val() == 'banyak_pertemuan') {
+                 input_materi += tambahan;
+             
+            } 
+            input_materi +=  '<div class="form-group waktu"><div class="row"><div class="col-3"><label>Durasi</label>' +
+                               '<select class="select" name="durasi_materi[]">' +
+                                    '<option value="60">60 menit</option>' +
+                                    '<option value="90">90 menit</option>' +
+                                    '<option value="120">120 menit</option>' +
+                                    '<option value="180">180 menit</option>' +
+                                '</select>' +
+                                '</div>' +
+                            '</div>' +
+                         '</div>' +
+                    '</div>';
         $(wrapper_materi).append(input_materi);
+        console.log(input_materi)
         $('.select').selectpicker('refresh');
     }
 });

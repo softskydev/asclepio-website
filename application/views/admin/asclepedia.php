@@ -1,3 +1,4 @@
+
 <style>
     #box_upcoming .box-card__img {
         padding-top: 100%;
@@ -190,6 +191,16 @@
                         <input type="text" class="form-control" value="" name="gform">
                     </div>
                     <div class="form-group">
+                        <label for="">Banyak Pertemuan / Sekali Pertemuan </label>
+                        
+                        <div class="radiobutton" style="margin-left: 20px;">
+                            <input id="val_sekali" type="radio" checked value="sekali_pertemuan" name="tipe_kelas_sekali_or_banyak" class="form-check-input">
+                            <label class="form-check-label" for="val_sekali">Sekali Pertemuan</label>
+                            <input id="val_banyak" type="radio" value="banyak_pertemuan" name="tipe_kelas_sekali_or_banyak" class="form-check-input"> 
+                            <label for="val_banyak" class="form-check-label"> Banyak Pertemuan</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label>Topik Kelas</label>
                         <select class="select" data-live-search="true" data-size="5" id="topik" name="topik" required>
                         </select>
@@ -213,11 +224,11 @@
                         </select>
                     </div>
 
-                    <div class="form-group tgl">
+                    <div class="form-group tgl hide_when_banyak">
                         <label>Tanggal</label>
                         <div class="row">
                             <div class="col-3">
-                                <select class="select" name="date" required>
+                                <select class="select" name="date">
                                     <?php $max_date = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y')) ?>
                                     <?php for ($i = 1; $i <= $max_date; $i++) { ?>
                                         <option <?= ($i == date('d')) ? 'selected' : ''  ?> value="<?= $i ?>"><?= $i ?></option>
@@ -226,7 +237,7 @@
                             </div>
                             <div class="col-3">
                                 <label></label>
-                                <select class="select" name="month" required>
+                                <select class="select" name="month">
 
                                     <?php for ($i = 1; $i <= 12; $i++) { ?>
                                         <option <?= ($i == date('m')) ? 'selected' : ''  ?> value="<?= $i ?>"><?= $i ?></option>
@@ -235,7 +246,7 @@
                             </div>
                             <div class="col-3">
                                 <label></label>
-                                <select class="select" name="year" required>
+                                <select class="select" name="year">
 
                                     <?php for ($i = 2000; $i <= date('Y') + 1; $i++) { ?>
                                         <option <?= ($i == date('Y')) ? 'selected' : ''  ?> value="<?= $i ?>"><?= $i ?></option>
@@ -246,39 +257,44 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group waktu">
+                    <div class="form-group waktu hide_when_banyak">
                         <div class="row">
                             <div class="col-4">
                                 <label>Waktu Mulai</label>
-                                <input type="time" class="form-control" name="waktu_mulai" required>
+                                <input type="time" class="form-control" name="waktu_mulai" >
                             </div>
                             <div class="col-4">
                                 <label>Waktu Selesai</label>
-                                <input type="time" class="form-control" name="waktu_akhir" required>
+                                <input type="time" class="form-control" name="waktu_akhir" >
                             </div>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label for="">Limit Transaksi </label>
                         <input type="number" name="limit" class="form-control">
                     </div>
                     <div class="form-group" id="box_early">
                         <label>Early Bird - Harga Webinar</label>
+                        <input class="form-control daterange" name="date_early" type="text" />
+                        <br>
                         <input class="form-control" id="early_price" name="early_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga early bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group" id="box_late">
                         <label>Late Bird - Harga Webinar</label>
+                        <input class="form-control daterange" name="date_late" type="text" />
+                        <br>
                         <input class="form-control" id="late_price" name="late_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <!-- <div class="form-group">
                         <label>Harga webinar</label>
                         <input class="form-control" type="text" name="harga" placeholder="Masukan angka harga" required /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div> -->
-                    <div class="form-group">
+                    <div class="form-group hide_when_banyak">
                         <label>Link Zoom Meeting</label>
-                        <input class="form-control" type="text" name="link_zoom" placeholder="Masukan link zoom meeting" required />
+                        <input class="form-control" type="text" name="link_zoom" placeholder="Masukan link zoom meeting"  />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group hide_when_banyak">
                         <label>Link Youtube</label>
                         <input class="form-control" type="text" name="youtube" placeholder="Masukan link youtube" />
                     </div>
@@ -306,15 +322,27 @@
                             <label>Deskripsi</label>
                             <textarea class="form-control" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi[]" required></textarea>
                         </div>
+                        <div class="form-group show_on_banyak">
+                            <label>Link Materi </label>
+                            <input class="form-control" type="text" value="" name="link_materi[]" placeholder="Tuliskan Link Zoom untuk Materi ini" />
+                        </div>
+                        <div class="form-group show_on_banyak">
+                            <label>Tanggal Materi </label>
+                            <input class="form-control" type="date" value="" name="tanggal_materi[]" placeholder="Masukan Tanggal Materi" />
+                        </div>
+                        <div class="form-group show_on_banyak">
+                            <label>Waktu Materi </label>
+                            <input class="form-control" type="time" value="" name="time_materi[]"  />
+                        </div>
                         <div class="form-group waktu">
                             <div class="row">
                                 <div class="col-3">
                                     <label>Durasi</label>
                                     <select class="select" name="durasi_materi[]">
-                                        <option value="30">30 menit</option>
-                                        <option value="40">40 menit</option>
-                                        <option value="50">50 menit</option>
                                         <option value="60">60 menit</option>
+                                        <option value="90">90 menit</option>
+                                        <option value="120">120 menit</option>
+                                        <option value="180">180 menit</option>
                                     </select>
                                 </div>
                             </div>
@@ -328,7 +356,7 @@
                             <div class="ic"><img src="<?= base_url() ?>assets/admin/images/ic-plus-more.svg" /></div><span>Tambah Materi</span>
                         </a>
                     </div>
-                    <div class="form-action text-right"><a class="btn btn-link" href="#" data-dismiss="modal">Cancel</a><button class="btn btn-primary" type="submit">Simpan Kelas</button></div>
+                    <div class="form-action text-right"><a class="btn btn-link" href="javascript:void(0)" data-dismiss="modal">Cancel</a><button class="btn btn-primary" type="submit">Simpan Kelas</button></div>
                 </div>
             </form>
         </div>

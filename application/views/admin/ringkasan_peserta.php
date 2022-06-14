@@ -28,12 +28,17 @@ if ($this->uri->segment(4) == 'semua') {
     $finalDate1 = $date1[0] . '-' . $date1[1] . '-' . $date1[2];
     $finalDate2 = $date2[0] . '-' . $date2[1] . '-' . $date2[2];
     $query .= "AND date(t.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
-    $query_pembeli .= " AND date(t.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
+    $query_pembeli .= " AND date(t.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "' ";
 }
-$detail = $this->query->get_query($query)->result();
-$pembeli = $this->query->get_query($query_pembeli)->row()->pembeli;
-// echo $this->db->last_query();
-// exit;
+$detail                 = $this->query->get_query($query)->result();
+$pembeli                = $this->query->get_query($query_pembeli)->row()->pembeli;
+$is_asclepio_asclepedia = $this->query->get_query('SELECT a.* , b.product_id FROM transaksi a JOIN transaksi_detail b ON a.id = b.transaksi_id WHERE b.product_id = '.$data->id.' AND a.user_id = 22')->num_rows();
+
+
+if ($is_asclepio_asclepedia == 1) {
+  $pembeli = $pembeli - 1;  
+} 
+// exit; 
 ?>
 
 <!DOCTYPE html>
@@ -65,13 +70,13 @@ $pembeli = $this->query->get_query($query_pembeli)->row()->pembeli;
         <thead>
             <tr>
                 <th>No.</th>
+                <th>Tanggal Order</th>
                 <th>
                     Pembeli
                 </th>
                 <th>No WA</th>
                 <th>Email</th>
                 <th>Harga Beli</th>
-                <th>Tanggal Order</th>
                 <th>Status Order</th>
             </tr>
         </thead>
@@ -79,10 +84,14 @@ $pembeli = $this->query->get_query($query_pembeli)->row()->pembeli;
             <?php
             $no = 1;
             foreach ($detail as $d) { 
+                if ($d->email != 'asclepio.asclepedia@gmail.com') {
                 ?>
                 <tr>
                     <td>
                         <?= $no++ ?>
+                    </td>
+                    <td>
+                        <?= $d->tgl_order ?>
                     </td>
                     <td>
                         <?= $d->nama_lengkap ?>
@@ -97,12 +106,10 @@ $pembeli = $this->query->get_query($query_pembeli)->row()->pembeli;
                         Rp <?= rupiah($d->total_harga) ?>
                     </td>
                     <td>
-                        <?= $d->tgl_order ?>
-                    </td>
-                    <td>
                         Sudah bayar
                     </td>
                 </tr>
+                <?php } ?>
             <?php } ?>
         </tbody>
     </table>

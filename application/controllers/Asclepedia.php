@@ -36,6 +36,8 @@ class Asclepedia extends CI_Controller
     }
     function save_kelas()
     {
+
+        debug($_POST);
         $config['upload_path']   = './assets/uploads/kelas/asclepedia';
         $config['allowed_types'] = '*';
         $config['encrypt_name']  = true;
@@ -99,11 +101,11 @@ class Asclepedia extends CI_Controller
 
                 $detail[] = array(
                     'transaksi_id' => $trans_id,
-                    'product_id' => $id,
-                    'harga' => 0,
-                    'diskon' => 0,
-                    'total_harga' => 0,
-                    'status' => 'success',
+                    'product_id'   => $id,
+                    'harga'        => 0,
+                    'diskon'       => 0,
+                    'total_harga'  => 0,
+                    'status'       => 'success',
                 );
             }
             $this->query->insert_batch('transaksi_detail', $detail);

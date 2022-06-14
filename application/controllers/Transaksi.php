@@ -19,15 +19,26 @@ class Transaksi extends CI_Controller
     }
     function get_transaksi($page = 0)
     {
-        $limit = $this->input->post('limit');
-        $sort = $this->input->post('sort');
-        $order = $this->input->post('order');
-        $search = $this->input->post('search');
-        $query = "SELECT u.foto_profil,u.nama_lengkap,u.no_wa,k.jenis_kelas,k.judul_kelas,k.kategori_kelas,k.kategori_go,k.tgl_kelas,d.total_harga,t.id,t.status,t.tgl_pembelian,t.payment_method FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id JOIN `user` u ON t.`user_id` = u.id";
-        // $query2 = "SELECT u.foto_profil,u.nama_lengkap,k.jenis_kelas,k.judul_kelas,k.kategori_kelas,k.kategori_go,k.tgl_kelas,t.total,t.id,t.status,t.tgl_pembelian FROM transaksi t JOIN kelas k ON t.`product_id` = k.id JOIN `user` u ON t.`user_id` = u.id LIMIT $limit OFFSET $page";
-        $config['base_url'] = base_url() . 'Transaksi/get_transaksi/';
+        $limit                = $this->input->post('limit');
+
+        $sort                 = $this->input->post('sort');
+        $order                = $this->input->post('order');
+        $search               = $this->input->post('search');
+        // $batas = 10;
+        // $halaman = isset($_GET['halaman'])?(int)$_GET['halaman'] : 1;
+        // $halaman_awal = ($halaman>1) ? ($halaman * $batas) - $batas : 0;    
+
+        // $previous = $halaman - 1;
+        // $next = $halaman + 1;
+        
+        // $data = mysqli_query($koneksi,"select * from pegawai");
+        // $jumlah_data = mysqli_num_rows($data);
+        // $total_halaman = ceil($jumlah_data / $batas);
+        $query                = "SELECT u.foto_profil,u.nama_lengkap,u.no_wa,k.jenis_kelas,k.judul_kelas,k.kategori_kelas,k.kategori_go,k.tgl_kelas,d.total_harga,t.id,t.status,t.tgl_pembelian,t.payment_method FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id JOIN `user` u ON t.`user_id` = u.id";
+        // $query2            = "SELECT u.foto_profil,u.nama_lengkap,k.jenis_kelas,k.judul_kelas,k.kategori_kelas,k.kategori_go,k.tgl_kelas,t.total,t.id,t.status,t.tgl_pembelian FROM transaksi t JOIN kelas k ON t.`product_id` = k.id JOIN `user` u ON t.`user_id` = u.id LIMIT $limit OFFSET $page";
+        $config['base_url']   = base_url() . 'Transaksi/get_transaksi/';
         $config['total_rows'] = $this->db->query($query)->num_rows();
-        $config['per_page'] = $limit;
+        $config['per_page']   = $limit;
         if ($sort == 'terbaru') {
             if ($order == 'today') {
                 if ($search) {
@@ -64,7 +75,8 @@ class Transaksi extends CI_Controller
             }
         }
         $data = $this->query->get_query($query)->result();
-
+        // echo $this->db->last_query();
+        // debug($data);
 
         $this->pagination->initialize($config);
 
