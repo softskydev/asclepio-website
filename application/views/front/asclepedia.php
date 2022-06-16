@@ -18,53 +18,86 @@
             <div class="row wrap-box-card slider" data-items="4">
                 <?php
                 foreach ($onrating as $or) {
-                    $today_time = strtotime(date("Y-m-d H:i"));
-                    // $expire_time = strtotime("-1 day", strtotime($or->tgl_kelas));
-                    $expire_time = strtotime($or->tgl_kelas . ' ' . $or->waktu_mulai);
-                    $date = $or->public_date;
-                    $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-
-                    if ($new_date > date('Y-m-d')) {
-                        $new_price = $or->early_price;
-                    } else {
-                        $new_price = $or->late_price;
+                    $new_price = 0;
+                    if ( $or->early_daterange != null) {
+                        $early_daterange     = $or->early_daterange;
+                        $early_date1         = explode(' - ', $early_daterange)[0];
+                        $early_date2         = explode(' - ', $early_daterange)[1];
+                        $early_convert_date1 = date('Y-m-d', strtotime($early_date1));
+                        $early_convert_date2 = date('Y-m-d', strtotime($early_date2));
+                        if ((date('Y-m-d') >= $early_convert_date1) && (date('Y-m-d') <= $early_convert_date2)) {
+                            $new_price = $or->early_price;
+                        }else {
+                            $new_price = $or->late_price;
+                        }
                     }
                     if ($new_price == 0) {
                         $harga = 'FREE';
                     } else {
                         $harga = 'Rp ' . rupiah($new_price);
                     }
+                    if ($or->tipe_kelas == 'sekali_pertemuan') {
+                        $today_time = strtotime(date("Y-m-d H:i"));
+                        // $expire_time = strtotime("-1 day", strtotime($or->tgl_kelas));
+                        $expire_time = strtotime($or->tgl_kelas . ' ' . $or->waktu_mulai);
+                        $date = $or->public_date;
+                        $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
 
-                    $cek_transaksi = $this->query->get_query("SELECT COUNT(d.id) as total FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE d.product_id = $or->id")->row();
-                    if ($or->kategori_kelas == 'good morning knowledge') {
-                        $label = '<span class="tag tag">Good Morning Knowledge</span>';
-                        if ($expire_time <= $today_time) {
-                            $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                            $button = '';
-                        } else {
-                            $ribbon = '';
-                            $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
-                        }
-                    } else {
-                        $label = '<span class="tag tag-scndry">Skills Lab</span>';
-                        if ($expire_time <= $today_time) {
-                            $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                            $button = '';
-                        } else {
-                            if ($or->limit != 0) {
-                                if ($cek_transaksi->total >= $or->limit) {
-                                    $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                                    $button = '';
-                                } else {
-                                    $ribbon = '';
-                                    $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
-                                }
+                        //checking early price at some period
+                        
+                        
+
+
+                        // if ($new_date > date('Y-m-d')) {
+                        //     $new_price = $or->early_price;
+                        // } else {
+                        //     $new_price = $or->late_price;
+                        // }
+
+
+                       
+
+                        $cek_transaksi = $this->query->get_query("SELECT COUNT(d.id) as total FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE d.product_id = $or->id")->row();
+                        if ($or->kategori_kelas == 'good morning knowledge') {
+                            $label = '<span class="tag tag">Good Morning Knowledge</span>';
+                            if ($expire_time <= $today_time) {
+                                $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                                $button = '';
                             } else {
                                 $ribbon = '';
                                 $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
                             }
-                        }
-                    }
+                        } else {
+                            $label = '<span class="tag tag-scndry">Skills Lab</span>';
+                            if ($harga == '?') {
+                                 $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Pendaftaran belum dibuka</div></div>";
+                                 $button = '';
+                            } else {
+                                if ($expire_time <= $today_time) {
+                                    $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                                    $button = '';
+                                } else {
+                                    if ($or->limit != 0) {
+                                        if ($cek_transaksi->total >= $or->limit) {
+                                            $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                                            $button = '';
+                                        } else {
+                                            $ribbon = '';
+                                            $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
+                                        }
+                                    } else {
+                                        $ribbon = '';
+                                        $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
+                                    }
+                                }
+                            }
+                            
+                         }
+                     } else {
+                        $ribbon = '';
+                        $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
+
+                     }
 
                 ?>
                     <div class="col-lg-3 col-md-6 slider__item">
@@ -121,40 +154,62 @@
             </div>
             <div class="row wrap-box-card">
                 <?php
-                foreach ($morning as $m) {
-                    $today_time = strtotime(date("Y-m-d H:i"));
-                    // $expire_time = strtotime("-1 day", strtotime($m->tgl_kelas));
-                    $expire_time = strtotime($m->tgl_kelas . ' ' . $m->waktu_mulai);
-                    $date = $m->public_date;
-                    $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-
-                    if ($new_date > date('Y-m-d')) {
-                        $new_price = $m->early_price;
-                    } else {
-                        $new_price = $m->late_price;
+                foreach ($morning as $morning_knowledge) {
+                    $new_price = 0;
+                    if ( $morning_knowledge->early_daterange != null) {
+                        $early_daterange     = $morning_knowledge->early_daterange;
+                        $early_date1         = explode(' - ', $early_daterange)[0];
+                        $early_date2         = explode(' - ', $early_daterange)[1];
+                        $early_convert_date1 = date('Y-m-d', strtotime($early_date1));
+                        $early_convert_date2 = date('Y-m-d', strtotime($early_date2));
+                        if ((date('Y-m-d') >= $early_convert_date1) && (date('Y-m-d') <= $early_convert_date2)) {
+                            $new_price = $morning_knowledge->early_price;
+                        }else {
+                            $new_price = $morning_knowledge->late_price;
+                        }
+                        if ($new_price == 0) {
+                            $harga = 'FREE';
+                        } else {
+                            $harga = 'Rp ' . rupiah($new_price);
+                        }
                     }
-                    if ($new_price == 0) {
-                        $harga = 'FREE';
-                    } else {
-                        $harga = 'Rp ' . rupiah($new_price);
-                    }
+                    if ($morning_knowledge->tipe_kelas == 'sekali_pertemuan') {
+                        $today_time     = strtotime(date("Y-m-d H:i"));
+                        // $expire_time = strtotime("-1 day", strtotime($m->tgl_kelas));
+                        $expire_time    = strtotime($morning_knowledge->tgl_kelas . ' ' . $morning_knowledge->waktu_mulai);
+                        $date           = $morning_knowledge->public_date;
+                        $new_date       = date("Y-m-d", strtotime("+2 day", strtotime($date)));
 
-                    if ($expire_time <= $today_time) {
-                        $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                        $button = '';
+                
+                        
+
+                        // if ($new_date > date('Y-m-d')) {
+                        //     $new_price = $morning_knowledge->early_price;
+                        // } else {
+                        //     $new_price = $morning_knowledge->late_price;
+                        // }
+                        
+
+                        if ($expire_time <= $today_time) {
+                            $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                            $button = '';
+                        } else {
+                            $ribbon = '';
+                            $button = '<button class="btn btn-primary" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $morning_knowledge->id . ')">Daftar</button>';
+                        }
                     } else {
-                        $ribbon = '';
-                        $button = '<button class="btn btn-primary" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $m->id . ')">Daftar</button>';
+                         $ribbon = '';
+                         $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $morning_knowledge->id . ')">Daftar</button>';
                     }
                 ?>
                     <div class="col-lg-4 col-md-6 slider__item">
                         <div class="box-card">
                             <?= $ribbon ?>
-                            <a href="<?= base_url() ?>asclepedia/<?= $m->slug ?>">
-                                <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/asclepedia/<?= $m->thumbnail ?>" class="thumbnail" />
+                            <a href="<?= base_url() ?>asclepedia/<?= $morning_knowledge->slug ?>">
+                                <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/asclepedia/<?= $morning_knowledge->thumbnail ?>" class="thumbnail" />
                                     <div class="rating">
                                         <?php
-                                        $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $m->id")->row()->rating;
+                                        $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $morning_knowledge->id")->row()->rating;
                                         if ($rating == '') {
                                             $rating = 0;
                                         } else {
@@ -165,11 +220,11 @@
                                     </div>
                                 </div>
                                 <div class="box-card__text"><span class="tag">Good morning knowledge</span>
-                                    <h4><?= $m->judul_kelas ?></h4>
+                                    <h4><?= $morning_knowledge->judul_kelas ?></h4>
 
                                     <div class="author">
                                         <?php
-                                        $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $m->id")->result();
+                                        $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $morning_knowledge->id")->result();
                                         if (count($pemateri) > 1) {
                                             foreach ($pemateri as $p) {
                                                 echo '<div class="pp"><img src="' . base_url() . 'assets/uploads/pemateri/' . $p->foto . '" /></div>';
@@ -204,39 +259,57 @@
             </div>
             <div class="row wrap-box-card">
                 <?php foreach ($skill as $s) {
-                    $today_time = strtotime(date("Y-m-d H:i"));
-                    // $expire_time = strtotime("-1 day", strtotime($s->tgl_kelas));
-                    $expire_time = strtotime($s->tgl_kelas . ' ' . $s->waktu_mulai);
-                    $date = $s->public_date;
-                    $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
+                    $new_price = 0;
+                    if ( $s->early_daterange != null) {
+                        $early_daterange     = $s->early_daterange;
+                        $early_date1         = explode(' - ', $early_daterange)[0];
+                        $early_date2         = explode(' - ', $early_daterange)[1];
+                        $early_convert_date1 = date('Y-m-d', strtotime($early_date1));
+                        $early_convert_date2 = date('Y-m-d', strtotime($early_date2));
+                        if ((date('Y-m-d') >= $early_convert_date1) && (date('Y-m-d') <= $early_convert_date2)) {
+                            $new_price = $s->early_price;
+                        }else {
+                            $new_price = $s->late_price;
+                        }
+                        if ($new_price == 0) {
+                            $harga = 'FREE';
+                        } else {
+                            $harga = 'Rp ' . rupiah($new_price);
+                        }
+                    }
+                    if ($s->tipe_kelas == 'sekali_pertemuan') {
+                        $today_time     = strtotime(date("Y-m-d H:i"));
+                        $expire_time    = strtotime($s->tgl_kelas . ' ' . $s->waktu_mulai);
+                        $date           = $s->public_date;
+                        $new_date       = date("Y-m-d", strtotime("+2 day", strtotime($date)));
 
-                    if ($new_date > date('Y-m-d')) {
-                        $new_price = $s->early_price;
-                    } else {
-                        $new_price = $s->late_price;
-                    }
-                    if ($new_price == 0) {
-                        $harga = 'FREE';
-                    } else {
-                        $harga = 'Rp ' . rupiah($new_price);
-                    }
-                    $cek_transaksi = $this->query->get_query("SELECT COUNT(d.id) as total FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE d.product_id = $s->id")->row();
-                    if ($expire_time <= $today_time) {
-                        $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                        $button = '';
-                    } else {
-                        if ($s->limit != 0) {
-                            if ($cek_transaksi->total >= $s->limit) {
-                                $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                                $button = '';
+                        // if ($new_date > date('Y-m-d')) {
+                        //     $new_price = $s->early_price;
+                        // } else {
+                        //     $new_price = $s->late_price;
+                        // }
+                       
+                        $cek_transaksi = $this->query->get_query("SELECT COUNT(d.id) as total FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE d.product_id = $s->id")->row();
+                        if ($expire_time <= $today_time) {
+                            $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                            $button = '';
+                        } else {
+                            if ($s->limit != 0) {
+                                if ($cek_transaksi->total >= $s->limit) {
+                                    $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                                    $button = '';
+                                } else {
+                                    $ribbon = '';
+                                    $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $s->id . ')">Daftar</button>';
+                                }
                             } else {
                                 $ribbon = '';
                                 $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $s->id . ')">Daftar</button>';
                             }
-                        } else {
-                            $ribbon = '';
-                            $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $s->id . ')">Daftar</button>';
                         }
+                    } else {
+                         $ribbon = '';
+                         $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $s->id . ')">Daftar</button>';
                     }
                 ?>
                     <div class="col-lg-3 col-md-6 slider__item">

@@ -10,7 +10,7 @@
                         <?php
                         $date = $data->public_date;
                         $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-
+                        $tipe_kelas = $data->tipe_kelas;
                         if ($new_date > date('Y-m-d')) {
                             $new_price = $data->early_price;
                         } else {
@@ -139,11 +139,47 @@
                                     <li>
                                         <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-tp-location.svg" /></div><span>Zoom Meeting</span>
                                     </li>
+                                    
+                                        <?php 
+                                            if ($tipe_kelas == 'banyak_pertemuan') {
+                                                $jadwal = $this->query->get_query("select * from kelas_materi where kelas_id = ".$data->id)->result();
+                                                foreach ($jadwal as $tgl) { 
+                                                    ?>
+                                                    <li>
+                                                        <div class="ic">
+                                                            <img src="<?= base_url() ?>assets/front/images/ic-tp-date.svg" />
+                                                        </div>
+                                                        <span><?= format_indo($tgl->date_materi) ?></span>
+                                                    </li>
+                                                    <?php
+                                                }
+                                            } else {
+                                                ?>
+                                                <li>
+                                                    <div class="ic">
+                                                        <img src="<?= base_url() ?>assets/front/images/ic-tp-date.svg" />
+                                                    </div>
+                                                    <span><?= format_indo($data->tgl_kelas) ?></span>
+                                                </li>
+                                                <?php
+                                            }
+                                            
+                                         ?>
+                                        
+                                       
+                                        
+                                    
                                     <li>
-                                        <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-tp-date.svg" /></div><span><?= format_indo($data->tgl_kelas) ?></span>
-                                    </li>
-                                    <li>
-                                        <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-tp-date.svg" /></div><span><?= $data->waktu_mulai ?> - <?= $data->waktu_akhir ?> WIB</span>
+                                        <?php 
+                                        if ($tipe_kelas == 'banyak_pertemuan') {
+
+                                        } else {
+                                            ?>
+                                            <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-tp-date.svg" /></div><span><?= $data->waktu_mulai ?> - <?= $data->waktu_akhir ?> WIB</span>
+                                            <?php
+                                        }
+                                        ?>
+                                        
                                     </li>
                                 </ul>
                             </div>

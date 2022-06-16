@@ -589,12 +589,12 @@ class Keuangan extends CI_Controller
         $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
 
         // Buat header tabel nya pada baris ke 3
-        $excel->setActiveSheetIndex(0)->setCellValue('A3', "Pembeli"); // Set kolom B3 dengan tulisan "NIS"
-        $excel->setActiveSheetIndex(0)->setCellValue('B3', "No WA"); // Set kolom B3 dengan tulisan "NIS"
-        $excel->setActiveSheetIndex(0)->setCellValue('C3', "Email"); // Set kolom B3 dengan tulisan "NIS"
-        $excel->setActiveSheetIndex(0)->setCellValue('D3', "Asal Kota"); // Set kolom B3 dengan tulisan "NIS"
-        $excel->setActiveSheetIndex(0)->setCellValue('E3', "Harga Beli"); // Set kolom B3 dengan tulisan "NIS"
-        $excel->setActiveSheetIndex(0)->setCellValue('F3', "Tanggal Order"); // Set kolom B3 dengan tulisan "NIS"
+        $excel->setActiveSheetIndex(0)->setCellValue('A3', "Tanggal Order"); // Set kolom B3 dengan tulisan "NIS"
+        $excel->setActiveSheetIndex(0)->setCellValue('B3', "Pembeli"); // Set kolom B3 dengan tulisan "NIS"
+        $excel->setActiveSheetIndex(0)->setCellValue('C3', "No WA"); // Set kolom B3 dengan tulisan "NIS"
+        $excel->setActiveSheetIndex(0)->setCellValue('D3', "Email"); // Set kolom B3 dengan tulisan "NIS"
+        $excel->setActiveSheetIndex(0)->setCellValue('E3', "Asal Kota"); // Set kolom B3 dengan tulisan "NIS"
+        $excel->setActiveSheetIndex(0)->setCellValue('F3', "Harga Beli"); // Set kolom B3 dengan tulisan "NIS"
         $excel->setActiveSheetIndex(0)->setCellValue('G3', "Status Order"); // Set kolom B3 dengan tulisan "NIS"
 
         // Apply style header yang telah kita buat tadi ke masing-masing kolom header
@@ -630,32 +630,34 @@ class Keuangan extends CI_Controller
             // } else {
             //     $status = 'Pembayaran Expired';
             // }
-            if (!preg_match('/[^+0-9]/', trim($dt->no_wa))) {
-                // cek apakah no hp karakter 1-3 adalah +62
-                if (substr(trim($dt->no_wa), 0, 3) == '+62') {
-                    $wa = '0' . substr(trim($dt->no_wa), 1);
-                }
-                else if (substr(trim($dt->no_wa), 0, 2) == '62') {
-                    $wa = '0' . substr(trim($dt->no_wa), 1);
-                }else{
-                    $wa = $dt->no_wa;
-                }
-            }
+            $wa = $dt->no_wa;
+            // if (!preg_match('/[^+0-9]/', trim($dt->no_wa))) {
+            //     // cek apakah no hp karakter 1-3 adalah +62
+            //     if (substr(trim($dt->no_wa), 0, 3) == '+62') {
+            //         $wa = '0' . substr(trim($dt->no_wa), 1);
+            //     }
+            //     else if (substr(trim($dt->no_wa), 0, 2) == '62') {
+            //         $wa = '0' . substr(trim($dt->no_wa), 1);
+            //     }else{
+            //         $wa = $dt->no_wa;
+            //     }
+            // }
             $excel->getActiveSheet()->getStyle('A' . $rows)->applyFromArray($style_row);
-            $excel->setActiveSheetIndex(0)->setCellValue('A' . $rows, $dt->nama_lengkap);
+            $excel->setActiveSheetIndex(0)->setCellValue('A' . $rows, format_indo($dt->tgl_order));   
             $excel->getActiveSheet()->getStyle('B' . $rows)->applyFromArray($style_row);
-            $excel->setActiveSheetIndex(0)->setCellValue('B' . $rows,  substr_replace($wa, '0', 0, 3));
+            $excel->setActiveSheetIndex(0)->setCellValue('B' . $rows, $dt->nama_lengkap);
+            // $excel->setActiveSheetIndex(0)->setCellValue('B' . $rows,  substr_replace($wa, '0', 0, 3));
+            $excel->setActiveSheetIndex(0)->setCellValue('C' . $rows,  $wa);
             $excel->getActiveSheet()->getStyle('C' . $rows)->applyFromArray($style_row);
-            $excel->setActiveSheetIndex(0)->setCellValue('C' . $rows, $dt->email);
+            $excel->setActiveSheetIndex(0)->setCellValue('D' . $rows, $dt->email);
             $excel->getActiveSheet()->getStyle('D' . $rows)->applyFromArray($style_row);
-            $excel->setActiveSheetIndex(0)->setCellValue('D' . $rows, $dt->kota);
+            $excel->setActiveSheetIndex(0)->setCellValue('E' . $rows, $dt->kota);
             $excel->getActiveSheet()->getStyle('E' . $rows)->applyFromArray($style_row);
             // $excel->setActiveSheetIndex(0)->setCellValue('E' . $rows, 'Rp ' . rupiah($dt->total_harga));
-            $excel->setActiveSheetIndex(0)->setCellValue('E' . $rows, $dt->total_harga);
+            $excel->setActiveSheetIndex(0)->setCellValue('F' . $rows, $dt->total_harga);
             $excel->getActiveSheet()->getStyle('F' . $rows)->applyFromArray($style_row);
-            $excel->setActiveSheetIndex(0)->setCellValue('F' . $rows, format_indo($dt->tgl_order));
-            $excel->getActiveSheet()->getStyle('G' . $rows)->applyFromArray($style_row);
             $excel->setActiveSheetIndex(0)->setCellValue('G' . $rows, 'Sudah Bayar');
+            $excel->getActiveSheet()->getStyle('G' . $rows)->applyFromArray($style_row);
             $rows++;
         }
 

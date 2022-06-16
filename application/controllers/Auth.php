@@ -304,7 +304,7 @@ class Auth extends CI_Controller
 	{
 		$mail = $_POST['email'];
 		$newpassword = $mail . date('Y-m-d') . rand(1, 99);
-		$new = substr($newpassword, 0, -22);
+		$new = strtoupper(substr(md5($newpassword), 0, 6));
 		$password_to_db = md5($new);
 		$update = ['password' => $password_to_db,];
 		$where = ['email' => $mail];

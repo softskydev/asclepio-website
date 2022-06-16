@@ -37,38 +37,46 @@ class Asclepedia extends CI_Controller
     function save_kelas()
     {
 
-        debug($_POST);
+        // debug($_POST);
         $config['upload_path']   = './assets/uploads/kelas/asclepedia';
         $config['allowed_types'] = '*';
         $config['encrypt_name']  = true;
         $this->load->library('upload', $config);
 
-        $_FILES['images']['name'] = $_FILES['thumbnail']['name'];
-        $_FILES['images']['type'] = $_FILES['thumbnail']['type'];
+        $_FILES['images']['name']     = $_FILES['thumbnail']['name'];
+        $_FILES['images']['type']     = $_FILES['thumbnail']['type'];
         $_FILES['images']['tmp_name'] = $_FILES['thumbnail']['tmp_name'];
-        $_FILES['images']['error'] = $_FILES['thumbnail']['error'];
-        $_FILES['images']['size'] = $_FILES['thumbnail']['size'];
+        $_FILES['images']['error']    = $_FILES['thumbnail']['error'];
+        $_FILES['images']['size']     = $_FILES['thumbnail']['size'];
 
-        $gform = ($this->input->post('gform')) ? $this->input->post('gform') : '';
-        $youtube = ($this->input->post('youtube')) ? $this->input->post('youtube') : '';
+        $gform                        = ($this->input->post('gform')) ? $this->input->post('gform') : '';
+        $youtube                      = ($this->input->post('youtube')) ? $this->input->post('youtube') : '';
 
         $token = random_string('alnum', 16);
 
         $this->upload->initialize($config);
         $this->upload->do_upload('images');
-        $fileData = $this->upload->data();
+        $fileData   = $this->upload->data();
         $uploadData = $fileData['file_name'];
+        $tahun      = $this->input->post('year');
+        $bulan      = $this->input->post('month');
+        $tanggal    = $this->input->post('date');
+        $date_kelas = ( $this->input->post('tipe_kelas_sekali_or_banyak') == 'sekali_pertemuan') ? $tahun.'-'.$bulan.'-'.$tanggal : $this->input->post('tanggal_materi')[0];
+
         $data = [
             'judul_kelas'     => $this->input->post('judul_kelas'),
             'topik_id'        => $this->input->post('topik'),
             'deskripsi_kelas' => $this->input->post('deskripsi_kelas'),
             'kategori_kelas'  => $this->input->post('kategori'),
-            'tgl_kelas'       => $this->input->post('year') . '-' . $this->input->post('month') . '-' . $this->input->post('date'),
+            'tgl_kelas'       => $date_kelas,
             'waktu_mulai'     => $this->input->post('waktu_mulai'),
             'waktu_akhir'     => $this->input->post('waktu_akhir'),
+            'tipe_kelas'      => $this->input->post('tipe_kelas_sekali_or_banyak'),
             'jenis_kelas'     => 'asclepedia',
             'early_price'     => str_replace(',', '', $this->input->post('early_price')),
             'late_price'      => str_replace(',', '', $this->input->post('late_price')),
+            'early_daterange' => str_replace('/', '-', $this->input->post('date_early')),
+            'late_daterange'  => str_replace('/', '-', $this->input->post('date_late')),
             'link_zoom'       => $this->input->post('link_zoom'),
             'slug'            => url_title($this->input->post('judul_kelas'), 'dash', true),
             'gform_url'       => $gform,
@@ -90,10 +98,10 @@ class Asclepedia extends CI_Controller
 
             for ($i = 0; $i < $free_member; $i++) {
                 $member = array(
-                    'user_id' => $this->input->post('free_member')[$i],
-                    'kode_transaksi' => 'ASC' . date("YmdHis") . $i,
-                    'total' => 0,
-                    'status' => 'paid',
+                    'user_id'           => $this->input->post('free_member')[$i],
+                    'kode_transaksi'    => 'ASC' . date("YmdHis") . $i,
+                    'total'             => 0,
+                    'status'            => 'paid',
                     'metode_pembayaran' => 'free'
                 );
                 $save_trans = $this->query->insert_for_id('transaksi', null, $member);
@@ -120,10 +128,13 @@ class Asclepedia extends CI_Controller
         }
         for ($i = 0; $i < $judul_materi; $i++) {
             $materi[] = array(
-                'kelas_id' => $id,
-                'judul_materi' => $this->input->post('judul_materi')[$i],
+                'kelas_id'         => $id,
+                'judul_materi'     => $this->input->post('judul_materi')[$i],
                 'deskripsi_materi' => $this->input->post('deskripsi_materi')[$i],
-                'durasi_materi' => $this->input->post('durasi_materi')[$i],
+                'date_materi'      => $this->input->post('tanggal_materi')[$i],
+                'hour_materi'      => $this->input->post('time_materi')[$i],
+                'zoom_materi'      => $this->input->post('link_materi')[$i],
+                'durasi_materi'    => $this->input->post('durasi_materi')[$i],
             );
         }
 

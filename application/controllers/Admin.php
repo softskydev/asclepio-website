@@ -117,6 +117,31 @@ class Admin extends CI_Controller
         $page['content']  = $this->load->view('admin/asclepedia', $data, true);
         $this->load->view('admin/layout', $page);
     }
+
+    function kelas_detail($kelas_id){
+        $this->check_session();
+
+        $data['data']  = $this->query->get_data_simple('kelas' , ['id' => $kelas_id] )->row();
+        $data['topik'] = $this->query->get_data_simple('topik' , ['is_delete' => 0] )->result();
+        $pemateri      = $this->query->get_data_simple('kelas_pemateri' , ['kelas_id' => $kelas_id] )->result();
+        $array = [];
+        foreach ($pemateri as $v) {
+            $array[] = $v->pemateri_id;
+        }
+        $data['data_pemateri']  = $array;
+        $data['list_pemateri']  = $this->query->get_data_simple('pemateri' , ['is_delete' => 0] )->result();
+        $data['materi']         = $this->query->get_data_simple('kelas_materi' , ['kelas_id' => $kelas_id] )->result();
+
+
+        $data['title']       = $data['data']->judul_kelas;
+        $data['script'][] = 'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js';
+        $data['script'][] = 'https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js';
+        $data['script'][] = $this->js_path() . 'class_detail.js';
+
+        $page['content']  = $this->load->view('admin/asclepedia_edit_kelas', $data, true);
+        $this->load->view('admin/layout', $page);
+
+    }
     function asclepio_go()
     {
 

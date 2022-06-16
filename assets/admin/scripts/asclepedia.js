@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // getPemateri(x);
-    $("#addAsclepedia").modal('show');
+    // $("#addAsclepedia").modal('show');
     getTopik();
     $("#box_materi").hide();
     $('#addAsclepedia').on('shown.bs.modal', function () {
@@ -25,8 +25,16 @@ $(document).ready(function () {
              
         }
     });
-
-    $('.daterange').daterangepicker();
+    var today = new Date(); 
+    var dd = today.getDate(); 
+    var mm = today.getMonth()+1; //January is 0! 
+    var yyyy = today.getFullYear(); 
+    if(dd<10){ dd='0'+dd } 
+    if(mm<10){ mm='0'+mm } 
+    var today = dd+'/'+mm+'/'+yyyy;
+    $('.daterange').daterangepicker({
+        minDate: today,
+    });
     $('.hide_when_banyak').show();
     $('.show_on_banyak').hide();
 
@@ -438,56 +446,58 @@ function getFinished() {
 
 function edit_kelas(id) {
 
-    $.ajax({
-        url: global_url + 'Asclepedia/get_kelas_detail/' + id,
-        method: 'GET',
-        dataType: 'JSON',
-        success: function (resp) {
+    window.open(global_url+'admin/kelas_detail/'+id , '_blank')
 
-            console.log(resp);
-            var date = resp.data.tgl_kelas;
-            var arr = date.split('-');
-            console.log(arr[1]);
+    // $.ajax({
+    //     url: global_url + 'Asclepedia/get_kelas_detail/' + id,
+    //     method: 'GET',
+    //     dataType: 'JSON',
+    //     success: function (resp) {
 
-            $("#editAsclepedia").modal('show');
-            $("#kelas_id").val(id);
-            if (resp.data.kategori_kelas == 'good morning knowledge') {
-                $("#kat_gmk").attr('checked', true);
-                $("#link_gform_edit").show();
-                $("#link_gform_edit input").val(resp.data.gform_url);
-                $("#box_early_edit").hide();
-                $("#box_late_edit").hide();
-            } else {
-                $("#kat_sl").attr('checked', true);
-                $("#link_gform_edit").hide();
-                $("#box_early_edit").show();
-                $("#box_late_edit").show();
-            }
-            $("#date").val(parseInt(arr[2], 10));
-            $("#date").selectpicker('refresh');
-            $("#month").val(parseInt(arr[1], 10));
-            $("#month").selectpicker('refresh');
-            $("#year").val(arr[0]);
-            $("#year").selectpicker('refresh');
-            // $("input[name='topik']").val(
-            editTopik(resp.data.topik_id);
-            $("#existing_image").attr('src', global_url + 'assets/uploads/kelas/asclepedia/' + resp.data.thumbnail);
-            $("#judul_kelas_edit").val(resp.data.judul_kelas);
-            $("#deskripsi_kelas_edit").val(resp.data.deskripsi_kelas);
-            load_pemateri_edit(id);
-            load_materi_edit(id);
-            $("#time_start").val(resp.data.waktu_mulai);
-            $("#time_end").val(resp.data.waktu_akhir);
-            $("#early_price_edit").val(numeral(resp.data.early_price).format('0,0'));
-            $("#late_price_edit").val(numeral(resp.data.late_price).format('0,0'));
-            $("#link_zoom_edit").val(resp.data.link_zoom);
-            $("#youtube_edit").val(resp.data.youtube);
-            $("#limit_edit").val(resp.data.limit);
-            $("#limit_edit").val(resp.data.limit);
-            $("#link_log_edit").attr('href',global_url+'Admin/log_history/'+id);
-            select_profile_member(id);
-        }
-    });
+    //         console.log(resp);
+    //         var date = resp.data.tgl_kelas;
+    //         var arr = date.split('-');
+    //         console.log(arr[1]);
+
+    //         $("#editAsclepedia").modal('show');
+    //         $("#kelas_id").val(id);
+    //         if (resp.data.kategori_kelas == 'good morning knowledge') {
+    //             $("#kat_gmk").attr('checked', true);
+    //             $("#link_gform_edit").show();
+    //             $("#link_gform_edit input").val(resp.data.gform_url);
+    //             $("#box_early_edit").hide();
+    //             $("#box_late_edit").hide();
+    //         } else {
+    //             $("#kat_sl").attr('checked', true);
+    //             $("#link_gform_edit").hide();
+    //             $("#box_early_edit").show();
+    //             $("#box_late_edit").show();
+    //         }
+    //         $("#date").val(parseInt(arr[2], 10));
+    //         $("#date").selectpicker('refresh');
+    //         $("#month").val(parseInt(arr[1], 10));
+    //         $("#month").selectpicker('refresh');
+    //         $("#year").val(arr[0]);
+    //         $("#year").selectpicker('refresh');
+    //         // $("input[name='topik']").val(
+    //         editTopik(resp.data.topik_id);
+    //         $("#existing_image").attr('src', global_url + 'assets/uploads/kelas/asclepedia/' + resp.data.thumbnail);
+    //         $("#judul_kelas_edit").val(resp.data.judul_kelas);
+    //         $("#deskripsi_kelas_edit").val(resp.data.deskripsi_kelas);
+    //         load_pemateri_edit(id);
+    //         load_materi_edit(id);
+    //         $("#time_start").val(resp.data.waktu_mulai);
+    //         $("#time_end").val(resp.data.waktu_akhir);
+    //         $("#early_price_edit").val(numeral(resp.data.early_price).format('0,0'));
+    //         $("#late_price_edit").val(numeral(resp.data.late_price).format('0,0'));
+    //         $("#link_zoom_edit").val(resp.data.link_zoom);
+    //         $("#youtube_edit").val(resp.data.youtube);
+    //         $("#limit_edit").val(resp.data.limit);
+    //         $("#limit_edit").val(resp.data.limit);
+    //         $("#link_log_edit").attr('href',global_url+'Admin/log_history/'+id);
+    //         select_profile_member(id);
+    //     }
+    // });
 }
 
 function select_profile_member(transaksi_id) {

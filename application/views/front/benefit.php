@@ -139,7 +139,7 @@
                 <div style="overflow: hidden;position:relative">
                     <div class="d-none d-md-block d-lg-block d-xl-block" style="position: absolute;width: 100%;top:0;left:0;height:450px;"></div>
                     <div class="d-block d-md-none d-lg-none d-xl-none" style="position: absolute;width: 100%;top:0;left:0;height:100px;"></div>
-                    <iframe width="100%" height="500" id="video-yt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                    <iframe width="100%" height="500" id="video-yt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allownetworking="internal" allowfullscreen></iframe>
                 </div>
 
             </div>

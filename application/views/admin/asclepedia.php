@@ -276,13 +276,13 @@
                     </div>
                     <div class="form-group" id="box_early">
                         <label>Early Bird - Harga Webinar</label>
-                        <input class="form-control daterange" name="date_early" type="text" />
+                        <input class="form-control daterange" value='01/01/2018 - 01/15/2023' name="date_early" type="text" />
                         <br>
                         <input class="form-control" id="early_price" name="early_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga early bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group" id="box_late">
                         <label>Late Bird - Harga Webinar</label>
-                        <input class="form-control daterange" name="date_late" type="text" />
+                        <input class="form-control daterange" value='01/01/2018 - 01/15/2023' name="date_late" type="text" />
                         <br>
                         <input class="form-control" id="late_price" name="late_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
