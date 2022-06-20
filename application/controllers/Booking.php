@@ -420,7 +420,7 @@ class Booking extends CI_Controller
             [
                 "title" => 'Asclepio | Transaksi Masuk',
                 "body" => '',
-                "icon" => 'https://iswam.intivestudio.com/assets/images/logo.png',
+                "icon" => 'https://asclepio.id/assets/admin/images/logo-ascelpio.png',
             ],
         ];
         $dataString = json_encode($data);

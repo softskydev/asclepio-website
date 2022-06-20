@@ -33,14 +33,7 @@ if ($this->uri->segment(4) == 'semua') {
 $detail                 = $this->query->get_query($query)->result();
 $pembeli                = $this->query->get_query($query_pembeli)->row()->pembeli;
 $is_asclepio_asclepedia = $this->query->get_query('SELECT a.* , b.product_id FROM transaksi a JOIN transaksi_detail b ON a.id = b.transaksi_id WHERE b.product_id = '.$data->id.' AND a.user_id = 22')->num_rows();
-
-
-if ($is_asclepio_asclepedia == 1) {
-  $pembeli = $pembeli - 1;  
-} 
-// exit; 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,8 +57,54 @@ if ($is_asclepio_asclepedia == 1) {
     <h1 style="text-align: center;">
         <?= $data->judul_kelas ?>
     </h1>
-    <h3>Total Peserta : <?= $pembeli ?></h3>
-    <h3>Total Pemasukan :Rp <?= rupiah($data->total) ?></h3>
+
+    <!-- Report -->
+    <table style="width: 100%;border-collapse:collapse" border="1">
+        <thead>
+            <tr>
+                <th>Jenis Peserta</th>
+                <th>Jumlah Peserta</th>
+                <th>Nominal Pembayaran Peserta</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Grand Total Peserta</td>
+                <td><?= $pembeli ?></td>
+                <td><?= number_format(100000) ?></td>
+
+            </tr>
+            <tr>
+                <td>Total Peserta Early </td>
+                <td><?= $pembeli ?></td>
+                <td><?= number_format(100000) ?></td>
+
+            </tr>
+            <tr>
+                <td>Total Peserta Late</td>
+                <td><?= $pembeli ?></td>
+                <td><?= number_format(100000) ?></td>                
+            </tr>
+            <tr>
+                <td>Total Peserta Voucher </td>
+                <td><?= $pembeli ?></td>
+                <td><?= number_format(100000) ?></td>
+            </tr>
+            <tr>
+                <td>Total Peserta Bayar </td>
+                <td><?= $pembeli ?></td>
+                <td><?= number_format(100000) ?></td>
+            </tr>
+            <tr>
+                <td>Total Peserta Free </td>
+                <td><?= $pembeli ?></td>
+                <td><?= number_format(100000) ?></td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <!-- <h3>Total Peserta : <?= $pembeli ?></h3> -->
+    <!-- <h3>Total Pemasukan :Rp <?= rupiah($data->total) ?></h3> -->
     <table style="width: 100%;border-collapse:collapse" border="1">
         <thead>
             <tr>
@@ -82,16 +121,16 @@ if ($is_asclepio_asclepedia == 1) {
         </thead>
         <tbody>
             <?php
+            $total = 0;
             $no = 1;
             foreach ($detail as $d) { 
-                if ($d->email != 'asclepio.asclepedia@gmail.com') {
                 ?>
                 <tr>
                     <td>
                         <?= $no++ ?>
                     </td>
                     <td>
-                        <?= $d->tgl_order ?>
+                        <?= set_date($d->tgl_order) ?>
                     </td>
                     <td>
                         <?= $d->nama_lengkap ?>
@@ -103,16 +142,24 @@ if ($is_asclepio_asclepedia == 1) {
                         <?= $d->email ?>
                     </td>
                     <td>
-                        Rp <?= rupiah($d->total_harga) ?>
+                        <?= $d->total_harga ?>
                     </td>
                     <td>
                         Sudah bayar
                     </td>
                 </tr>
-                <?php } ?>
+                <?php $total += $d->total_harga; ?>
             <?php } ?>
         </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5" style="text-align:right;"> Total Pemasukan </th>
+                <th colspan="2" style="text-align: left;">Rp <?= number_format($total); ?></th>
+            </tr>
+        </tfoot>
     </table>
+
+    
 </body>
 
 </html>

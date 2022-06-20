@@ -177,13 +177,17 @@
                     </div>
                     <div class="form-group cstm-btnradio">
                         <label>Kategori</label>
-                        <div class="form-check-inline">
+                        <div class="form-check-inline ">
                             <input onchange="change_val(this.value)" class="form-check-input " id="optkategori1" type="radio" name="kategori" value="good morning knowledge" checked="" required />
                             <label class="form-check-label" for="optkategori1">Good morning knowledge</label>
                         </div>
-                        <div class="form-check-inline">
+                        <div class="form-check-inline ">
                             <input onchange="change_val(this.value)" class="form-check-input " id="optkategori2" type="radio" name="kategori" value="skill labs" required />
                             <label class="form-check-label" for="optkategori2">Skill Lab</label>
+                        </div>
+                        <div class="form-check-inline col-3">
+                            <input onchange="change_val(this.value)" class="form-check-input " id="optkategori3" type="radio" name="kategori" value="drill_the_case" required />
+                            <label class="form-check-label" for="optkategori2">Drill the Case</label>
                         </div>
                     </div>
                     <div class="form-group" id="link_gform">
@@ -276,13 +280,13 @@
                     </div>
                     <div class="form-group" id="box_early">
                         <label>Early Bird - Harga Webinar</label>
-                        <input class="form-control daterange" value='01/01/2018 - 01/15/2023' name="date_early" type="text" />
+                        <input class="form-control daterange" data-date-format="dd/mm/yy" name="date_early" type="text" />
                         <br>
                         <input class="form-control" id="early_price" name="early_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga early bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group" id="box_late">
                         <label>Late Bird - Harga Webinar</label>
-                        <input class="form-control daterange" value='01/01/2018 - 01/15/2023' name="date_late" type="text" />
+                        <input class="form-control daterange" data-date-format="dd/mm/yy" name="date_late" type="text" />
                         <br>
                         <input class="form-control" id="late_price" name="late_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>

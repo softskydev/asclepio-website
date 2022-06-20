@@ -167,7 +167,7 @@ $this->load->helper('text');
         </a>
     <?php } ?> -->
     <div id="menu">
-        <a href="https://wa.me/6281346294614" target="_blank" class="buttons" tooltip="Admin ASCLEPIO TOOLS">
+        <!-- <a href="https://wa.me/6281346294614" target="_blank" class="buttons" tooltip="Admin ASCLEPIO TOOLS">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
         </a>
 
@@ -177,9 +177,9 @@ $this->load->helper('text');
 
         <a href="https://wa.me/6282141383060" target="_blank" class="buttons" tooltip="Admin ASCLEPEDIA">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
-        </a>
+        </a> -->
 
-        <a href="javascript:void(0)" class="buttons" tooltip="Butuh bantuan? chat PIYO yuk">
+        <a href="https://wa.me/6281327257373" class="buttons" tooltip="Tim CS PIYO">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
         </a>
     </div>
@@ -406,7 +406,7 @@ $this->load->helper('text');
                                             <img src="<?= base_url() ?>assets/front/images/ic-ig.png" alt="">
                                         </a>
                                         <a class="icon_socmed" href="https://t.me/asclepio_asclepedia" target="_blank">
-                                            <img src="<?= base_url() ?>assets/front/images/ic-tele.png" alt="">
+                                            <!-- <img src="<?= base_url() ?>assets/front/images/ic-tele.png" alt=""> -->
                                         </a>
 
                                     </div>
@@ -422,7 +422,7 @@ $this->load->helper('text');
                                             <img src="<?= base_url() ?>assets/front/images/ic-ig.png" alt="">
                                         </a>
                                         <a class="icon_socmed" href="https://t.me/ascpioclassroom" target="_blank">
-                                            <img src="<?= base_url() ?>assets/front/images/ic-tele.png" alt="">
+                                            <!-- <img src="<?= base_url() ?>assets/front/images/ic-tele.png" alt=""> -->
                                         </a>
                                     </div>
                                     <div class="footer__menu">
@@ -437,7 +437,7 @@ $this->load->helper('text');
                                             <img src="<?= base_url() ?>assets/front/images/ic-ig.png" alt="">
                                         </a>
                                         <a class="icon_socmed" href="https://t.me/ascpiotools" target="_blank">
-                                            <img src="<?= base_url() ?>assets/front/images/ic-tele.png" alt="">
+                                            <!-- <img src="<?= base_url() ?>assets/front/images/ic-tele.png" alt=""> -->
                                         </a>
                                     </div>
                                     <div class="footer__menu">

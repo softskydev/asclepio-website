@@ -156,62 +156,74 @@ class Asclepedia extends CI_Controller
 
     function get_upcoming()
     {
-        $type = $_GET['type'];
-        $search = $_GET['search'];
-
-        $query1 = "SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND tgl_kelas >= CURDATE() AND is_delete = 0";
-        if ($type != 'semua') {
-            if ($search) {
-                $query1 .= " AND kategori_kelas = '" . $type . "' AND judul_kelas LIKE '%$search%' ";
-            } else {
-                $query1 .= " AND kategori_kelas = '" . $type . "' ";
-            }
-        } else {
-            if ($search) {
-                $query1 .= " AND judul_kelas LIKE '%$search%' ";
-            } else {
-                $query1 .= "";
-            }
+        $type    = $_GET['type'];
+        $datenow = date('Y-m-d');
+        $query1 = "SELECT 
+                    CASE 
+                        WHEN a.tipe_kelas = 'banyak_pertemuan' THEN b.date_materi 
+                        WHEN a.tipe_kelas = 'sekali_pertemuan' THEN a.tgl_kelas
+                    END AS tanggal_mulai , a.* , b.date_materi
+                    FROM kelas a JOIN kelas_materi b ON a.id = b.kelas_id WHERE a.jenis_kelas = 'asclepedia' ";
+        if ($type != '' && $type != 'semua') {
+            $query1 .= ' AND kategori_kelas = "' . $type . '"';
         }
+        $query1 .= " GROUP BY a.id";
         $kelas = $this->query->get_query($query1)->result();
+        // echo $this->db->last_query();
+
+
         $items = [];
         foreach ($kelas as $k) {
-            $date = $k->created_date;
-            $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
+             if ($k->tanggal_mulai >= date('Y-m-d') ) {
+                if ($k->early_daterange != '') {
+                    $date_range_early = $k->early_daterange;
+                    $date_early_start = explode(' - ', $date_range_early)[0];
+                    $date_early_end   = explode(' - ', $date_range_early)[1];
+                    $date_early_start = date("Y-m-d", strtotime($date_early_start));  
+                    $date_early_end   = date("Y-m-d", strtotime($date_early_end));
+                    
+                    if (date('Y-m-d') <= $date_early_end) {
+                        $new_price = $k->early_price;
+                    } else {
+                        $new_price = $k->late_price;
+                    }
 
-            if ($new_date > date('Y-m-d')) {
-                $new_price = $k->early_price;
-            } else {
-                $new_price = $k->late_price;
-            }
-            if ($new_price == 0) {
-                $harga = 'FREE';
-            } else {
-                $harga = 'Rp.' . rupiah($new_price);
-            }
-            if ($k->kategori_kelas == 'good morning knowledge') {
-                $label = 'Good morning knowledge';
-            } else {
-                $label = 'Skill Lab';
-            }
-            $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
+                } else {
+                    $date = $k->created_date;
+                    $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
+                    if ($new_date > date('Y-m-d')) {
+                        $new_price = $k->early_price;
+                    } else {
+                        $new_price = $k->late_price;
+                    }
+                }
 
-            // debug($pemateri);
+                if ($new_price == 0) {
+                    $harga = 'FREE';
+                } else {
+                    $harga = 'Rp.' . rupiah($new_price);
+                }
+                if ($k->kategori_kelas == 'good morning knowledge') {
+                    $label = 'Good morning knowledge';
+                } else {
+                    $label = 'Skill Labs';
+                }
+                $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
 
-            $item['id'] = $k->id;
-            $item['judul'] = $k->judul_kelas;
-            $item['kategori'] = $label;
-            $item['waktu_mulai'] = $k->waktu_mulai;
-            $item['waktu_akhir'] = $k->waktu_akhir;
-            $item['harga'] = $harga;
-            $item['tgl_kelas'] = format_indo($k->tgl_kelas);
-            $item['thumbnail'] = $k->thumbnail;
-            $item['slug'] = $k->slug;
-            $item['token'] = $k->token;
-            $item['pemateri'] = $pemateri;
-            $item['in_public'] = $k->in_public;
-            $item['is_delete'] = $k->is_delete;
-            array_push($items, $item);
+                // debug($pemateri);
+
+                $item['id'] = $k->id;
+                $item['judul'] = $k->judul_kelas;
+                $item['kategori'] = $label;
+                $item['waktu_mulai'] = $k->waktu_mulai;
+                $item['waktu_akhir'] = $k->waktu_akhir;
+                $item['harga'] = $harga;
+                $item['tgl_kelas'] = format_indo($k->tgl_kelas);
+                $item['thumbnail'] = $k->thumbnail;
+                $item['slug'] = $k->slug;
+                $item['pemateri'] = $pemateri;
+                array_push($items, $item); 
+            }
         }
         if ($kelas) {
             $response = [
