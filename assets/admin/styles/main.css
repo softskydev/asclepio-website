@@ -3047,3 +3047,7 @@ label {
 .modal-body .dropdown-menu.inner {
   transform: none !important;
 }
+
+.min-w-auto{
+  min-width: auto !important;
+}
