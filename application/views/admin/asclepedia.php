@@ -177,17 +177,19 @@
                     </div>
                     <div class="form-group cstm-btnradio">
                         <label>Kategori</label>
-                        <div class="form-check-inline ">
-                            <input onchange="change_val(this.value)" class="form-check-input " id="optkategori1" type="radio" name="kategori" value="good morning knowledge" checked="" required />
-                            <label class="form-check-label" for="optkategori1">Good morning knowledge</label>
-                        </div>
-                        <div class="form-check-inline ">
-                            <input onchange="change_val(this.value)" class="form-check-input " id="optkategori2" type="radio" name="kategori" value="skill labs" required />
-                            <label class="form-check-label" for="optkategori2">Skill Lab</label>
-                        </div>
-                        <div class="form-check-inline col-3">
-                            <input onchange="change_val(this.value)" class="form-check-input " id="optkategori3" type="radio" name="kategori" value="drill_the_case" required />
-                            <label class="form-check-label" for="optkategori2">Drill the Case</label>
+                        <div class="d-flex flex-wrap">
+                            <div class="form-check-inline col-md-4 mr-0">
+                                <input onchange="change_val(this.value)" class="form-check-input " id="optkategori1" type="radio" name="kategori" value="good morning knowledge" checked="" required />
+                                <label class="form-check-label min-w-auto w-100 h-100 d-flex align-items-center" for="optkategori1">Good morning knowledge</label>
+                            </div>
+                            <div class="form-check-inline col-md-4 mr-0">
+                                <input onchange="change_val(this.value)" class="form-check-input " id="optkategori2" type="radio" name="kategori" value="skill labs" required />
+                                <label class="form-check-label min-w-auto w-100 h-100 d-flex align-items-center" for="optkategori2">Skill Lab</label>
+                            </div>
+                            <div class="form-check-inline col-md-4 mr-0">
+                                <input onchange="change_val(this.value)" class="form-check-input " id="optkategori3" type="radio" name="kategori" value="drill_the_case" required />
+                                <label class="form-check-label min-w-auto w-100 h-100 d-flex align-items-center" for="optkategori2">Drill the Case</label>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group" id="link_gform">
