@@ -49,8 +49,8 @@ if ($this->uri->segment(4) == 'semua') {
     $finalDate2         =  $date2[0] . '-' . $date2[1] . '-' . $date2[2];
     $query             .= "AND date(t.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
     $query_pembeli     .= " AND date(t.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
-    $query_grand_total .= " AND date(a.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
-    $query_jumlah_duit .= " AND date(a.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
+    $query_grand_total .= " AND date(b.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
+    $query_jumlah_duit .= " AND date(b.tgl_pembelian) between '" . $finalDate1 . "' and '" . $finalDate2 . "'";
 }
 
 
@@ -96,7 +96,7 @@ $is_asclepio_asclepedia = $this->query->get_query('SELECT a.* , b.product_id FRO
     </h1>
 
     <!-- Report -->
-    <table style="width: 100%;border-collapse:collapse" border="1">
+    <!-- <table style="width: 100%;border-collapse:collapse" border="1">
         <thead>
             <tr>
                 <th>Jenis Peserta</th>
@@ -138,7 +138,7 @@ $is_asclepio_asclepedia = $this->query->get_query('SELECT a.* , b.product_id FRO
                 <td style="font-weight: bold;">Rp <?= number_format($sum_price_free) ?></td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
     <br>
     <!-- <h3>Total Peserta : <?= $pembeli ?></h3> -->
     <!-- <h3>Total Pemasukan :Rp <?= rupiah($data->total) ?></h3> -->

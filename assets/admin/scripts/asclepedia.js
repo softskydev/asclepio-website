@@ -263,18 +263,21 @@ function getUpcoming() {
             $("#box_upcoming").empty();
             var box = $("#box_upcoming");
             if (response.status == 200) {
+                console.log(response)
                 var len = response.data.length;
 
                 for (var i = 0; i < len; i++) {
-                    var id = response.data[i]['id'];
-                    var thumbnail = response.data[i]['thumbnail'];
-                    var judul = response.data[i]['judul'];
-                    var kategori = response.data[i]['kategori'];
+                    // alert(response.data[i]['in_public'])
+                    var id          = response.data[i]['id'];
+                    var thumbnail   = response.data[i]['thumbnail'];
+                    var judul       = response.data[i]['judul'];
+                    var kategori    = response.data[i]['kategori'];
                     var waktu_mulai = response.data[i]['waktu_mulai'];
                     var waktu_akhir = response.data[i]['waktu_akhir'];
-                    var harga = response.data[i]['harga'];
-                    var tgl_kelas = response.data[i]['tgl_kelas'];
-                    var verif = global_url + 'Front/verif_kelas/';
+                    var harga       = response.data[i]['harga'];
+                    var tgl_kelas   = response.data[i]['tgl_kelas'];
+                    var verif       = global_url + 'Front/verif_kelas/';
+                    
                     if (response.data[i]['in_public'] == 0) {
                         var public = 'Publish';
                         var btn_edit = "<li><a href='javascript:void(0)' onclick='edit_kelas(" + id + ")'>Edit Kelas</a></li>";
@@ -285,6 +288,8 @@ function getUpcoming() {
                     var img = '';
                     if (kategori == 'Good morning knowledge') {
                         var label = "<span class='tag'>" + kategori + "</span>"
+                    } else if (kategori == 'Drill the Case'){
+                        var label = "<span class='tag tag-primary'>" + kategori + "</span>"
                     } else {
                         var label = "<span class='tag tag-scndry'>" + kategori + "</span>"
                     }

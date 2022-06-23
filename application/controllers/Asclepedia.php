@@ -154,6 +154,27 @@ class Asclepedia extends CI_Controller
         }
     }
 
+    function save_only_course(){
+
+        // debug($_POST);route
+
+        $materi = array(
+            'kelas_id'         => $this->input->post('kelas_id'),
+            'judul_materi'     => $this->input->post('judul_materi'),
+            'deskripsi_materi' => $this->input->post('deskripsi_materi'),
+            'date_materi'      => $this->input->post('tanggal_materi'),
+            'hour_materi'      => $this->input->post('time_materi'),
+            'zoom_materi'      => $this->input->post('link_materi'),
+            'durasi_materi'    => $this->input->post('durasi_materi'),
+        );
+
+        $this->query->insert_for_id('kelas_materi' , null , $materi);
+
+        $this->session->set_flashdata('msg_t' , MSG_SUCCESS);
+        $this->session->set_flashdata('msg' , 'Materi berhasil di tambahkan!');
+        redirect( base_url('admin/kelas_detail/'.$this->input->post('kelas_id')) );
+    }
+
     function get_upcoming()
     {
         $type    = $_GET['type'];
@@ -205,7 +226,11 @@ class Asclepedia extends CI_Controller
                 }
                 if ($k->kategori_kelas == 'good morning knowledge') {
                     $label = 'Good morning knowledge';
-                } else {
+                } else if($k->kategori_kelas == 'drill the case'){
+                     $label = 'Drill the Case';
+                }
+
+                else {
                     $label = 'Skill Labs';
                 }
                 $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
@@ -216,12 +241,14 @@ class Asclepedia extends CI_Controller
                 $item['judul'] = $k->judul_kelas;
                 $item['kategori'] = $label;
                 $item['waktu_mulai'] = $k->waktu_mulai;
+                $item['in_public'] = $k->in_public;
                 $item['waktu_akhir'] = $k->waktu_akhir;
                 $item['harga'] = $harga;
                 $item['tgl_kelas'] = format_indo($k->tgl_kelas);
                 $item['thumbnail'] = $k->thumbnail;
                 $item['slug'] = $k->slug;
                 $item['pemateri'] = $pemateri;
+                $item['is_delete'] = $k->is_delete;
                 array_push($items, $item); 
             }
         }
@@ -435,96 +462,100 @@ class Asclepedia extends CI_Controller
         echo json_encode($response);
     }
 
-    function do_edit($publish = null)
+    function do_edit($id = null)
     {
-        $id = $this->input->post('kelas_id');
-        $config['upload_path']   = './assets/uploads/kelas/asclepedia';
-        $config['allowed_types'] = '*';
-        $config['encrypt_name']  = true;
-        $this->load->library('upload', $config);
+        // debug($_FILES);
+        // exit;   
+        $errormsg = '';
+        $gform    = ($this->input->post('gform_edit')) ? $this->input->post('gform_edit') : '';
+        $youtube  = ($this->input->post('youtube_edit')) ? $this->input->post('youtube_edit') : '';
 
-        $_FILES['images']['name'] = $_FILES['thumbnail_edit']['name'];
-        $_FILES['images']['type'] = $_FILES['thumbnail_edit']['type'];
-        $_FILES['images']['tmp_name'] = $_FILES['thumbnail_edit']['tmp_name'];
-        $_FILES['images']['error'] = $_FILES['thumbnail_edit']['error'];
-        $_FILES['images']['size'] = $_FILES['thumbnail_edit']['size'];
-
-        $gform = ($this->input->post('gform_edit')) ? $this->input->post('gform_edit') : '';
-        $youtube = ($this->input->post('youtube_edit')) ? $this->input->post('youtube_edit') : '';
-
-        $this->upload->initialize($config);
-        if ($publish == null) {
-            $in_public = 0;
-        } else {
-            $in_public = 1;
-        }
+       
+       
         $data = [
-            'judul_kelas'     => $this->input->post('judul_kelas_edit'),
+            'judul_kelas'     => $this->input->post('judul_kelas'),
+            'kategori_kelas'  => $this->input->post('kategori_kelas'),
+            'tipe_kelas'      => $this->input->post('tipe_kelas_sekali_or_banyak'),
             'topik_id'        => $this->input->post('topik_edit'),
-            'deskripsi_kelas' => $this->input->post('deskripsi_kelas_edit'),
-            'kategori_kelas'  => $this->input->post('kategori_edit'),
-            'tgl_kelas'       => $this->input->post('year_edit') . '-' . $this->input->post('month_edit') . '-' . $this->input->post('date_edit'),
-            'waktu_mulai'     => $this->input->post('waktu_mulai_edit'),
-            'waktu_akhir'     => $this->input->post('waktu_akhir_edit'),
+            'deskripsi_kelas' => $this->input->post('deskripsi_kelas'),
+            'link_zoom'       => $this->input->post('linkzoom'),
+            'youtube'         => $this->input->post('linkyoutube'),
+            'early_daterange' => $this->input->post('linkyoutube'),
+            'late_daterange'  => $this->input->post('linkyoutube'),
+            'limit'           => $this->input->post('limit'),
+            'early_daterange' => str_replace('/', '-', $this->input->post('daterange_early')),
+            'late_daterange'  => str_replace('/', '-', $this->input->post('daterange_late')),
             'jenis_kelas'     => 'asclepedia',
-            'early_price'     => str_replace(',', '', $this->input->post('early_price_edit')),
-            'late_price'      => str_replace(',', '', $this->input->post('late_price_edit')),
-            'link_zoom'       => $this->input->post('link_zoom_edit'),
-            'slug'            => url_title($this->input->post('judul_kelas_edit'), 'dash', true),
-            'gform_url'       => $gform,
-            'youtube'         => $youtube,
-            'limit'           => $this->input->post('limit_edit'),
-            'in_public'       => $in_public,
+            'early_price'     => str_replace(',', '', $this->input->post('price_early')),
+            'late_price'      => str_replace(',', '', $this->input->post('price_late')),
+            'slug'            => $this->re_named_slug($this->input->post('judul_kelas')),
+            // 'gform_url'       => $gform,
+            // 'youtube'         => $youtube,
+            'in_public'       => $this->input->post('status_publish'),
             'public_date'     => date("Y-m-d h:i:s"),
 
         ];
 
-        if ($this->upload->do_upload('images')) {
-            // Uploaded file data
-            if ($id != null) {
-                $get = $this->query->get_data_simple('kelas', ['id' => $id])->row();
-                if ($get) {
-                    $old_path = './assets/uploads/kelas/asclepedia/' . $get->thumbnail;
-                    if (file_exists($old_path)) {
-                        unlink($old_path);
-                    }
-                }
-                $fileData   = $this->upload->data();
-                $uploadData = $fileData['file_name'];
+        if (isset($_FILES['foto_kelas']['name'])) {
+            $config['upload_path']   = './assets/uploads/kelas/asclepedia/';
+            $config['allowed_types'] = '*';
+            $config['encrypt_name']  = true;
+            $this->upload->initialize($config);
 
-                $data['thumbnail'] = $uploadData;
-            } else {
-                echo $this->upload->display_errors();
+            $_FILES['images']['name']     = $_FILES['foto_kelas']['name'];
+            $_FILES['images']['type']     = $_FILES['foto_kelas']['type'];
+            $_FILES['images']['tmp_name'] = $_FILES['foto_kelas']['tmp_name'];
+            $_FILES['images']['error']    = $_FILES['foto_kelas']['error'];
+            $_FILES['images']['size']     = $_FILES['foto_kelas']['size'];
+
+            if ($this->upload->do_upload('images')) {
+                // Uploaded file data
+                if ($id != null) {
+                    $get = $this->query->get_data_simple('kelas', ['id' => $id])->row();
+                    if ($get) {
+                        $old_path = './assets/uploads/kelas/asclepedia/' . $get->thumbnail;
+                        if (file_exists($old_path)) {
+                            unlink($old_path);
+                        }
+                    }
+                    $fileData   = $this->upload->data();
+                    $uploadData = $fileData['file_name'];
+
+                    $data['thumbnail'] = $uploadData;
+                } else {
+                    $errormsg =  $this->upload->display_errors();
+                }
             }
         }
+        
+
         $update = $this->query->insert_for_id('kelas', ['id' => $id], $data);
 
+        // if ($this->input->post('free_member_edit')) {
+        //     $free_member   = count($this->input->post('free_member_edit'));
 
-        if ($this->input->post('free_member_edit')) {
-            $free_member   = count($this->input->post('free_member_edit'));
+        //     for ($i = 0; $i < $free_member; $i++) {
+        //         $member = array(
+        //             'user_id' => $this->input->post('free_member_edit')[$i],
+        //             'kode_transaksi' => 'ASC' . date("YmdHis") . $i,
+        //             'total' => 0,
+        //             'status' => 'paid',
+        //             'metode_pembayaran' => 'free'
+        //         );
+        //         $save_trans = $this->query->insert_for_id('transaksi', null, $member);
+        //         $trans_id = $save_trans->output;
 
-            for ($i = 0; $i < $free_member; $i++) {
-                $member = array(
-                    'user_id' => $this->input->post('free_member_edit')[$i],
-                    'kode_transaksi' => 'ASC' . date("YmdHis") . $i,
-                    'total' => 0,
-                    'status' => 'paid',
-                    'metode_pembayaran' => 'free'
-                );
-                $save_trans = $this->query->insert_for_id('transaksi', null, $member);
-                $trans_id = $save_trans->output;
-
-                $detail[] = array(
-                    'transaksi_id' => $trans_id,
-                    'product_id' => $id,
-                    'harga' => 0,
-                    'diskon' => 0,
-                    'total_harga' => 0,
-                    'status' => 'success',
-                );
-            }
-            $this->query->insert_batch('transaksi_detail', $detail);
-        }
+        //         $detail[] = array(
+        //             'transaksi_id' => $trans_id,
+        //             'product_id' => $id,
+        //             'harga' => 0,
+        //             'diskon' => 0,
+        //             'total_harga' => 0,
+        //             'status' => 'success',
+        //         );
+        //     }
+        //     $this->query->insert_batch('transaksi_detail', $detail);
+        // }
 
         if ($this->input->post('pemateri_edit')) {
             $this->query->delete_data('kelas_pemateri', ['kelas_id' => $id]);
@@ -538,20 +569,68 @@ class Asclepedia extends CI_Controller
             $this->query->insert_batch('kelas_pemateri', $pemateri);
         }
 
-        $this->update_log($id, $this->input->post('link_zoom_edit'));
+        $this->update_log($id, $this->input->post('link_zoom'));
 
 
         if ($update) {
 
-            $this->session->set_flashdata('msg_type', 'success');
-            $this->session->set_flashdata('msg', 'Berhasil edit data');
-            redirect('/Admin/asclepedia');
+            $response = [
+                'status' => 200,
+                'msg' => 'berhasil update kelas!'
+            ];
+
         } else {
-            $this->session->set_flashdata('msg_type', 'error');
-            $this->session->set_flashdata('msg', 'Gagal edit data');
-            redirect('/Admin/asclepedia');
+            // $this->session->set_flashdata('msg_type', 'error');
+            // $this->session->set_flashdata('msg', 'Gagal edit data');
+            // redirect('/Admin/asclepedia');
+
+            $response = [
+                'status' => 400,
+                'msg' => 'gagal update kelas! :'.$errormsg
+            ];
         }
+
+        echo json_encode($response);
     }
+
+    function course_detail($id){
+
+        $json = $this->query->get_data_simple('kelas_materi' , ['id' => $id] )->row();
+        echo json_encode(['status' => 200 , 'data' => $json]);
+    }
+
+    function save_course_link($id){
+
+        $data = [
+            'link_materi_rekaman' => $_POST['link_materi_rekaman'],
+            'link_materi_youtube' => $_POST['link_materi_youtube'],
+            'password_materi' => $_POST['password_materi'],
+        ];
+
+        $where = [
+            'id' => $id
+        ];
+
+        $this->query->insert_for_id('kelas_materi' , $where , $data);
+
+        $response['status'] = 200;
+        $response['msg'] = 'Sukses mengupdate materi';
+
+        echo json_encode($response);
+    }
+
+    function re_named_slug($title) {
+
+        $slug_now = url_title($title, 'dash', true);
+        $check = $this->query->get_data_simple('kelas' , ['slug' => $slug_now]);
+        if ($check->num_rows()>0) {
+            $slug_now = $slug_now .'-'.rand(1,999);
+        }
+
+        return $slug_now;
+
+    }
+
     function delete_kelas($id)
     {
         $is_delete = $this->query->get_data('is_delete', 'kelas', ['id' => $id])->row()->is_delete;

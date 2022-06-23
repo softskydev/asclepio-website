@@ -58,26 +58,26 @@ $route['authadmin'] = 'Login/index';
 
 // WEB
 
-$route['asclepedia/(:any)'] = 'Front/asclepedia/$1';
-$route['asclepedia'] = 'Front/asclepedia';
-$route['asclepiogo/(:any)'] = 'Front/asclepiogo/$1';
-$route['asclepiogo'] = 'Front/asclepiogo';
-$route['cart'] = 'Front/cart';
-$route['following_class'] = 'Front/following_class';
-$route['payment/(:any)'] = 'Front/payment/$1';
-$route['payment_status/(:any)'] = 'Front/payment_status/$1';
-$route['profile'] = 'Front/profile';
-$route['profile/(:any)'] = 'Front/profile/$1';
-$route['profile/(:any)/(:any)'] = 'Front/profile/$1/$1';
+$route['asclepedia/(:any)']            = 'Front/asclepedia/$1';
+$route['asclepedia']                   = 'Front/asclepedia';
+$route['asclepiogo/(:any)']            = 'Front/asclepiogo/$1';
+$route['asclepiogo']                   = 'Front/asclepiogo';
+$route['cart']                         = 'Front/cart';
+$route['following_class']              = 'Front/following_class';
+$route['payment/(:any)']               = 'Front/payment/$1';
+$route['payment_status/(:any)']        = 'Front/payment_status/$1';
+$route['profile']                      = 'Front/profile';
+$route['profile/(:any)']               = 'Front/profile/$1';
+$route['profile/(:any)/(:any)']        = 'Front/profile/$1/$1';
 $route['profile/(:any)/(:any)/(:any)'] = 'Front/profile/$1/$1/$1';
-$route['about'] = 'Front/about';
-$route['faq'] = 'Front/faq';
-$route['benefit/(:any)'] = 'Front/benefit/$1';
-$route['setting'] = 'Front/setting';
-$route['login'] = 'Front/login';
-$route['login/(:any)'] = 'Front/login/$1';
-$route['register'] = 'Front/register';
-$route['verify'] = 'Auth/verify';
+$route['about']                        = 'Front/about';
+$route['faq']                          = 'Front/faq';
+$route['benefit/(:any)']               = 'Front/benefit/$1';
+$route['setting']                      = 'Front/setting';
+$route['login']                        = 'Front/login';
+$route['login/(:any)']                 = 'Front/login/$1';
+$route['register']                     = 'Front/register';
+$route['verify']                       = 'Auth/verify';
 /*
  * ============ Routes dari Master DATA =============*
  * ===== URL == ( if:num == id) =	== Controller == *

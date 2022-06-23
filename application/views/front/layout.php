@@ -331,7 +331,7 @@ $this->load->helper('text');
                                 <li><a href="<?= base_url() ?>profile/kelas"><img src="<?= base_url() ?>assets/front/images/ic-menu-following-class.svg" alt=""> <span>Kelas yang sudah diikuti</span>
                                         <u class="count"><?= $count_follow ?></u></a></li>
                                 <!-- <li><a href="<?= base_url() ?>benefit"><img src="<?= base_url() ?>assets/front/images/ic-menu-benefit.svg" alt=""> <span>Benefit</span>
-                                        <u class="count"><?= $count_benefit ?></u></a></li> -->
+                                        <u class="count"></u></a></li> -->
                                 <!-- <li><a href="<?= base_url() ?>setting"><img src="<?= base_url() ?>assets/front/images/ic-menu-setting.svg" alt=""> <span>Pengaturan</span></a></li> -->
                                 <li class="logout"><a href="<?= base_url() ?>Auth/logout_cust"><img src="<?= base_url() ?>assets/front/images/ic-menu-logout.svg" alt=""> <span>Log out</span></a></li>
                             <?php } ?>

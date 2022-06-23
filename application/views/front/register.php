@@ -10,15 +10,24 @@
                                 <label>Nama Lengkap</label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <select name="gelar" id="" class="form-control" required>
+                                        <select name="gelar" id="gelar_doctor" class="form-control" required>
                                             <option value="dr.">dr.</option>
                                             <option value="Mr.">Mr.</option>
                                             <option value="Mrs.">Mrs.</option>
                                             <option value="Ms.">Ms.</option>
+                                            <option value="S.Keb">S.Keb</option>
+                                            <option value="Apt.">Apt.</option>
+                                            <option value="Ns.">Ns.</option>
+                                            <option value="Bd.">Bd. </option>
+                                            <option value="A.Md.Keb">A.Md.Keb</option>
+                                            <option value="A.Md.Kep">A.Md.Kep</option>
+                                            <option value="other">Other</option>
                                         </select>
                                     </div>
+
                                     <input class="form-control" type="text" name="nama_lengkap" placeholder="Masukan nama lengkap" required />
                                 </div>
+                                <small id="text-noted" style="color:red;display:none"> *Langsung tulis nama beserta gelar anda </small>
                             </div>
                             <div class="form-group">
                                 <label for="">Jenis Kelamin</label>
@@ -39,10 +48,10 @@
                                 <label>Nomor WhatsApp</label>
                                 <input class="form-control" type="text" name="no_wa" placeholder="Masukan No. WA anda" required />
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Instagram <small>(optional)</small></label>
                                 <input class="form-control" type="text" name="ig" placeholder="Masukan nama instagram anda" />
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label>Asal Provinsi</label>
                                 <select class="select" title="Pilih asal provinsi" name="provinsi_id" id="select_provinsi" data-live-search="true" data-size="5" required>
@@ -114,3 +123,7 @@
     </div>
 
 </section>
+
+<script type="text/javascript">
+    
+</script>

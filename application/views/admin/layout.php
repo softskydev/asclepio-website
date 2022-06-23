@@ -15,6 +15,8 @@
     <link href="<?= base_url() ?>assets/font-awesome-pro-master/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
 </head>
 
 <body>
@@ -159,7 +161,11 @@
             $("#" + id).val(x);
         }
     </script>
-
+     <?php if ($this->session->flashdata('msg')): ?>
+        <script type="text/javascript">
+          toastr["<?= $this->session->flashdata('msg_t') ?>"]("<?= $this->session->flashdata('msg') ?>")
+        </script>
+    <?php endif ?>
     <script>
         window.editors = {};
 

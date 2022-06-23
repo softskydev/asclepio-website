@@ -85,6 +85,7 @@ class Front extends CI_Controller
             $data['onrating'] = $this->query->get_query("SELECT k.* FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.is_delete = 0 AND k.in_public = 1 AND k.jenis_kelas = 'asclepedia' GROUP BY k.`judul_kelas` ORDER BY COUNT(d.`product_id`) DESC LIMIT 3")->result();
             $data['morning'] = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'good morning knowledge' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
             $data['skill'] = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'skill labs' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
+            $data['drill'] = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'drill the case' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
             $page['content']  = $this->load->view('front/asclepedia', $data, true);
         } else {
             $data['title']       =  ' Kelas Online Kedokteran #1 di Indonesia | Asclepedia Class';
@@ -429,21 +430,43 @@ class Front extends CI_Controller
         $this->load->view('front/layout', $page);
     }
     function benefit($id)
-    {
-        $data['meta_title'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
-        $data['meta_desc'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
+    {   
+
+        $kelas                = $this->query->get_data_simple('kelas', ['id' => $id])->row();
+
+        $data['meta_title']   = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
+        $data['meta_desc']    = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
         $data['meta_keyword'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_keyword;
-        $data['meta_url'] = base_url();
-        $data['meta_img'] = '';
-        $user_id = $this->session->userdata('id');
-        $data['title']       =  ' Kelas Online Kedokteran #1 di Indonesia | Benefit';
-        $data['data']       = $this->query->get_data_simple('kelas', ['id' => $id])->row();
-        $data['script'][] = $this->js_path() . 'profile.js';
+        $data['meta_url']     = base_url();
+        $data['meta_img']     = '';
+        $user_id              = $this->session->userdata('id');
+        $data['title']        =  ' Kelas Online Kedokteran #1 di Indonesia | Benefit';
+        $data['data']         = $this->query->get_data_simple('kelas', ['id' => $id])->row();
+        $data['script'][]     = $this->js_path() . 'profile.js';   
         if ($user_id == '') {
             redirect(base_url('login'));
         } else {
-            $page['content']  = $this->load->view('front/benefit', $data, true);
+
+            if ($kelas->tipe_kelas == 'banyak_pertemuan') {
+                $count = $this->query->get_query("SELECT COUNT(link_materi_rekaman) AS jumlah_materi FROM  kelas_materi WHERE kelas_id = $id AND link_materi_rekaman != '' ")->row();
+                if ($count->jumlah_materi == 0) {
+                    $data['script'][]     = $this->js_path() . 'profile.js';
+                    $page['content']  = $this->load->view('front/benefit', $data, true);
+                } else {
+                    $data['data']    = $kelas;
+                    $data['materi']   = $this->query->get_data_simple('kelas_materi' , ['kelas_id' => $id])->result();
+                    $page['content']  = $this->load->view('front/benefit_multiple_class', $data, true);
+                }
+
+            } else {
+                 
+                 $page['content']  = $this->load->view('front/benefit', $data, true);
+            }
+           
         }
+
+
+
 
         $this->load->view('front/layout', $page);
     }

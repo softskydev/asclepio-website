@@ -101,3 +101,14 @@ define("GOOGLE_API_KEY", 'AIzaSyDIOhOjf9jfr0-fU9kl95MjMYdGHKNgfgI');
 // define("USERPASSWORD", 'eastoni_123');
 define("ACCESS_EMAIL", 'asclepio.website@gmail.com');
 define("ACCESS_EMAIL_PASSWORD", 'ppnpapehyljmikvz');
+
+
+
+
+define("MSG_SUCCESS", 'success');
+define("MSG_INFO", 'info');
+define("MSG_WARNING", 'warning');
+define("MSG_ERROR", 'error');
+
+
+
