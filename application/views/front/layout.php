@@ -167,7 +167,7 @@ $this->load->helper('text');
         </a>
     <?php } ?> -->
     <div id="menu">
-        <!-- <a href="https://wa.me/6281346294614" target="_blank" class="buttons" tooltip="Admin ASCLEPIO TOOLS">
+        <a href="https://wa.me/6281346294614" target="_blank" class="buttons" tooltip="Admin ASCLEPIO TOOLS">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
         </a>
 
@@ -177,13 +177,13 @@ $this->load->helper('text');
 
         <a href="https://wa.me/6282141383060" target="_blank" class="buttons" tooltip="Admin ASCLEPEDIA">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
-        </a> -->
+        </a>
 
         <a href="https://wa.me/6281327257373" class="buttons" tooltip="Tim CS PIYO">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
         </a>
     </div>
-    <!-- <ul id="menu" class="mfb-component--br mfb-slidein-spring" data-mfb-toggle="hover" style="z-index: 999;">
+    <ul id="menu" class="mfb-component--br mfb-slidein-spring" data-mfb-toggle="hover" style="z-index: 999;">
         <li class="mfb-component__wrap">
             <a href="javascript:void(0)" class="mfb-component__button--main" data-mfb-label="Butuh bantuan? chat PIYO yuk">
                 <i class="mfb-component__main-icon--resting fab fa-whatsapp" style="font-size: 30px;"></i>
@@ -208,7 +208,7 @@ $this->load->helper('text');
                 </li>
             </ul>
         </li>
-    </ul> -->
+    </ul>
     <div id="wrap">
         <?php
         if ($this->uri->segment(1) == 'login' || $this->uri->segment(1) == 'register') { ?>
