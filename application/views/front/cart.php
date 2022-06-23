@@ -173,7 +173,15 @@
                                 <div class="left"><span>Total Harga</span></div>
                                 <div class="right text-right"><span id="text_total"></span></div>
                             </li>
-                        </ul><button class="btn btn-primary btn-block btn-checkout" onclick="makeTransaction(<?= $this->session->userdata('id') ?>)">Checkout</button>
+                        </ul>
+                        <div class="row mx-0">
+                            <div class="col-6 pl-md-0 pr-md-1">
+                                <button class="btn btn-primary btn-checkout w-100" onclick="makeTransaction(<?= $this->session->userdata('id') ?>)">Checkout Otomatis</button>
+                            </div>
+                            <div class="col-6 pr-md-0 pl-md-1">
+                                <a href="<?= base_url()?>manual"><button class="btn btn-primary w-100">Checkout Manual</button></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

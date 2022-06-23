@@ -63,6 +63,7 @@ $route['asclepedia'] = 'Front/asclepedia';
 $route['asclepiogo/(:any)'] = 'Front/asclepiogo/$1';
 $route['asclepiogo'] = 'Front/asclepiogo';
 $route['cart'] = 'Front/cart';
+$route['manual'] = 'Front/manual';
 $route['following_class'] = 'Front/following_class';
 $route['payment/(:any)'] = 'Front/payment/$1';
 $route['payment_status/(:any)'] = 'Front/payment_status/$1';
