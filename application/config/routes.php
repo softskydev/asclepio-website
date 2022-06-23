@@ -67,6 +67,7 @@ $route['following_class']              = 'Front/following_class';
 $route['payment/(:any)']               = 'Front/payment/$1';
 $route['payment_status/(:any)']        = 'Front/payment_status/$1';
 $route['profile']                      = 'Front/profile';
+$route['manual'] = 'Front/manual';
 $route['profile/(:any)']               = 'Front/profile/$1';
 $route['profile/(:any)/(:any)']        = 'Front/profile/$1/$1';
 $route['profile/(:any)/(:any)/(:any)'] = 'Front/profile/$1/$1/$1';
