@@ -259,26 +259,36 @@ $this->load->helper('text');
 
                             <div class="col-md-5 ">
                                 <div class="row">
-                                    <div class="col-md-4 text-right">
+                                    <div class="col-md-2 text-right">
                                         <a href="<?= base_url() ?>cart" class="btn-link" style="display: inline-flex;"><i class="fa fa-shopping-cart"></i></a> 
                                         <?php $count_cart = $this->query->get_query("SELECT COUNT(id) AS count_cart FROM cart WHERE `user_id` = " . $this->session->userdata('id') . " ")->row()->count_cart; ?>
                                         <?php if ($count_cart != 0) { ?>
                                             <label class="badge badge-danger"><?= $count_cart ?></label>
                                             <?php } ?>
-                                        </div>
-                                        <div class="col-md-2 d-none d-md-block">
-                                            <a href="<?= base_url() ?>cart" class="btn-link" style="display: inline-flex;"><i class="fa fa-bell"></i></a> 
-                                            <label class="badge badge-danger">0</label>
-                                        <!-- <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa fa-bell" aria-hidden="true"></i>
-                                        </button>
-                                        <div class="dropdown-menu border-0 py-0 shadow" style="width: 300px;" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item border-bottom" href="#">Action</a>
-                                            <a class="dropdown-item border-bottom" href="#">Another action</a>
-                                            <a class="dropdown-item border-bottom" href="#">Something else here</a>
-                                        </div> -->
                                     </div>
-                                    <div class="col-md-6 d-none d-md-block">
+                                    <div class="col-md-2 text-right position-relative notif-menu">
+                                        <a href="#" class="btn-link" style="display: inline-flex;"><i class="fa fa-bell"></i></a> 
+                                        <?php $count_cart = $this->query->get_query("SELECT COUNT(id) AS count_cart FROM cart WHERE `user_id` = " . $this->session->userdata('id') . " ")->row()->count_cart; ?>
+                                        <?php if ($count_cart != 0) { ?>
+                                            <label class="badge badge-danger"><?= $count_cart ?></label>
+                                            <?php } ?>
+                                            <div class="notif__box">
+                                                <div class="notif-list">
+                                                    <ul>
+                                                        <?php for ($i=1; $i < 30 ; $i++) { ?>
+                                                            <li>
+                                                                <a href="#" class="border-bottom">
+                                                                    <div class="icon bg-dark"></div>
+                                                                    <span>Notif <?= $i ?></span>
+                                                                </a>
+                                                            </li>
+                                                        <?php }?>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                    </div>
+                                        
+                                    <div class="col-md-8 d-none d-md-block">
                                         <div class="header__right">
 
                                             <div class="account-user">

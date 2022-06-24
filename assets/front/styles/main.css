@@ -2351,7 +2351,13 @@ header.header .icon-menu span:nth-child(3) {
     font-weight: 500;
 }
 
-.account-user .account-submenu {
+
+
+.notif:after{
+    display: none;
+}
+
+.account-user .account-submenu, .notif__box .notif-list {
     position: absolute;
     min-width: 250px;
     top: calc(100% + 40px);
@@ -2368,7 +2374,54 @@ header.header .icon-menu span:nth-child(3) {
     visibility: hidden;
 }
 
-.account-user .account-submenu:before {
+.notif__box .notif-list{
+    left: -150px;
+    min-width: 400px;
+    top: calc(100% + 70px);
+    padding: 0px;
+}
+
+.notif__box .notif-list li a {
+    display: flex;
+    align-items: center;
+    padding: 10px 10px;
+}
+.notif__box .notif-list li a .icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.notif__box .notif-list ul{
+    height: 450px;
+    overflow-y: scroll;
+    padding: 10px; 
+}
+
+.notif__box .notif-list ul::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+.notif__box .notif-list ul::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+.notif__box .notif-list ul::-webkit-scrollbar-thumb
+{
+	background-color: #0000007a;
+}
+
+.notif__box .notif-list li a span{
+    padding-left: 15px;
+    font-weight: 600;
+}
+
+
+.account-user .account-submenu:before, .notif__box .notif-list:before {
     content: "";
     position: absolute;
     top: -16px;
@@ -2380,12 +2433,12 @@ header.header .icon-menu span:nth-child(3) {
     border-width: 0 16px 16px;
 }
 
-.account-user .account-submenu ul li:not(:last-child) {
+.account-user .account-submenu ul li:not(:last-child), .notif__box .notif-list ul li:not(:last-child) {
     -webkit-margin-after: 20px;
     margin-block-end: 20px;
 }
 
-.account-user .account-submenu ul li a {
+.account-user .account-submenu ul li a, .notif__box .notif-list ul li a {
     font-size: 14px;
     line-height: 1.5em;
     color: #202320;
@@ -2416,7 +2469,7 @@ body.usracnt-open .account-user:after {
     transform: rotate(-180deg);
 }
 
-body.usracnt-open .account-user .account-submenu {
+body.usracnt-open .account-user .account-submenu, .notif-menu:hover .notif__box .notif-list {
     opacity: 1;
     visibility: visible;
     top: calc(100% + 20px);
@@ -2805,6 +2858,17 @@ header.header-auth .header__right .language span {
         bottom: 5px !important;
         right: 5px !important;
     }
+
+    .notif__box{
+        position: absolute;
+        right: 230px;
+    }
+
+    
+    .notif__box .notif-list::before{
+        left: 80%;
+    }
+    
 }
 
 
