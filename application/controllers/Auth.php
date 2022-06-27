@@ -182,12 +182,18 @@ class Auth extends CI_Controller
 		redirect('login');
 	}
 	public function login()
-	{
-		$email 	=	$_POST['email'];
-		$password   =   $_POST['password'];
-		$url   =   $_POST['url'];
-		$token = $_POST['token'];
+	{	
+
+
+		$email    =	$_POST['email'];
+		$password = $_POST['password'];
+		$url      = $_POST['url'];
+		$token    = $_POST['token'];
 		$remember = $_POST['remember'];
+		
+		debug($_POST);
+
+
         if ($email == '' && $password != '') {
 			$this->session->set_flashdata('msg_type', 'error');
 			$this->session->set_flashdata('msg', 'Email tidak boleh kosong');

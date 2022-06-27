@@ -167,7 +167,7 @@ $this->load->helper('text');
         </a>
     <?php } ?> -->
     <div id="menu">
-        <!-- <a href="https://wa.me/6281346294614" target="_blank" class="buttons" tooltip="Admin ASCLEPIO TOOLS">
+        <a href="https://wa.me/6281346294614" target="_blank" class="buttons" tooltip="Admin ASCLEPIO TOOLS">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
         </a>
 
@@ -177,13 +177,13 @@ $this->load->helper('text');
 
         <a href="https://wa.me/6282141383060" target="_blank" class="buttons" tooltip="Admin ASCLEPEDIA">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
-        </a> -->
+        </a>
 
         <a href="https://wa.me/6281327257373" class="buttons" tooltip="Tim CS PIYO">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
         </a>
     </div>
-    <!-- <ul id="menu" class="mfb-component--br mfb-slidein-spring" data-mfb-toggle="hover" style="z-index: 999;">
+    <ul id="menu" class="mfb-component--br mfb-slidein-spring" data-mfb-toggle="hover" style="z-index: 999;">
         <li class="mfb-component__wrap">
             <a href="javascript:void(0)" class="mfb-component__button--main" data-mfb-label="Butuh bantuan? chat PIYO yuk">
                 <i class="mfb-component__main-icon--resting fab fa-whatsapp" style="font-size: 30px;"></i>
@@ -208,7 +208,7 @@ $this->load->helper('text');
                 </li>
             </ul>
         </li>
-    </ul> -->
+    </ul>
     <div id="wrap">
         <?php
         if ($this->uri->segment(1) == 'login' || $this->uri->segment(1) == 'register') { ?>
@@ -353,7 +353,7 @@ $this->load->helper('text');
                                 <li><a href="<?= base_url() ?>profile/kelas"><img src="<?= base_url() ?>assets/front/images/ic-menu-following-class.svg" alt=""> <span>Kelas yang sudah diikuti</span>
                                         <u class="count"><?= $count_follow ?></u></a></li>
                                 <!-- <li><a href="<?= base_url() ?>benefit"><img src="<?= base_url() ?>assets/front/images/ic-menu-benefit.svg" alt=""> <span>Benefit</span>
-                                        <u class="count"><?= $count_benefit ?></u></a></li> -->
+                                        <u class="count"></u></a></li> -->
                                 <!-- <li><a href="<?= base_url() ?>setting"><img src="<?= base_url() ?>assets/front/images/ic-menu-setting.svg" alt=""> <span>Pengaturan</span></a></li> -->
                                 <li class="logout"><a href="<?= base_url() ?>Auth/logout_cust"><img src="<?= base_url() ?>assets/front/images/ic-menu-logout.svg" alt=""> <span>Log out</span></a></li>
                             <?php } ?>

@@ -2,6 +2,13 @@ $(document).ready(function () {
     getUniv();
     getProvinsi();
 });
+$("#gelar_doctor").change(function(event) {
+    if (this.value == 'other') {
+        $("#text-noted").show();
+    } else {
+        $("#text-noted").hide();
+    }
+});
 
 function getProvinsi() {
     $.ajax({

@@ -187,7 +187,7 @@
                                 <label class="form-check-label min-w-auto w-100 h-100 d-flex align-items-center" for="optkategori2">Skill Lab</label>
                             </div> 
                             <div class="form-check-inline col-md-4 mr-0">
-                                <input onchange="change_val(this.value)" class="form-check-input " id="optkategori3" type="radio" name="kategori" value="drill_the_case" required />
+                                <input onchange="change_val(this.value)" class="form-check-input " id="optkategori3" type="radio" name="kategori" value="drill the case" required />
                                 <label class="form-check-label min-w-auto w-100 h-100 d-flex align-items-center" for="optkategori3">Drill the Case</label>
                             </div>
                         </div>

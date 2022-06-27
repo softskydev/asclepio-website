@@ -134,9 +134,11 @@ class Admin extends CI_Controller
 
 
         $data['title']       = $data['data']->judul_kelas;
+        $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js';
         $data['script'][] = 'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js';
         $data['script'][] = 'https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js';
-        $data['script'][] = $this->js_path() . 'class_detail.js';
+        $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js';
+        $data['script'][] = $this->js_path() . 'asclepedia_edit.js';
 
         $page['content']  = $this->load->view('admin/asclepedia_edit_kelas', $data, true);
         $this->load->view('admin/layout', $page);
