@@ -191,7 +191,7 @@ class Auth extends CI_Controller
 		$token    = $_POST['token'];
 		$remember = $_POST['remember'];
 		
-		debug($_POST);
+		// debug($_POST);
 
 
         if ($email == '' && $password != '') {

@@ -360,7 +360,9 @@
 
         </div>
     </section>
-     <section class="section" id="drill_the_case">
+    
+    <?php if(count($drill)>0) { ?>
+    <section class="section" id="drill_the_case">
         <div class="container">
             <div class="section__heading">
                 <h3>Asclepedia : Drill the Case</h3>
@@ -393,16 +395,6 @@
                         $date           = $drillthecase->public_date;
                         $new_date       = date("Y-m-d", strtotime("+2 day", strtotime($date)));
 
-                
-                        
-
-                        // if ($new_date > date('Y-m-d')) {
-                        //     $new_price = $drillthecase->early_price;
-                        // } else {
-                        //     $new_price = $drillthecase->late_price;
-                        // }
-                        
-
                         if ($expire_time <= $today_time) {
                             $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
                             $button = '';
@@ -414,7 +406,7 @@
                          $ribbon = '';
                          $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $drillthecase->id . ')">Daftar</button>';
                     }
-                ?>
+                    ?>
                     <div class="col-lg-4 col-md-6 slider__item">
                         <div class="box-card">
                             <?= $ribbon ?>
@@ -463,6 +455,7 @@
 
         </div>
     </section>
+    <?php } ?>
     <section class="section jadwal">
         <div class="container">
             <div class="section__heading">

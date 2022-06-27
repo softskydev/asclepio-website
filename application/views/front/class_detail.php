@@ -269,7 +269,12 @@
             </div>
             <div class="row wrap-box-card slider" data-items="4">
                 <?php
-                $saran = $this->query->get_query("SELECT * FROM kelas WHERE id != '$data->id' AND topik_id = $data->topik_id AND tgl_kelas > CURDATE() AND is_delete = 0 AND in_public = 1")->result();
+                $querys = "SELECT * FROM kelas WHERE id != '$data->id'";
+                if ($data->topik_id != null) {
+                    $querys .= "AND topik_id = $data->topik_id";
+                }
+                $querys .= " AND tgl_kelas > CURDATE() AND is_delete = 0 AND in_public = 1";
+                $saran = $this->query->get_query($querys)->result();
                 foreach ($saran as $s) {
                     $date = $s->public_date;
                     $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
@@ -284,7 +289,6 @@
                     } else {
                         $harga = 'Rp ' . rupiah($new_price);
                     }
-
                     if ($s->jenis_kelas == 'asclepedia') {
                         $jenis_kelas = 'asclepedia';
                         if ($s->kategori_kelas == 'good morning knowledge') {

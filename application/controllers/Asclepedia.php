@@ -153,6 +153,90 @@ class Asclepedia extends CI_Controller
             redirect('/Admin/asclepedia');
         }
     }
+    
+    function save_tiket_terusan(){
+
+        // debug($_POST);
+        $config['upload_path']   = './assets/uploads/kelas_terusan';
+        $config['allowed_types'] = '*';
+        $config['file_name']  = create_slug($_POST['judul_tiket_terusan']).date('Ymd');
+        $this->load->library('upload', $config);
+
+        $_FILES['images']['name']     = $_FILES['thumbnail']['name'];
+        $_FILES['images']['type']     = $_FILES['thumbnail']['type'];
+        $_FILES['images']['tmp_name'] = $_FILES['thumbnail']['tmp_name'];
+        $_FILES['images']['error']    = $_FILES['thumbnail']['error'];
+        $_FILES['images']['size']     = $_FILES['thumbnail']['size'];
+
+
+        $judul_tiket_terusan  = $_POST['judul_tiket_terusan'];
+        $code_terusan         = 'ASCTT-'.rand(0,99).strtoupper(substr(md5( date('Y-m-d') ) , 0 , 6));
+        $harga_terusan        = str_replace(',' , '' , $_POST['tiket_terusan_price']);
+        
+        if ( !  $this->upload->do_upload('images'))
+        {
+                $error = $this->upload->display_errors();
+
+                $this->session->set_flashdata('msg_t' , MSG_ERROR);
+                $this->session->set_flashdata('msg' , 'Gagal menginput :'.$error);
+                
+                redirect( base_url('Admin/asclepedia/') );
+
+        }   
+        else
+        {
+                $data = $this->upload->data();
+                $data_images = $data['file_name'];
+
+                $terusan = [
+                    'code_kelas'          => $code_terusan,
+                    'image'               => $data_images,
+                    'judul_kelas_terusan' => $judul_tiket_terusan,
+                    'price_kelas_terusan' => $harga_terusan,
+                ];
+
+                $id = $this->query->insert_for_id('kelas_terusan' , null , $terusan);
+                $id_kelas_terusan = $id->output;
+
+        }
+
+        $data_to_kelas = [];
+        $jumlah_kelas      = count($_POST['kelas_id']);
+
+        for($i = 0 ; $i < $jumlah_kelas ;$i++ ){
+            $data_to_kelas[] = [
+                'kelas_terusan_id' => $id_kelas_terusan,
+                'kelas_id'         => $_POST['kelas_id'][$i],
+            ];
+        }
+
+        $this->query->insert_batch('kelas_terusan_detail' , $data_to_kelas );
+
+        $this->session->set_flashdata('msg_t' , MSG_SUCCESS);
+        $this->session->set_flashdata('msg' , 'Materi berhasil di tambahkan!');
+        redirect( base_url('Admin/asclepedia/') );
+
+    }
+
+    function getTerusan(){
+
+        $data = $this->query->get_data_simple('kelas_terusan', null);
+        if ($data->num_rows()>0) {
+            $datas = $data->result();
+            $response = [
+                'status' => 200,
+                'data'   => $datas,
+            ];
+        } else {
+            $response = [
+                'status' => 400,
+                'data'  => null
+            ];
+        }
+
+        echo json_encode($response);
+
+    }
 
     function save_only_course(){
 
@@ -244,7 +328,7 @@ class Asclepedia extends CI_Controller
                 $item['in_public'] = $k->in_public;
                 $item['waktu_akhir'] = $k->waktu_akhir;
                 $item['harga'] = $harga;
-                $item['tgl_kelas'] = format_indo($k->tgl_kelas);
+                $item['tgl_kelas'] = format_indo($k->tanggal_mulai);
                 $item['thumbnail'] = $k->thumbnail;
                 $item['slug'] = $k->slug;
                 $item['pemateri'] = $pemateri;

@@ -88,14 +88,14 @@ class Front extends CI_Controller
             $data['drill'] = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'drill the case' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
             $page['content']  = $this->load->view('front/asclepedia', $data, true);
         } else {
-            $data['title']       =  ' Kelas Online Kedokteran #1 di Indonesia | Asclepedia Class';
-            $data['data'] = $this->query->get_query("SELECT * FROM kelas WHERE slug = '$slug'")->row();
-            $data['meta_title'] = $data['data']->judul_kelas;
-            $data['meta_desc'] = $data['data']->deskripsi_kelas;
+            $data['title']        = ' Kelas Online Kedokteran #1 di Indonesia | Asclepedia Class';
+            $data['data']         = $this->query->get_query("SELECT * FROM kelas WHERE slug = '$slug'")->row();
+            $data['meta_title']   = $data['data']->judul_kelas;
+            $data['meta_desc']    = $data['data']->deskripsi_kelas;
             $data['meta_keyword'] = $data['data']->deskripsi_kelas;
-            $data['meta_url'] = base_url('asclepedia/' . $data['data']->slug);
-            $data['meta_img'] = base_url() . 'assets/uploads/kelas/asclepedia/' . $data['data']->thumbnail;
-            $page['content']  = $this->load->view('front/class_detail', $data, true);
+            $data['meta_url']     = base_url('asclepedia/' . $data['data']->slug);
+            $data['meta_img']     = base_url() . 'assets/uploads/kelas/asclepedia/' . $data['data']->thumbnail;
+            $page['content']      = $this->load->view('front/class_detail', $data, true);
         }
 
         $this->load->view('front/layout', $page);

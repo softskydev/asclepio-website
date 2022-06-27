@@ -166,9 +166,10 @@ class Voucher extends CI_Controller
 
         $items = [];
         foreach ($data as $d) {
-            $querys = $this->db->query("SELECT id FROM transaksi_detail WHERE code_voucher = '$d->code_voucher'")->num_rows();
-            $pengguna = $this->query->get_query("SELECT u.nama_lengkap FROM transaksi t JOIN transaksi_detail d ON t.`id` = d.transaksi_id JOIN `user` u ON t.user_id = u.id WHERE d.code_voucher = '$d->code_voucher' AND t.`status` = 'paid'")->row()->nama_lengkap;
-            if ($pengguna) {
+            $querys   = $this->db->query("SELECT id FROM transaksi_detail WHERE code_voucher = '$d->code_voucher'")->num_rows();
+            $pengguna = $this->query->get_query("SELECT u.nama_lengkap FROM transaksi t JOIN transaksi_detail d ON t.`id` = d.transaksi_id JOIN `user` u ON t.user_id = u.id WHERE d.code_voucher = '$d->code_voucher' AND t.`status` = 'paid'");
+            if ($pengguna->num_rows() > 0) {
+                $pengguna = $pengguna->row()->nama_lengkap;
                 $item['pengguna_voucher'] = '<br><span class="badge badge-success">' . $pengguna . '</span>';
             } else {
                 $item['pengguna_voucher'] = '';

@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    // getPemateri(x);
-    // $("#addAsclepedia").modal('show');
     getTopik();
     $("#box_materi").hide();
     $('#addAsclepedia').on('shown.bs.modal', function () {
@@ -9,10 +7,14 @@ $(document).ready(function () {
         $("#form_add").trigger("reset");
         $("#box_early").hide();
         $("#box_late").hide();
+        $("#showWhenTiketTerusan").hide();
+        $("#hideWhenTiketTerusan").show();
+        $("#form_add").attr('action'  , global_url + 'Asclepedia/save_kelas');
     });
     getUpcoming();
     getFinished();
     getUnbenefit();
+    getTerusan();
 
     $("input[type=radio][name='tipe_kelas_sekali_or_banyak'").change(function() {
         if (this.value == 'sekali_pertemuan') {
@@ -38,9 +40,10 @@ $(document).ready(function () {
 
 });
 let dokter = [];
-
 function change_val(val) {
     if (val == 'good morning knowledge') {
+        $("#showWhenTiketTerusan").hide();
+        $("#hideWhenTiketTerusan").show();
         $("#link_gform").show();
         $("#link_gform_edit").show();
         $("#box_early").hide();
@@ -49,7 +52,15 @@ function change_val(val) {
         $("#box_late_edit").hide();
         $("#early_price").val(0);
         $("#late_price").val(0);
-    } else {
+        $("#for_tiket_terusan").show();
+        $("#form_add").attr('action'  , global_url + 'Asclepedia/save_kelas');
+        $("input[name='judul_kelas']").addAttr('required');
+        $("#select_pemateri").addAttr('required');
+        $("#deskripsi_kelas").addAttr('required');
+        $(".deskripsi_materi").addAttr('required');
+    } else if(val == 'skill labs' || val == 'drill the case'  ) {
+        $("#showWhenTiketTerusan").hide();
+        $("#hideWhenTiketTerusan").show();
         $("#link_gform").hide();
         $("#link_gform_edit").hide();
         $("#box_early").show();
@@ -58,7 +69,73 @@ function change_val(val) {
         $("#box_late_edit").show();
         $("#early_price").val('');
         $("#late_price").val('');
+        $("#for_tiket_terusan").show();
+        $("#form_add").attr('action'  , global_url + 'Asclepedia/save_kelas');
+        $("input[name='judul_kelas']").addAttr('required');
+        $("#select_pemateri").addAttr('required');
+        $("#deskripsi_kelas").addAttr('required');
+        $(".deskripsi_materi").addAttr('required');
+    } else {
+       $("#hideWhenTiketTerusan").hide();
+       $("#showWhenTiketTerusan").show();
+       $("input[name='judul_kelas']").removeAttr('required');
+       $("textarea[name='deskripsi_kelas']").removeAttr('required');
+       $(".deskripsi_materi").removeAttr('required');
+       $("#select_pemateri").removeAttr('required');
+       $("#form_add").attr('action'  , global_url + 'Asclepedia/save_tiket_terusan');
     }
+}
+
+function getTerusan(){
+
+    $.ajax({
+        type: "GET",
+        url: global_url + "Asclepedia/getTerusan/",
+        dataType: "json",
+        success: function (response) {
+            $("#box_tiket_terusan").empty();
+            var box = $("#box_tiket_terusan");
+            console.log(response)
+            if (response.status == 200) {
+                
+                var len = response.data.length;
+
+                for (var i = 0; i < len; i++) {
+                    // alert(response.data[i]['in_public'])
+                    var id         = response.data[i]['id'];
+                    var thumbnail  = response.data[i]['image'];
+                    var judul      = response.data[i]['judul_kelas_terusan'];
+                    var code_kelas = response.data[i]['code_kelas'];
+                    var harga      = response.data[i]['price_kelas_terusan'];
+                   
+                    var html = "<div class='col-md-3 mb-3'>" +
+                        "<div class='box-card'>" +
+                        "<div class='box-card__img'><img src='" + global_url + "assets/uploads/kelas_terusan/" + thumbnail + "' class='thumbnail'/></div>" +
+                        "<div class='box-card__text'><span class='tag tag-success'>Tiket Terusan</span>" +
+                        "<h4><a href='#'>" + judul + "</a></h4>" +
+                        "</div>" +
+                        "<div class='box-card__footer'>" +
+                        "<div class='price'>" + numeral(harga).format('0,0') + "</div>" +
+                        "<div class='action'>" +
+                        "<div class='dot'><img src='" + global_url + "assets/admin/images/ic-three-dots.svg'/></div>" +
+                        "<div class='action-sub'>" +
+                        "<ul>" +
+                        // "<li><a href='javascript:void(0)' onclick='edit_kelas(" + id + ")'>Edit Kelas</a></li>" +
+                        "<li class='dlt'><a href='" + global_url + "Asclepedia/delete_kelas/" + id + "'>Edit Tiket </a></li>" +
+                        "</ul>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>";
+                    $(box).append(html);
+                }
+            } else {
+                $(box).html('Tidak ada data');
+            }
+        }
+    });
+
 }
 
 
@@ -263,7 +340,7 @@ function getUpcoming() {
             $("#box_upcoming").empty();
             var box = $("#box_upcoming");
             if (response.status == 200) {
-                console.log(response)
+                // console.log(response)
                 var len = response.data.length;
 
                 for (var i = 0; i < len; i++) {

@@ -111,6 +111,22 @@ class Admin extends CI_Controller
         $this->check_session();
 
         $data['title']       = 'Asclepedia Class';
+        $data_kelas_terusan = [];
+        $kelas_terusan   = $this->query->get_query("SELECT 
+        CASE 
+            WHEN a.tipe_kelas = 'banyak_pertemuan' THEN b.date_materi 
+            WHEN a.tipe_kelas = 'sekali_pertemuan' THEN a.tgl_kelas
+        END AS tanggal_mulai , a.* , b.date_materi
+        FROM kelas a JOIN kelas_materi b ON a.id = b.kelas_id WHERE a.jenis_kelas = 'asclepedia' group by a.id ")->result();
+        $i = 0;
+        foreach($kelas_terusan as $kelas){
+            if($kelas->tanggal_mulai >= date('Y-m-d')){
+                $data_kelas_terusan[$i]['id']  = $kelas->id;
+                $data_kelas_terusan[$i]['judul'] = $kelas->judul_kelas;
+                $i++;
+            }
+        }
+        $data['kelas_terusan'] = $data_kelas_terusan;       
         $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js';
         $data['script'][] = $this->js_path() . 'asclepedia.js';
 
