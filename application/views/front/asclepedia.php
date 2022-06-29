@@ -361,6 +361,41 @@
         </div>
     </section>
     
+    <!-- TIKET TERUSAN -->
+    <section class="section highlight" id="tiket_terusan">
+        <div class="aksen aksen-1" style="bottom: calc(50% - 146px);left: -51px;"><img src="<?= base_url() ?>assets/front/images/aksen-asclepedia-highlight1.svg" /></div>
+        <div class="aksen aksen-2" style="top: calc(50% - 118px);right: -39px;"><img src="<?= base_url() ?>assets/front/images/aksen-asclepedia-highlight2.svg" /></div>
+        <div class="container">
+            <div class="section__heading">
+                <h3>Asclepedia : Tiket Terusan</h3>
+            </div>
+            <div class="row wrap-box-card">
+                <?php foreach ($terusan as $data) { 
+                ?>
+                    <div class="col-lg-3 col-md-6 slider__item">
+                        <div class="box-card">
+                            <a href="<?= base_url() ?>kelas-terusan/<?= strtoupper(md5($data->code_kelas)) ?>">
+                                <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas_terusan/<?= $data->image ?>" class="thumbnail" />
+                                    <!-- <div class="rating">
+                                        <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-star.png" /></div><span><?= $rating ?></span>
+                                    </div> -->
+                                </div>
+                                <div class="box-card__text"><span class="tag tag-scndry">Tiket Terusan </span>
+                                    <h4><?= $data->judul_kelas_terusan ?></h4>
+                                </div>
+                            </a>
+                            
+                            <div class="box-card__footer">
+                                <div class="price" style="text-decoration:line-through">Rp <?= number_format($data->price_actual) ?></div> 
+                                <div class="price">Rp <?= number_format($data->price_kelas_terusan) ?></div> 
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </section>
+    <?= count($drill); ?>
     <?php if(count($drill)>0) { ?>
     <section class="section" id="drill_the_case">
         <div class="container">

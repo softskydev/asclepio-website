@@ -131,7 +131,10 @@
     <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-messaging.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    
+    
     <?php
     if (isset($script)) {
         $count = sizeof($script);
@@ -141,13 +144,15 @@
         }
     }
     ?>
+
+    
     <?php
     if ($this->session->flashdata('msg_type')) {
     ?>
         <script type="text/javascript">
             Swal.fire({
                 title: '<?= $this->session->flashdata('msg') ?>',
-                icon: '<?= $this->session->flashdata('msg_type') ?>',
+                icon:  '<?= $this->session->flashdata('msg_type') ?>',
             })
         </script>
 

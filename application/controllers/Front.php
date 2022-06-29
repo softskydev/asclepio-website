@@ -75,18 +75,20 @@ class Front extends CI_Controller
         $data['caption'] = $this->query->get_data_simple('caption', ['id' => 1])->row();
         $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js';
         $data['script'][] = $this->js_path() . 'booking.js';
+        
         if ($slug == null) {
-            $data['meta_title'] = $this->query->get_data_simple('seo', ['page' => 'asclepedia'])->row()->meta_title;
-            $data['meta_desc'] = $this->query->get_data_simple('seo', ['page' => 'asclepedia'])->row()->meta_desc;
+            $data['meta_title']   = $this->query->get_data_simple('seo', ['page' => 'asclepedia'])->row()->meta_title;
+            $data['meta_desc']    = $this->query->get_data_simple('seo', ['page' => 'asclepedia'])->row()->meta_desc;
             $data['meta_keyword'] = $this->query->get_data_simple('seo', ['page' => 'asclepedia'])->row()->meta_keyword;
-            $data['meta_url'] = base_url('asclepedia');
-            $data['meta_img'] = '';
-            $data['title']       =  ' Kelas Online Kedokteran #1 di Indonesia | Asclepedia Class';
-            $data['onrating'] = $this->query->get_query("SELECT k.* FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.is_delete = 0 AND k.in_public = 1 AND k.jenis_kelas = 'asclepedia' GROUP BY k.`judul_kelas` ORDER BY COUNT(d.`product_id`) DESC LIMIT 3")->result();
-            $data['morning'] = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'good morning knowledge' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
-            $data['skill'] = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'skill labs' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
-            $data['drill'] = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'drill the case' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
-            $page['content']  = $this->load->view('front/asclepedia', $data, true);
+            $data['meta_url']     = base_url('asclepedia');
+            $data['meta_img']     = '';
+            $data['title']        = ' Kelas Online Kedokteran #1 di Indonesia | Asclepedia Class';
+            $data['onrating']     = $this->query->get_query("SELECT k.* FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.is_delete = 0 AND k.in_public = 1 AND k.jenis_kelas = 'asclepedia' GROUP BY k.`judul_kelas` ORDER BY COUNT(d.`product_id`) DESC LIMIT 3")->result();
+            $data['morning']      = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'good morning knowledge' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
+            $data['skill']        = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'skill labs' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
+            $data['drill']        = $this->query->get_query("SELECT * FROM kelas WHERE jenis_kelas = 'asclepedia' AND kategori_kelas = 'drill the case' AND is_delete = 0 AND in_public = 1 ORDER BY public_date ASC")->result();
+            $data['terusan']      = $this->query->get_query("SELECT * FROM kelas_terusan")->result();
+            $page['content']      = $this->load->view('front/asclepedia', $data, true);
         } else {
             $data['title']        = ' Kelas Online Kedokteran #1 di Indonesia | Asclepedia Class';
             $data['data']         = $this->query->get_query("SELECT * FROM kelas WHERE slug = '$slug'")->row();
@@ -100,6 +102,20 @@ class Front extends CI_Controller
 
         $this->load->view('front/layout', $page);
     }
+
+    function tiket_terusan_detail($slug){
+        $data['data']         = $this->query->get_data_simple('kelas_terusan' , ['md5(code_kelas)' => $slug])->row();
+        $data['title']   = $data['data']->judul_kelas_terusan;
+        $data['meta_title']   = $data['data']->judul_kelas_terusan;
+        $data['meta_desc']    = $data['data']->judul_kelas_terusan;
+        $data['meta_keyword'] = $data['data']->judul_kelas_terusan .','. $data['data']->code_kelas;
+        $data['meta_url']     = base_url('kelas-terusan');
+        $data['meta_img'] = '';
+        $page['content']      = $this->load->view('front/class_detail_terusan', $data, true);
+        $this->load->view('front/layout', $page);
+    }
+
+
     function asclepiogo($slug = null)
     {
 
@@ -134,9 +150,9 @@ class Front extends CI_Controller
     function change_jadwal()
     {
         $jenis_kelas = $this->input->post('jenis_kelas');
-        $tgl_kelas = $this->input->post('tgl_kelas');
-        $kategori = $this->input->post('kategori');
-        $query1 = "SELECT * FROM kelas WHERE jenis_kelas = '$jenis_kelas' AND tgl_kelas = '$tgl_kelas' AND is_delete = 0 AND in_public = 1";
+        $tgl_kelas   = $this->input->post('tgl_kelas');
+        $kategori    = $this->input->post('kategori');
+        $query1      = "SELECT * FROM kelas WHERE jenis_kelas = '$jenis_kelas' AND tgl_kelas = '$tgl_kelas' AND is_delete = 0 AND in_public = 1";
 
         if ($kategori != 'all') {
             if ($jenis_kelas == 'asclepedia') {

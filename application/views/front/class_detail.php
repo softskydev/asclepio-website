@@ -26,9 +26,11 @@
                             $kategori = $data->kategori_kelas;
                             if ($kategori == 'good morning knowledge') {
                                 $label = '<span class="tag tag">Good Morning Knowledge</span>';
+                            } else if($kategori == 'drill the case'){
+                                $label = '<span class="tag tag">Drill the Case</span>';
                             } else {
                                 $label = '<span class="tag tag-scndry">Skills Lab</span>';
-                            }
+                            } 
                         } else {
                             $kategori = $data->kategori_go;
                             if ($kategori == 'open') {
@@ -149,7 +151,7 @@
                                                         <div class="ic">
                                                             <img src="<?= base_url() ?>assets/front/images/ic-tp-date.svg" />
                                                         </div>
-                                                        <span><?= format_indo($tgl->date_materi) ?></span>
+                                                        <span><?= format_indo($tgl->date_materi) ?> - <?= substr($tgl->hour_materi,0,-3); ?></span>
                                                     </li>
                                                     <?php
                                                 }

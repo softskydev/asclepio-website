@@ -193,6 +193,7 @@ class Asclepedia extends CI_Controller
                     'image'               => $data_images,
                     'judul_kelas_terusan' => $judul_tiket_terusan,
                     'price_kelas_terusan' => $harga_terusan,
+                    'price_actual'        => str_replace(',','' ,$_POST['price_actual']),
                 ];
 
                 $id = $this->query->insert_for_id('kelas_terusan' , null , $terusan);
@@ -218,6 +219,64 @@ class Asclepedia extends CI_Controller
 
     }
 
+    function editTiketTerusan(){
+        $tiket_terusan_id = $_POST['tiket_terusan_id'];
+        $rows             = $this->query->get_data_simple('kelas_terusan', ['id' => $tiket_terusan_id])->row();
+        $old_image        = $rows->image;
+        
+        $data_kelas_terusan = [
+            'judul_kelas_terusan' => $_POST['judul_tiket_terusan'],
+            'price_kelas_terusan' => str_replace(',' ,'',$_POST['tiket_terusan_price']),
+            'price_actual'        => str_replace(',','' ,$_POST['price_actual'])
+        ];
+
+        if(isset($_FILES['thumbnail']['name'])){
+            $config['upload_path']   = './assets/uploads/kelas_terusan/';
+            $config['allowed_types'] = '*';
+            $config['file_name']     = create_slug($_POST['judul_tiket_terusan']).date('Ymd');
+            $this->load->library('upload', $config);
+
+            $_FILES['images']['name']     = $_FILES['thumbnail']['name'];
+            $_FILES['images']['type']     = $_FILES['thumbnail']['type'];
+            $_FILES['images']['tmp_name'] = $_FILES['thumbnail']['tmp_name'];
+            $_FILES['images']['error']    = $_FILES['thumbnail']['error'];
+            $_FILES['images']['size']     = $_FILES['thumbnail']['size'];
+
+            if ( $this->upload->do_upload('images')){
+                
+                $old_path = './assets/uploads/kelas/kelas_terusan/' . $old_image;
+                if (file_exists($old_path)) {
+                    unlink($old_path);
+                }
+
+                $data        = $this->upload->data();
+                $data_kelas_terusan['image']    = $data['file_name'];
+                
+            } 
+
+        }
+
+        $this->query->insert_for_id('kelas_terusan' ,  ['id' => $tiket_terusan_id] , $data_kelas_terusan );
+
+        $data_to_kelas = [];
+        $this->query->delete_data('kelas_terusan_detail' , ['kelas_terusan_id' => $tiket_terusan_id]);
+        $jumlah_kelas      = count($_POST['kelas_id']);
+
+        for($i = 0 ; $i < $jumlah_kelas ;$i++ ){
+            $data_to_kelas[] = [
+                'kelas_terusan_id' => $tiket_terusan_id,
+                'kelas_id'         => $_POST['kelas_id'][$i],
+            ];
+        }
+
+        $this->query->insert_batch('kelas_terusan_detail' , $data_to_kelas );
+
+        $this->session->set_flashdata('msg_type' , MSG_SUCCESS);
+        $this->session->set_flashdata('msg' , 'Tiket terusan berhasil di update');
+        redirect( base_url('Admin/asclepedia/') );
+
+    }
+
     function getTerusan(){
 
         $data = $this->query->get_data_simple('kelas_terusan', null);
@@ -235,29 +294,47 @@ class Asclepedia extends CI_Controller
         }
 
         echo json_encode($response);
+    }
+    
+    function detailTiketTT($id){
+
+        $kelas_detail    = $this->query->get_data_simple('kelas_terusan_detail' , ['kelas_terusan_id' => $id ])->result();
+        $kelas_selected  = [];
+        foreach($kelas_detail as $det){
+            $kelas_selected[] = $det->kelas_id;
+        }
+        $tiket_terusan           = $this->query->get_data_simple('kelas_terusan' , ['id' => $id])->row();
+        $late_price              = 0;
+        $kelas_terusan   = $this->query->get_query("SELECT 
+        CASE 
+            WHEN a.tipe_kelas = 'banyak_pertemuan' THEN b.date_materi 
+            WHEN a.tipe_kelas = 'sekali_pertemuan' THEN a.tgl_kelas
+        END AS tanggal_mulai , a.* , b.date_materi
+        FROM kelas a JOIN kelas_materi b ON a.id = b.kelas_id WHERE a.jenis_kelas = 'asclepedia' group by a.id ")->result();
+        $option = '';
+        foreach($kelas_terusan as $kelas){
+            if($kelas->tanggal_mulai >= date('Y-m-d') ){
+                $selected = (in_array($kelas->id, $kelas_selected)) ? 'selected' : '';
+                $option  .= '<option data-price="'.$kelas->late_price.'" value="'.$kelas->id.'" '. $selected.'>'.$kelas->judul_kelas.'</option>';
+
+                $late_price += $kelas->late_price;
+            }
+        }
+        
+        $response =[
+            'status'     => 200,
+            'msg'        => 'success get data',
+            'data_row'   => $tiket_terusan,
+            'data_kelas' => $option,
+            'total_harga'=> $late_price,
+        ];
+
+        echo json_encode($response);
+
 
     }
 
-    function save_only_course(){
-
-        // debug($_POST);route
-
-        $materi = array(
-            'kelas_id'         => $this->input->post('kelas_id'),
-            'judul_materi'     => $this->input->post('judul_materi'),
-            'deskripsi_materi' => $this->input->post('deskripsi_materi'),
-            'date_materi'      => $this->input->post('tanggal_materi'),
-            'hour_materi'      => $this->input->post('time_materi'),
-            'zoom_materi'      => $this->input->post('link_materi'),
-            'durasi_materi'    => $this->input->post('durasi_materi'),
-        );
-
-        $this->query->insert_for_id('kelas_materi' , null , $materi);
-
-        $this->session->set_flashdata('msg_t' , MSG_SUCCESS);
-        $this->session->set_flashdata('msg' , 'Materi berhasil di tambahkan!');
-        redirect( base_url('admin/kelas_detail/'.$this->input->post('kelas_id')) );
-    }
+    
 
     function get_upcoming()
     {
@@ -681,6 +758,56 @@ class Asclepedia extends CI_Controller
 
         $json = $this->query->get_data_simple('kelas_materi' , ['id' => $id] )->row();
         echo json_encode(['status' => 200 , 'data' => $json]);
+    }
+
+    function save_only_course(){
+
+        // debug($_POST);
+
+        if (isset($_POST['materi_id'])){
+            $where = ['id' => $_POST['materi_id']];
+            $response_msg = 'Materi berhasil di Update';
+        } else {
+            $where = null;
+            $response_msg = 'Materi berhasil di tambahkan';
+        }
+
+        $materi = array(
+            'kelas_id'         => $this->input->post('kelas_id'),
+            'judul_materi'     => $this->input->post('judul_materi'),
+            'deskripsi_materi' => $this->input->post('deskripsi_materi'),
+            'date_materi'      => $this->input->post('tanggal_materi'),
+            'hour_materi'      => $this->input->post('time_materi'),
+            'zoom_materi'      => $this->input->post('link_materi'),
+            'durasi_materi'    => $this->input->post('durasi_materi'),
+        );
+
+        $this->query->insert_for_id('kelas_materi' , $where , $materi);
+
+        $this->session->set_flashdata('msg_t' , MSG_SUCCESS);
+        $this->session->set_flashdata('msg' , $response_msg);
+        redirect( base_url('admin/kelas_detail/'.$this->input->post('kelas_id')) );
+    }
+
+    function delete_only_course(){
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+            $kelas_id = $_POST['kelas_id'];
+            $materi_id = $_POST['materi_id'];
+
+            $this->query->delete_data('kelas_materi' , ['id' => $materi_id]);
+            $response =[
+                'status' => 200,
+                'msg' => "Berhasil menghapus materi",
+            ];
+
+            echo json_encode($response);
+        } else {
+            exit('METHOD NOT ALLOWED');
+        }
+        
+        
     }
 
     function save_course_link($id){

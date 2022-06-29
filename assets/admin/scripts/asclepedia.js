@@ -27,6 +27,29 @@ $(document).ready(function () {
              
         }
     });
+    var totalSum;
+    $("#select_kelas").change(function() {
+        totalSum = 0;
+        $("#select_kelas option:selected").each(function(){
+            price = $(this).data('price');
+            totalSum += parseInt(price);
+            // console.log(this);
+        })
+        $("#grandTotalPrice").val(numeral(totalSum).format('0,0'));
+        $("#grandTotalPrice").attr('readonly' , true);
+    });
+    var totalSumEdit = 0;
+    $("#editKelasTT").change(function() {
+        totalSumEdit = 0;
+        $("#editKelasTT option:selected").each(function(){
+            price = $(this).data('price');
+            totalSumEdit += parseInt(price);
+            // console.log(this);
+        })
+        $("#totalPriceTT").val(numeral(totalSumEdit).format('0,0'));
+        $("#totalPriceTT").attr('readonly' , true);
+    });
+
     var today = new Date();
     $('.daterange').daterangepicker({
         minDate: today,
@@ -37,6 +60,14 @@ $(document).ready(function () {
     $('.hide_when_banyak').show();
     $('.show_on_banyak').hide();
 
+
+    imageTT.onchange = evt => {
+        const [file] = imageTT.files
+        if (file) {
+            editImgTT.src = URL.createObjectURL(file)
+        }
+    }
+      
 
 });
 let dokter = [];
@@ -121,7 +152,7 @@ function getTerusan(){
                         "<div class='action-sub'>" +
                         "<ul>" +
                         // "<li><a href='javascript:void(0)' onclick='edit_kelas(" + id + ")'>Edit Kelas</a></li>" +
-                        "<li class='dlt'><a href='" + global_url + "Asclepedia/delete_kelas/" + id + "'>Edit Tiket </a></li>" +
+                        "<li ><a href='javascript:void(0)' onclick='detailTiket("+id+")'>Lihat Tiket </a></li>" +
                         "</ul>" +
                         "</div>" +
                         "</div>" +
@@ -138,11 +169,34 @@ function getTerusan(){
 
 }
 
-
 function show_materi() {
     $("#box_materi").show();
     $("#box_add").hide();
 }
+
+function detailTiket(id){
+
+    $("#modalEditTIketTerusan").modal('show');
+    $.ajax({
+        url: global_url+"Asclepedia/detailTiketTT/"+id,
+        type: "GET",
+        dataType: "json",
+        success: function (response) {
+            // console.log(response);
+            $("#editKelasTT").html(response.data_kelas);
+            $("#editKelasTT").selectpicker("refresh");
+            $("#editImgTT").attr("src" , global_url+'assets/uploads/kelas_terusan/'+response.data_row.image);
+            $("#editPriceTT").val(numeral(response.data_row.price_kelas_terusan).format('0,0'));
+            $("#editTitleTT").val(response.data_row.judul_kelas_terusan);
+            $("#totalPriceTT").val(numeral(response.total_harga).format('0,0'));
+            $("#titleTiketTerusan").html(response.data_row.judul_kelas_terusan);
+            $("#idTT").val(response.data_row.id);
+        }
+    });
+
+}
+
+
 
 // function getPemateri(x) {
 

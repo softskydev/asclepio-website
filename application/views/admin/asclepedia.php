@@ -429,11 +429,15 @@
                             <select class="select" id="select_kelas" data-live-search="true" name="kelas_id[]" multiple="multiple" required>
                                 <?php
                                 foreach ($kelas_terusan as $p) { ?>
-                                    <option value="<?= $p['id'] ?>"><?= $p['judul'] ?></option>
+                                    <option data-price='<?= $p['price'] ?>' value="<?= $p['id'] ?>"><?= $p['judul'] ?></option>
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="form-group" id="box_early">
+                        <div class="form-group" >
+                            <label>Total Harga Seharusnya</label>
+                            <input class="form-control" name="price_actual" id="grandTotalPrice" reaedonly/>
+                        </div>
+                        <div class="form-group" >
                             <label>Harga Tiket Terusan</label>
                             <input class="form-control" id="tiket_terusan_price" name="tiket_terusan_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukkan Harga Tiket Terusan" value="0" />
                             <small>*input harga hanya angka, Contoh 200:000</small>
@@ -449,53 +453,53 @@
         </div>
     </div>
 </div>
-<!-- <div class="modal" id="addAsclepediaMateri" tabindex="-1">
-    <div class="modal-dialog modal-dialog--centered modal-dialog--md">
+<div class="modal" id="modalEditTIketTerusan" tabindex="-1">
+    <div class="modal-dialog modal-dialog--centered modal-dialog--lg" id="modal_dlg">
         <div class="modal-content">
             <div class="modal-body">
+                <form action="<?= base_url() .'Asclepedia/editTiketTerusan' ?>" enctype="multipart/form-data" method="POST">
+                <a class="close" href="#" data-dismiss="modal" aria-label="Close"><img src="<?= base_url() ?>assets/admin/images/ic-xclose.svg" /></a>
                 <div class="modal-title">
-                    <h3>Membuat Asclepedia</h3>
-                </div><a class="close" href="#" data-dismiss="modal" aria-label="Close"><img src="<?= base_url() ?>assets/admin/images/ic-xclose.svg" /></a>
-                <h4>Materi yang akan dibahas</h4>
-                <form>
-                    <div class="box-form-materi">
-                        <h4>Materi 1</h4>
-                        <div class="form-group">
-                            <label>Judul materi</label>
-                            <input class="form-control" type="text" value="" placeholder="Masukan judul materi" />
-                        </div>
-                        <div class="form-group">
-                            <label>Deskripsi</label>
-                            <textarea class="form-control" rows="4" placeholder="Masukan deskripsi materi"></textarea>
-                        </div>
-                        <div class="form-group waktu">
-                            <div class="row">
-                                <div class="col-3">
-                                    <label>Durasi</label>
-                                    <select class="select">
-                                        <option>30 menit</option>
-                                        <option>40 menit</option>
-                                        <option>50 menit</option>
-                                        <option>60 menit</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-form-materi">
-                    </div>
-                    <div class="addmore">
-                        <a href="#">
-                            <div class="ic"><img src="<?= base_url() ?>assets/admin/images/ic-plus-more.svg" /></div><span>Tambah Materi</span>
-                        </a>
-                    </div>
-                    <div class="form-action text-right"><a class="btn btn-link" href="#" data-dismiss="modal">Cancel</a><a class="btn btn-primary" href="#">Publish Kelas</a></div>
-                </form>
+                     <h3> Tiket Terusan : <span id="titleTiketTerusan"></span></h3>
+                     <input type="hidden" name="tiket_terusan_id" id="idTT">
+                </div>
+                <div class="form-group">
+                    <img src="" style="height:420px;width:620px;" id="editImgTT" alt="">    
+                    <br>
+                    <br>
+                    <input class="form-control" type="file" id="imageTT" name="thumbnail" >
+                </div>
+                <div class="form-group">
+                    <label>Judul Tiket Terusan</label>
+                    <input class="form-control" id="editTitleTT" type="text" value="" name="judul_tiket_terusan" maxlength="50" placeholder="Juni Jago Pediatri" required />
+                </div>
+                <div class="form-group">
+                    <label>Kelas Asclepedia  </label>
+                    <select class="select" id="editKelasTT" data-live-search="true" name="kelas_id[]" multiple="multiple" required>
+                        
+                    </select>
+                </div>
+                <div class="form-group" >
+                    <label>Total Harga Semua</label>
+                    <input class="form-control" id="totalPriceTT" name="price_actual" style="text-decoration:line-through"  type="text" readonly />
+                </div>
+                <div class="form-group" >
+                    <label>Harga Tiket Terusan</label>
+                    <input class="form-control" id="editPriceTT" name="tiket_terusan_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukkan Harga Tiket Terusan" value="0" />
+                    <small>*input harga hanya angka, Contoh 200.000</small>
+                </div>
+                
             </div>
+            <div class="modal-footer">
+                <div class="form-action text-right">
+                    <a class="btn btn-link" href="#" data-dismiss="modal">Batal</a>
+                    <button class="btn btn-primary" type="submit">Update Tiket Terusan</button>
+                </div>
+            </div>
+            </form>
         </div>
     </div>
-</div> -->
-
+</div>
 <div class="modal" id="addAsclepediaBenefit" tabindex="-1">
     <div class="modal-dialog modal-dialog--centered modal-dialog--lg" id="modal_dlg">
         <div class="modal-content">
@@ -554,7 +558,8 @@
                             <label>Password Materi</label>
                             <input class="form-control" type="text" name="password_materi" id="password_materi" placeholder="Masukan Password materi" />
                         </div>
-                        <div class="form-action text-right"><a class="btn btn-link" href="#" data-dismiss="modal">Batal</a>
+                        <div class="form-action text-right">
+                            <a class="btn btn-link" href="#" data-dismiss="modal">Batal</a>
                             <button class="btn btn-primary" type="submit">Simpan</button>
                         </div>
                     </form>

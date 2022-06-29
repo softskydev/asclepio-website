@@ -109,7 +109,6 @@ class Admin extends CI_Controller
     function asclepedia()
     {
         $this->check_session();
-
         $data['title']       = 'Asclepedia Class';
         $data_kelas_terusan = [];
         $kelas_terusan   = $this->query->get_query("SELECT 
@@ -120,16 +119,16 @@ class Admin extends CI_Controller
         FROM kelas a JOIN kelas_materi b ON a.id = b.kelas_id WHERE a.jenis_kelas = 'asclepedia' group by a.id ")->result();
         $i = 0;
         foreach($kelas_terusan as $kelas){
-            if($kelas->tanggal_mulai >= date('Y-m-d')){
-                $data_kelas_terusan[$i]['id']  = $kelas->id;
+            if($kelas->tanggal_mulai >= date('Y-m-d') ){
+                $data_kelas_terusan[$i]['id']    = $kelas->id;
                 $data_kelas_terusan[$i]['judul'] = $kelas->judul_kelas;
+                $data_kelas_terusan[$i]['price'] = $kelas->late_price;
                 $i++;
             }
         }
         $data['kelas_terusan'] = $data_kelas_terusan;       
         $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js';
         $data['script'][] = $this->js_path() . 'asclepedia.js';
-
         $page['content']  = $this->load->view('admin/asclepedia', $data, true);
         $this->load->view('admin/layout', $page);
     }
@@ -144,17 +143,14 @@ class Admin extends CI_Controller
         foreach ($pemateri as $v) {
             $array[] = $v->pemateri_id;
         }
-        $data['data_pemateri']  = $array;
-        $data['list_pemateri']  = $this->query->get_data_simple('pemateri' , ['is_delete' => 0] )->result();
-        $data['materi']         = $this->query->get_data_simple('kelas_materi' , ['kelas_id' => $kelas_id] )->result();
-
-
-        $data['title']       = $data['data']->judul_kelas;
-        $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js';
-        $data['script'][] = 'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js';
-        $data['script'][] = 'https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js';
-        $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js';
-        $data['script'][] = $this->js_path() . 'asclepedia_edit.js';
+        $data['data_pemateri'] = $array;
+        $data['list_pemateri'] = $this->query->get_data_simple('pemateri' , ['is_delete' => 0] )->result();
+        $data['materi']        = $this->query->get_data_simple('kelas_materi' , ['kelas_id' => $kelas_id] )->result();
+        $data['title']         =  @$data['data']->judul_kelas;
+        $data['script'][]      = '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js';
+        $data['script'][]      = 'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js';
+        $data['script'][]      = 'https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js';
+        $data['script'][]      = $this->js_path() . 'asclepedia_edit.js';
 
         $page['content']  = $this->load->view('admin/asclepedia_edit_kelas', $data, true);
         $this->load->view('admin/layout', $page);

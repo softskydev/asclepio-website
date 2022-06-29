@@ -83,8 +83,8 @@
             </div>
 
             <div class="form-group">
-                <label for="exampleInputPassword1">Deskripsi</label>
-                <textarea class="form-control do-readonly" placeholder="Masukan deskripsi kelas" name="deskripsi_kelas" rows='6'></textarea>
+                <label for="">Deskripsi</label>
+                <textarea class="form-control do-readonly" placeholder="Masukan deskripsi kelas" name="deskripsi_kelas" rows='6'><?= $data->deskripsi_kelas ?></textarea>
             </div>
             <!-- <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -222,9 +222,9 @@
                              
                               <button title="Benefit Materi & Rekaman" style="border-radius: 10px;" class=" btn-sm btn-secondary" onclick="addCourse(<?= $key->id ?>)"> <i class="fa fa-book"></i> </button>
                               
-                              <button title="Edit Materi ini" style="border-radius: 10px;" class=" btn-sm btn-warning" onclick="editRecord()" > <i class="fa fa-edit"></i> </button>
+                              <button title="Edit Materi ini" style="border-radius: 10px;" class=" btn-sm btn-warning" onclick="editRecord(<?= $key->id ?>)" > <i class="fa fa-edit"></i> </button>
                               
-                              <button title="Hapus Materi ini"style="border-radius: 10px;" class=" btn-sm btn-danger" onclick="deleteRecord()" > <i class="fa fa-trash"></i></button>
+                              <button title="Hapus Materi ini"style="border-radius: 10px;" class=" btn-sm btn-danger" onclick="deleteRecord(<?= $data->id ?> , <?= $key->id ?>)" > <i class="fa fa-trash"></i></button>
                               
                               
                           </td>
@@ -291,43 +291,43 @@
 </div>
 
 
-<div class="modal fade bd-example-modal-lg" id="addMateri" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="editMateri" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-        <form action="<?= base_url() ?>Asclepedia/save_only_course/" method="POST">
+        <form action="<?= base_url() ?>Asclepedia/save_only_course/"  method="POST">
         <div class="modal-header">
-            <h5 class="modal-title"> Materi Baru  </h5>
+            <h5 class="modal-title"> Update Materi   </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>   
             </button>
         </div>
         <div class="box-form-materi">
-            <input type="hidden" name="kelas_id" value="<?= $data->id ?>">
             <div class="form-group">
                 <label>Judul materi</label>
-                <input class="form-control" id="judul_materi"  type="text" value="" name="judul_materi" placeholder="Masukan judul materi" />
+                <input type="hidden" id="materi_id_edit" name="materi_id">
+                <input class="form-control" id="judul_materi_edit"  type="text" value="" name="judul_materi" placeholder="Masukan judul materi" />
             </div>
             <div class="form-group">
                 <label>Deskripsi</label>
-                <textarea class="form-control" id="deskripsi_materi" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi" required></textarea>
+                <textarea class="form-control" id="deskripsi_materi_edit" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi" required></textarea>
             </div>
             <div class="form-group show_on_banyak">
                 <label>Link Materi </label>
-                <input class="form-control" id="link_materi" type="text" value="" name="link_materi" placeholder="Tuliskan Link Zoom untuk Materi ini" />
+                <input class="form-control" id="link_materi_edit" type="text" value="" name="link_materi" placeholder="Tuliskan Link Zoom untuk Materi ini" />
             </div>
             <div class="form-group show_on_banyak">
                 <label>Tanggal Materi </label>
-                <input class="form-control" id="tanggal_materi" type="date" value="" name="tanggal_materi" placeholder="Masukan Tanggal Materi" />
+                <input class="form-control" id="tanggal_materi_edit" type="date" value="" name="tanggal_materi" placeholder="Masukan Tanggal Materi" />
             </div>
             <div class="form-group show_on_banyak">
                 <label>Waktu Materi </label>
-                <input class="form-control" id="time_materi" type="time" value="" name="time_materi"  />
+                <input class="form-control" id="time_materi_edit" type="time" value="" name="time_materi"  />
             </div>
             <div class="form-group waktu">
                 <div class="row">
                     <div class="col-3">
                         <label>Durasi</label>
-                        <select class="select" id="durasi_materi" name="durasi_materi">
+                        <select class="select" id="durasi_materi_edit" name="durasi_materi">
                             <option value="60">60 menit</option>
                             <option value="90">90 menit</option>
                             <option value="120">120 menit</option>
@@ -361,18 +361,18 @@
         <div class="box-form-materi">
             <input type="hidden" id="materi_id" name="">
             <div class="form-group">
-                <label>Link materi</label>
+                <label>Link Download Materi</label>
                 <input class="form-control" id="link_materi_rekaman"  type="text" value="" placeholder="Masukan Link materi" />
+            </div>
+            <div class="form-group">
+                <label>Password Materi</label>
+                <input class="form-control" id="password_materi"  type="text" value="" placeholder="Masukan Password Materi" />
             </div>
             <div class="form-group">
                 <label>Video Materi (Youtube)</label>
                 <input class="form-control" id="video_materi"  type="text" value="" placeholder="Masukan Link Video Materi" />
             </div>
-
-            <div class="form-group">
-                <label>Password Materi</label>
-                <input class="form-control" id="password_materi"  type="text" value="" placeholder="Masukan Password Materi" />
-            </div>
+    
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" onclick="saveCourse()">Simpan</button>

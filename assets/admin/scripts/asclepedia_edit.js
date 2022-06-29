@@ -83,7 +83,7 @@ function savethisClass(){
   var foto_kelas                  = $("#image_upload")[0].files;
   var judul_kelas                 = $("#judul_kelas").val();
   var kategori_kelas              = $("input[name='kategori_kelas']:checked").val();
-  var deskripsi_kelas             = $("input[name='deskripsi_kelas']").val();
+  var deskripsi_kelas             = $("textarea[name='deskripsi_kelas']").val();
   var tipe_kelas_sekali_or_banyak = $("input[name='tipe_kelas_sekali_or_banyak']:checked").val();
   // var pemateri_doctor             = $("#pemateri_doctor").val();
   $('#pemateri_doctor option').each(function(i) {
@@ -154,9 +154,49 @@ function addCourse(course_id){
     dataType: 'json',
     success:function(response){
       if (response.status == 200 ) {
-        $("#link_materi").val();
-        $("#video_materi").val();
-        $("#password_materi").val();
+        $("#link_materi_rekaman").val(response.data.link_materi_rekaman);
+        $("#video_materi").val(response.data.link_materi_youtube);
+        $("#password_materi").val(response.data.password_materi);
+      }
+    }
+  });
+}
+
+function deleteRecord(kelas_id , materi_id ){
+  
+  $.ajax({
+    url: global_url+ "Asclepedia/delete_only_course/",
+    method: "POST",
+    data: {
+      kelas_id:kelas_id,
+      materi_id:materi_id,
+    },
+    dataType: "json",
+    success: function (response) {
+      if(response.status == 200){
+        toastr['error'](response.msg);
+        setTimeout(() => {window.location.reload()}, 2500);
+      }
+    }
+  });
+
+}
+
+function editRecord(course_id){
+  $("#editMateri").modal('show');
+  $("#materi_id_edit").val(course_id);
+  $.ajax({
+    url: global_url + 'Asclepedia/course_detail/'+course_id,
+    type: 'GET',
+    dataType: 'json',
+    success:function(response){
+      if (response.status == 200 ) {
+        $("#judul_materi_edit").val(response.data.judul_materi);
+        $("#deskripsi_materi_edit").val(response.data.deskripsi_materi);
+        $("#link_materi_edit").val(response.data.zoom_materi);
+        $("#tanggal_materi_edit").val(response.data.date_materi);
+        $("#time_materi_edit").val(response.data.hour_materi);
+        $("#durasi_materi_edit").val(response.data.durasi_materi);
       }
     }
   });

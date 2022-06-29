@@ -77,6 +77,7 @@ $route['benefit/(:any)']               = 'Front/benefit/$1';
 $route['setting']                      = 'Front/setting';
 $route['login']                        = 'Front/login';
 $route['login/(:any)']                 = 'Front/login/$1';
+$route['kelas-terusan/(:any)']         = 'Front/tiket_terusan_detail/$1';
 $route['register']                     = 'Front/register';
 $route['verify']                       = 'Auth/verify';
 /*

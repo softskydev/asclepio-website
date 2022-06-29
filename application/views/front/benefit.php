@@ -11,7 +11,7 @@
         <div class="row justify-content-center">
             <?php
             if ($data->link_rekaman == '' && $data->link_rekaman == '') { ?>
-                <div class="col-md-12">Belum ada benefit di kelas ini. Pantau terus agar bisa mendapatkan benefit</div>
+                <div class="col-md-12">Benefit Asclepio (Recording, PDF Learning Materials, & E-certificate) akan muncul di dashboard maksimal 7 hari kerja setelah program Skills Lab selesai</div>
             <?php } else { ?>
                 <div class="col-md-8">
                     <?php
