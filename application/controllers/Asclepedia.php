@@ -312,12 +312,14 @@ class Asclepedia extends CI_Controller
         END AS tanggal_mulai , a.* , b.date_materi
         FROM kelas a JOIN kelas_materi b ON a.id = b.kelas_id WHERE a.jenis_kelas = 'asclepedia' group by a.id ")->result();
         $option = '';
+        $judul_kelas = array ();
         foreach($kelas_terusan as $kelas){
             if($kelas->tanggal_mulai >= date('Y-m-d') ){
                 $selected = (in_array($kelas->id, $kelas_selected)) ? 'selected' : '';
                 $option  .= '<option data-price="'.$kelas->late_price.'" value="'.$kelas->id.'" '. $selected.'>'.$kelas->judul_kelas.'</option>';
 
                 $late_price += $kelas->late_price;
+                array_push($judul_kelas, $kelas->judul_kelas);
             }
         }
         
@@ -327,6 +329,7 @@ class Asclepedia extends CI_Controller
             'data_row'   => $tiket_terusan,
             'data_kelas' => $option,
             'total_harga'=> $late_price,
+            'judul_kelas'=> $judul_kelas
         ];
 
         echo json_encode($response);
