@@ -424,6 +424,15 @@
                             <label>Judul Tiket Terusan</label>
                             <input class="form-control" id="judul_tiket_terusan " type="text" value="" name="judul_tiket_terusan" maxlength="50" placeholder="Juni Jago Pediatri" required />
                         </div>
+
+                        <div class="form-group">
+                            <label for="">List Kelas</label>
+                            <div class="list_">
+                                <label class="text-danger">Tidak Ada Kelas</label>
+                            </div>
+                            
+                        </div>
+
                         <div class="form-group">
                             <label>Kelas Asclepedia  </label>
                             <select class="select" id="select_kelas" data-live-search="true" name="kelas_id[]" multiple="multiple" required>
@@ -431,8 +440,10 @@
                                 foreach ($kelas_terusan as $p) { ?>
                                     <option data-price='<?= $p['price'] ?>' value="<?= $p['id'] ?>"><?= $p['judul'] ?></option>
                                 <?php } ?>
+                                
                             </select>
                         </div>
+                       
                         <div class="form-group" >
                             <label>Total Harga Seharusnya</label>
                             <input class="form-control" name="price_actual" id="grandTotalPrice" reaedonly/>
@@ -472,6 +483,13 @@
                 <div class="form-group">
                     <label>Judul Tiket Terusan</label>
                     <input class="form-control" id="editTitleTT" type="text" value="" name="judul_tiket_terusan" maxlength="50" placeholder="Juni Jago Pediatri" required />
+                </div>
+                <div class="form-group">
+                    <label for="">List Kelas</label>
+                    <div class="list_kelas">
+                        
+                    </div>
+                    
                 </div>
                 <div class="form-group">
                     <label>Kelas Asclepedia  </label>

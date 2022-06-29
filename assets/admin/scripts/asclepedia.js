@@ -30,22 +30,34 @@ $(document).ready(function () {
     var totalSum;
     $("#select_kelas").change(function() {
         totalSum = 0;
+        $('.list_').html('')
         $("#select_kelas option:selected").each(function(){
             price = $(this).data('price');
             totalSum += parseInt(price);
             // console.log(this);
+            var html = `<input type="text" readonly class="form-control mb-2" value="${this.text}"></input>`
+            $('.list_').append(html)
         })
+        if($(this).val().length < 1){
+            $('.list_').append(`<label class="text-danger">Tidak Ada Kelas</label>`)
+        }
         $("#grandTotalPrice").val(numeral(totalSum).format('0,0'));
         $("#grandTotalPrice").attr('readonly' , true);
+
     });
     var totalSumEdit = 0;
     $("#editKelasTT").change(function() {
         totalSumEdit = 0;
+        $('.list_kelas').html('')
         $("#editKelasTT option:selected").each(function(){
             price = $(this).data('price');
             totalSumEdit += parseInt(price);
-            // console.log(this);
+            var html = `<input type="text" readonly class="form-control mb-2" value="${this.text}"></input>`
+            $('.list_kelas').append(html)
         })
+        if($(this).val().length < 1){
+            $('.list_kelas').append(`<label class="text-danger">Tidak Ada Kelas</label>`)
+        }
         $("#totalPriceTT").val(numeral(totalSumEdit).format('0,0'));
         $("#totalPriceTT").attr('readonly' , true);
     });
@@ -188,6 +200,16 @@ function detailTiket(id){
             $("#editImgTT").attr("src" , global_url+'assets/uploads/kelas_terusan/'+response.data_row.image);
             $("#editPriceTT").val(numeral(response.data_row.price_kelas_terusan).format('0,0'));
             $("#editTitleTT").val(response.data_row.judul_kelas_terusan);
+            if(response.judul_kelas.length > 0){
+                $.each(response.judul_kelas, function(key, value){
+                    var html = `<input type="text" readonly class="form-control mb-2" value="${value}"></input>`
+                    $('.list_kelas').append(html)
+                })
+            }else{
+                var html = `<label class="text-danger">Tidak Ada Kelas</label>`
+                    $('.list_kelas').append(html)
+            }
+
             $("#totalPriceTT").val(numeral(response.total_harga).format('0,0'));
             $("#titleTiketTerusan").html(response.data_row.judul_kelas_terusan);
             $("#idTT").val(response.data_row.id);
