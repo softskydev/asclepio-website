@@ -92,6 +92,7 @@
                             }
 
                             ?>
+                            <a class="btn btn-primary" href="<?= base_url('asclepedia-bundling')?>">Bundling</a>
                             <!-- <button class="btn btn-primary" onclick="addToCart('<?= $this->session->userdata('id') ?>',<?= $data->id ?>)">Book Class</button> -->
                         </div>
                     </div>
