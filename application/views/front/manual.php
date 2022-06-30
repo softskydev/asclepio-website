@@ -106,6 +106,16 @@
                         </div>
                     </div>
                     <hr>
+                    <div class="row mx-0 mt-2 my-md-5">
+                        <div class="col-md-6">
+                            <h4>Dari Bank</h4>
+                            <img src="<?= base_url('assets/front/images/logo-bank-bca.png')?>" alt="from_bank" class="payment-image">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Nomor Rekening</h4>
+                            <h6 class="text-secondary">0092189310219847</h6>
+                        </div>
+                    </div>
                     <div class="mt-2 mt-md-5 mb-md-5">
                         <h4 class="text-capitalize">Harga Total</h4>
                         <h3 class="text-capitalize px-4 py-1 bg-secondary text-white col-md-4 col-8 text-center rounded">Rp. 998.000,00</h3>
