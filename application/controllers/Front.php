@@ -637,4 +637,16 @@ class Front extends CI_Controller
         $page['content']  = $this->load->view('front/manual', $data, true);
         $this->load->view('front/layout', $page);
     }
+
+    function bundling(){
+        $data['title']       =  'Asclepedia Bundling';
+        $data['meta_title'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
+        $data['meta_desc'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
+        $data['meta_keyword'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_keyword;
+        $data['meta_url'] = base_url();
+        $data['meta_img'] = '';
+        $data['script'][] = $this->js_path() . 'bundling.js';
+        $page['content']  = $this->load->view('front/bundling', $data, true);
+        $this->load->view('front/layout', $page);
+    }
 }
