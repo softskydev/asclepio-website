@@ -107,13 +107,13 @@
                     </div>
                     <hr>
                     <div class="row mx-0 mt-2 my-md-5">
-                        <div class="col-md-6">
-                            <h4>Dari Bank</h4>
-                            <img src="<?= base_url('assets/front/images/logo-bank-bca.png')?>" alt="from_bank" class="payment-image">
+                        <div class="col-md-6 form-group">
+                            <label for="bank_name">BANK / Nama Rekening</label>
+                            <input type="text" placeholder="Your name" class="form-control" id="bank_name">
                         </div>
-                        <div class="col-md-6">
-                            <h4>Nomor Rekening</h4>
-                            <h6 class="text-secondary">0092189310219847</h6>
+                        <div class="col-md-6 form-group">
+                            <label for="rekening_number">Nomor Rekening</label>
+                            <input type="text" placeholder="" class="form-control" id="rekening_number">
                         </div>
                     </div>
                     <div class="mt-2 mt-md-5 mb-md-5">
