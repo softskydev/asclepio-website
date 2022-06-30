@@ -26,11 +26,13 @@
                 <h1 class="logo"><a class="sidebar__logo" href="#"><img src="<?= base_url() ?>assets/admin/images/logo-ascelpio.png" alt="logo-ascelpio" /><span><?= $this->session->userdata('name') ?></span></a></h1>
                 <nav class="sidemenu">
                     <ul>
+                    
                         <?php
                         if ($this->session->userdata('access') == 'direksi') { ?>
                             <li class="<?php echo ($this->uri->segment(2) == 'dashboard') ? 'current-menu-item' : ''; ?>"><a href=" <?= base_url() ?>Admin/dashboard"><span>Dashboard</span></a></li>
                             <li class="<?php echo ($this->uri->segment(2) == 'asclepedia') ? 'current-menu-item' : ''; ?>"><a href=" <?= base_url() ?>Admin/asclepedia"><span>Asclepedia</span></a></li>
                             <li class="<?php echo ($this->uri->segment(2) == 'asclepio_go') ? 'current-menu-item' : ''; ?>"><a href=" <?= base_url() ?>Admin/asclepio_go"><span>Asclepio GO</span></a></li>
+                            <li class="<?php echo ($this->uri->segment(2) == 'cek_transaksi') ? 'current-menu-item' : ''; ?>"><a href=" <?= base_url() ?>Admin/cek_transaksi"><span>Check Pembayaran</span></a></li>
                             <li class="<?php echo ($this->uri->segment(2) == 'pemateri') ? 'current-menu-item' : ''; ?>"><a href=" <?= base_url() ?>Admin/pemateri"><span>Pemateri</span></a></li>
                             <li class="<?php echo ($this->uri->segment(2) == 'user') ? 'current-menu-item' : ''; ?>"><a href=" <?= base_url() ?>Admin/user"><span>User</span></a></li>
                             <li class="<?php echo ($this->uri->segment(2) == 'testimoni') ? 'current-menu-item' : ''; ?>"><a href=" <?= base_url() ?>Admin/testimoni"><span>Testimoni</span></a></li>
@@ -69,7 +71,7 @@
                             <li class="<?php echo ($this->uri->segment(2) == 'user') ? 'current-menu-item' : ''; ?>"><a href=" <?= base_url() ?>Admin/user"><span>User</span></a></li>
                             <li class="<?php echo ($this->uri->segment(2) == 'transaksi') ? 'current-menu-item' : ''; ?>"><a href="<?= base_url() ?>Admin/transaksi"><span>Transaksi</span></a></li>
                         <?php } ?>
-
+                       
                         <li class=""><a href="<?= base_url() ?>Admin/do_logout"><span>Logout</span></a></li>
                     </ul>
                 </nav>

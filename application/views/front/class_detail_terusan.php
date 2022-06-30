@@ -17,7 +17,7 @@
                         <div class="class-price "><b>Rp <?= number_format($data->price_kelas_terusan) ?></b></div>
                         </div>
                         <div class="class-btnwrap">
-                            <button class="btn btn-primary" onclick="addCartTerusan(<?= $this->session->userdata('id') ?> ,  <?= $data->id ?>)">Daftar</button>
+                            <button class="btn btn-primary" onclick="addCartTerusan('<?= $this->session->userdata('id') ?>' ,  <?= $data->id ?>)">Daftar</button>
                         </div>
                     </div>
                 </div>

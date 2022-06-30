@@ -95,6 +95,7 @@ function change_val(val) {
         $("#box_late_edit").hide();
         $("#early_price").val(0);
         $("#late_price").val(0);
+        $("#box_tool_price").hide();
         $("#for_tiket_terusan").show();
         $("#form_add").attr('action'  , global_url + 'Asclepedia/save_kelas');
         $("input[name='judul_kelas']").addAttr('required');
@@ -104,6 +105,7 @@ function change_val(val) {
     } else if(val == 'skill labs' || val == 'drill the case'  ) {
         $("#showWhenTiketTerusan").hide();
         $("#hideWhenTiketTerusan").show();
+        $("#box_tool_price").show();
         $("#link_gform").hide();
         $("#link_gform_edit").hide();
         $("#box_early").show();

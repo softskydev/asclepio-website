@@ -348,10 +348,11 @@
                         <br>
                         <input class="form-control" id="late_price" name="late_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
-                    <!-- <div class="form-group">
-                        <label>Harga webinar</label>
-                        <input class="form-control" type="text" name="harga" placeholder="Masukan angka harga" required /><small>*input harga hanya angka, Contoh 200:000</small>
-                    </div> -->
+                    <div class="form-group" id="box_tool_price">
+                        <label>Harga Tools Aja</label>
+                        <input class="form-control" type="text"  id="tools_price" onkeyup="onchange_num(this.id,this.value)" name="harga_tools" placeholder="Masukan Harga Tools" required />
+                        <small>Kosongkan bila tidak ada bundling tools</small>
+                    </div>
                     <div class="form-group hide_when_banyak">
                         <label>Link Zoom Meeting</label>
                         <input class="form-control" type="text" name="link_zoom" placeholder="Masukan link zoom meeting"  />
@@ -422,7 +423,7 @@
                     <div id="showWhenTiketTerusan">
                         <div class="form-group">
                             <label>Judul Tiket Terusan</label>
-                            <input class="form-control" id="judul_tiket_terusan " type="text" value="" name="judul_tiket_terusan" maxlength="50" placeholder="Juni Jago Pediatri" required />
+                            <input class="form-control" id="judul_tiket_terusan " type="text" value="" name="judul_tiket_terusan" maxlength="50" placeholder="Juni Jago Pediatri" />
                         </div>
 
                         <div class="form-group">
@@ -435,7 +436,7 @@
 
                         <div class="form-group">
                             <label>Kelas Asclepedia  </label>
-                            <select class="select" id="select_kelas" data-live-search="true" name="kelas_id[]" multiple="multiple" required>
+                            <select class="select" id="select_kelas" data-live-search="true" name="kelas_id[]" multiple="multiple" >
                                 <?php
                                 foreach ($kelas_terusan as $p) { ?>
                                     <option data-price='<?= $p['price'] ?>' value="<?= $p['id'] ?>"><?= $p['judul'] ?></option>
@@ -493,7 +494,7 @@
                 </div>
                 <div class="form-group">
                     <label>Kelas Asclepedia  </label>
-                    <select class="select" id="editKelasTT" data-live-search="true" name="kelas_id[]" multiple="multiple" required>
+                    <select class="select" id="editKelasTT" data-live-search="true" name="kelas_id[]" multiple="multiple" >
                         
                     </select>
                 </div>

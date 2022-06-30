@@ -100,11 +100,13 @@ function savethisClass(){
   var daterange_late              = $("#daterange_late").val();
   var price_late                  = $("#price_late").val();
   var kelas_id                    = $("#kelas_id").val();
+  var price_tools                 = $("#tools_price").val();
  
   fd.append('foto_kelas', foto_kelas[0]);
   fd.append('judul_kelas', judul_kelas);
   fd.append('kategori_kelas', kategori_kelas);
   fd.append('deskripsi_kelas', deskripsi_kelas);
+  fd.append('price_tools', price_tools);
   fd.append('tipe_kelas_sekali_or_banyak', tipe_kelas_sekali_or_banyak);
  
   fd.append('linkzoom', linkzoom);

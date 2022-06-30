@@ -156,6 +156,20 @@ class Admin extends CI_Controller
         $this->load->view('admin/layout', $page);
 
     }
+
+    function cek_transaksi(){
+
+        $data['title']    = 'Cek Transaksi';
+        $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js';
+        $data['script'][] = 'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js';
+        $data['script'][] = 'https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js';
+        $data['script'][] = $this->js_path() . 'cek_transaksi.js';
+
+        $page['content']  = $this->load->view('admin/cek_transaksi', $data, true);
+        $this->load->view('admin/layout', $page);
+
+    }
+
     function asclepio_go()
     {
 

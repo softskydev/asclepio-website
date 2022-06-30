@@ -111,6 +111,7 @@ class Front extends CI_Controller
         $data['meta_keyword'] = $data['data']->judul_kelas_terusan .','. $data['data']->code_kelas;
         $data['meta_url']     = base_url('kelas-terusan');
         $data['meta_img'] = '';
+        $data['script'][] = $this->js_path() . 'tiket-terusan.js';
         $page['content']      = $this->load->view('front/class_detail_terusan', $data, true);
         $this->load->view('front/layout', $page);
     }

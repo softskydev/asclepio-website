@@ -184,7 +184,14 @@
                 <input type="text" name="price_late" onkeyup="onchange_num(this.id,this.value)" value="<?= number_format($data->early_price) ?>" class="form-control do-readonly" id="price_late" aria-describedby="limit">
             </div>
         </div>
-        
+    </div>
+    <div class="row wrap-box-card">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label >Harga Tools</label>
+                <input type="text" onkeyup="onchange_num(this.id,this.value)" name="tools_price" value="<?= number_format($data->tools_price) ?>" class="form-control do-readonly" id="tools_price" aria-describedby="tools_price">
+            </div>
+        </div>
     </div>
 </section>
 <div class="section-heading">
