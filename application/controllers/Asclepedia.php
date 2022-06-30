@@ -12,8 +12,6 @@ class Asclepedia extends CI_Controller
         $this->load->helper('string');
     }
 
-    // private $tbl = 'categories';
-
     private function js_path()
     {
         return base_url() . 'assets/backend/js/';
@@ -36,8 +34,6 @@ class Asclepedia extends CI_Controller
     }
     function save_kelas()
     {
-
-        // debug($_POST);
         $config['upload_path']   = './assets/uploads/kelas/asclepedia';
         $config['allowed_types'] = '*';
         $config['encrypt_name']  = true;
@@ -52,10 +48,10 @@ class Asclepedia extends CI_Controller
         $gform                        = ($this->input->post('gform')) ? $this->input->post('gform') : '';
         $youtube                      = ($this->input->post('youtube')) ? $this->input->post('youtube') : '';
 
-        $token = random_string('alnum', 16);
-
+        $token                        = random_string('alnum', 16);
         $this->upload->initialize($config);
         $this->upload->do_upload('images');
+
         $fileData   = $this->upload->data();
         $uploadData = $fileData['file_name'];
         $tahun      = $this->input->post('year');
@@ -911,6 +907,7 @@ class Asclepedia extends CI_Controller
 
         echo json_encode(['status' => 200, 'data' => $data]);
     }
+    
 
     function detail($id)
     {
@@ -1148,5 +1145,165 @@ class Asclepedia extends CI_Controller
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         $response = curl_exec($curl);
         echo $response;
+    }
+
+    function load_data_transaction_tools(){
+
+        $tbl = 'transaksi a';
+		$select = 'a.* , b.nama_lengkap ';
+		//LIMIT
+		$limit = array(
+			'start'  => $this->input->get('start'),
+			'finish' => $this->input->get('length')
+		);
+		//WHERE LIKE
+		$where_like['data'][] = array(
+			'column' => 'b.nama_lengkap,a.kode_transaksi,a.status,a.tgl_pembelian',
+			'param'	 => $this->input->get('search[value]')
+		);
+		
+        $index_order = $this->input->get('order[0][column]');
+
+		$order['data'][] = [
+			'column' => $this->input->get('columns['.$index_order.'][name]'),
+			'type'	 => $this->input->get('order[0][dir]')
+		];
+
+        $join['data'][] = [
+			'table' => 'user b',
+			'join'  => 'a.user_id = b.id',
+			'type'  => 'join'
+		];
+
+		$where['data'][] = [
+            'column' => 'a.jenis_transaksi' ,
+            'param'  => 'kelas_tools'
+        ];
+
+
+		$query_total      = $this->query->get_data_complex($select,$tbl,NULL,null,null,$join,$where);
+		$query_filter     = $this->query->get_data_complex($select,$tbl,NULL,$where_like,$order,$join,$where);
+		$query            = $this->query->get_data_complex($select,$tbl,$limit,$where_like,$order,$join ,$where);
+
+		$response['data'] = array();
+		if ($query<>false) {
+			$no = 1;
+			foreach ($query->result() as $val) {
+				if ($val->id>0) {
+                    
+                    $action = '';
+                    if($val->status == 'pending'){
+                        if($val->ongkir == 0){
+                            $status  = '<label style="color:white" class="btn bg-danger"> Pending & Ongkir belum terisi</label>';
+                            $action .= '<button style="color:white" class="btn bg-success" onclick="set_ongkir('.$val->id.')"><i class=""></i>Set Ongkir </button>';
+                        } else {
+                            $status  = '<label style="color:white" class="btn bg-danger"> Pending </label>';
+                            $action .= '<button  class="btn bg-success" onclick="liat_detail('.$val->id.')"> Cek Detail Payment </button>';
+                        }
+                        
+                    } else {
+                        $status=  '<label class="label bg-warning"> '.$val->status.' </label>';
+                    }
+
+					$response['data'][] = array(
+						$val->nama_lengkap,
+						$val->kode_transaksi,
+						$status,
+						$val->tgl_pembelian,
+						$action,
+						
+					);
+				}
+			}
+		}
+
+		$response['recordsTotal'] = 0;
+		if ($query_total<>false) {
+			$response['recordsTotal'] = $query_total->num_rows();
+		}
+		$response['recordsFiltered'] = 0;
+		if ($query_filter<>false) {
+			$response['recordsFiltered'] = $query_filter->num_rows();
+		}
+
+		echo json_encode($response);
+    }
+
+    function load_transaksi_detail($transaksi_id){
+        
+        $query =  "SELECT a.* , b.nama_lengkap , b.address , b.postal_code , c.name 
+                   FROM transaksi a 
+                   join user b on a.user_id = b.id 
+                   join transaksi_detail c on a.id = c.transaksi_id 
+                   where a.id = ".$transaksi_id;
+        $data  =  $this->query->get_query($query)->row();
+
+        echo json_encode($data);
+    }
+
+    function input_ongkir(){
+        
+        $ongkir      = str_replace(',' , '' , $_POST['ongkir']);
+        $transaksi   = $this->query->get_data_simple('transaksi' , ['id' => $_POST['transaksi_id']])->row();
+        $total_harga = $this->query->get_query('select sum(total_harga) as subtotal from transaksi_detail where transaksi_id = '.$transaksi->id)->row()->subtotal;
+
+
+        $newTotal =  $total_harga + $ongkir;
+        $total    =  $newTotal - $transaksi->discount;
+
+
+        $data= [
+            'sub_total' => $total_harga,
+            'ongkir'   => $ongkir,
+            'total'    => $total
+        ];
+
+        if($transaksi->metode_pembayaran == 'manual') { 
+
+            $data['status'] = 'wait_for_payment';
+        } else {
+            $data['status'] = 'pending';    
+        }
+
+        $this->query->insert_for_id('transaksi' , ['id' => $transaksi->id] , $data);
+        if($this->send_invoice_manual($transaksi->id , $transaksi->user_id)){
+            $this->session->set_flashdata('msg_type', 'success');
+            $this->session->set_flashdata('msg', 'Ongkir Berhasil di tambahkan');
+            redirect(base_url('Admin/cek_transaksi/'));
+        };
+        
+    }
+    
+    function send_invoice_manual($transaksi_id , $user_id)
+    {
+        $transaksi = $this->query->get_data_simple('transaksi' , ['id' => $transaksi_id])->row();
+        $order_id  = $transaksi->kode_transaksi;
+        $fullname  = $this->query->get_data_simple('user', ['id' => $user_id])->row()->nama_lengkap;
+        $email     = $this->query->get_data_simple('user', ['id' => $user_id])->row()->email;
+        $detail    = $this->query->get_data_simple('transaksi_detail', ['transaksi_id' => $transaksi_id])->result();
+        $parsing   = ['fullname' => $fullname, 'order_id' => $order_id , 'detail' => $detail , 'transaksi' => $transaksi];
+        $this->load->library('phpmailer_lib');
+        $mail              = $this->phpmailer_lib->load();
+        $mail->IsSMTP(); // telling the class to use SMTP
+        $mail->SMTPAuth    = true;                   // enable SMTP authentication
+        $mail->SMTPAutoTLS = true;                   // enable SMTP authentication
+        $mail->SMTPSecure  = "tls";                  // sets the prefix to the servier
+        $mail->Host        = "smtp.gmail.com";       // sets GMAIL as the SMTP server
+        $mail->Port        = 587;                    // set the SMTP port for the GMAIL server
+        $mail->Username    = ACCESS_EMAIL;           // GMAIL username
+        $mail->Password    = ACCESS_EMAIL_PASSWORD;  // GMAIL password
+        $mail->AddAddress($email);
+        $mail->SetFrom('asclepio.website@gmail.com', 'Asclepio');
+        $mail->Subject = 'INVOICE #' . $order_id;
+        $mail->Body    = $this->load->view('front/mail_bundling', $parsing, true);
+        $mail->isHTML(true);
+
+
+        if ($mail->Send()) {
+            $return  = true;
+        } else {
+            $return  = false;
+        }
+        return $return;
     }
 }

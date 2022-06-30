@@ -28,12 +28,12 @@ class Booking extends CI_Controller
             ];
         } else {
 
-            $cek_kelas = $this->query->get_query("SELECT * FROM kelas WHERE id = $product_id")->row();
+            $cek_kelas     = $this->query->get_query("SELECT * FROM kelas WHERE id = $product_id")->row();
             $cek_transaksi = $this->query->get_query("SELECT t.* FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE t.user_id = " . $this->session->userdata('id') . " AND d.product_id = $product_id AND t.status = 'paid'");
             // $cek_data =
             // $count_kelas = count($cek_data);
-            $cek_status = $this->query->get_query("SELECT product_id FROM cart WHERE user_id = " . $this->session->userdata('id') . " AND product_id = $product_id");
-            $cek_cart = $this->query->get_query("SELECT c.product_id,k.late_price FROM cart c JOIN kelas k ON c.product_id = k.id WHERE c.user_id = " . $this->session->userdata('id') . "");
+            $cek_status    = $this->query->get_query("SELECT product_id FROM cart WHERE user_id = " . $this->session->userdata('id') . " AND product_id = $product_id");
+            $cek_cart      = $this->query->get_query("SELECT c.product_id,k.late_price FROM cart c JOIN kelas k ON c.product_id = k.id WHERE c.user_id = " . $this->session->userdata('id') . "");
             $data = [
                 'user_id' => $user_id,
                 'product_id' => $product_id
@@ -191,6 +191,80 @@ class Booking extends CI_Controller
 
         echo json_encode($response);
     }
+
+    function buyBundling(){
+
+        $user_id   = $this->session->userdata('id');
+        $post_code = $this->input->post('postcode');
+        $address   = $this->input->post('address');
+
+        $kelas = $this->query->get_data_simple('kelas' , ['id' => $this->input->post('kelas_id') ])->row();
+
+        $early_daterange     = $kelas->early_daterange;
+        $early_date1         = explode(' - ', $early_daterange)[0];
+        $early_date2         = explode(' - ', $early_daterange)[1];
+        $early_convert_date1 = date('Y-m-d', strtotime($early_date1));
+        $early_convert_date2 = date('Y-m-d', strtotime($early_date2));
+        if ((date('Y-m-d') >= $early_convert_date1) && (date('Y-m-d') <= $early_convert_date2)) {
+            $new_price = $kelas->early_price;
+        }else {
+            $new_price = $kelas->late_price;
+        }
+
+        $data = [
+            'kode_transaksi'    => 'ASC' . date("YmdHis"),
+            'user_id'           => $user_id,
+            'total'             => 0,
+            'status'            => 'pending',
+            'metode_pembayaran' => $this->input->post('metode_pembayaran'),
+            'jenis_transaksi'   => 'kelas_tools',
+            'expedition_name'   => $this->input->post('expedition'),
+        ];
+
+        $transaksi_id = $this->query->insert_for_id('transaksi' , null , $data);
+        $transaksi_id = $transaksi_id->output;
+
+        $detail_kelas = array(
+            'transaksi_id' => $transaksi_id,
+            'product_id'   => $kelas->id,
+            'name'         => $kelas->judul_kelas,
+            'harga'        => $new_price,
+            'diskon'       => 0,
+            'total_harga'  => $new_price,
+            'code_voucher' => '',
+            'status'       => 'pending',
+            'status_link'  => '',
+        );
+
+        $this->query->insert_for_id('transaksi_detail', null , $detail_kelas);
+
+        $detail_kelas = array(
+            'transaksi_id' => $transaksi_id,
+            'product_id'   => $kelas->id,
+            'name'         => 'Tools dari kelas : '.$kelas->judul_kelas,
+            'harga'        => $kelas->tools_price,
+            'diskon'       => 0,
+            'total_harga'  => $kelas->tools_price,
+            'code_voucher' => '',
+            'status'       => 'pending',
+            'status_link'  => '',
+        );
+
+        $this->query->insert_for_id('transaksi_detail', null , $detail_kelas);
+
+        $update_user  = [
+            'postal_code' => $post_code,
+            'address'     => $address,
+        ];
+
+        $this->query->insert_for_id('user' , ['id' =>  $user_id] , $update_user );
+
+        $this->session->set_flashdata('msg_type' , 'success');
+        $this->session->set_flashdata('msg' , 'Transaksi sudah di proses, tunggu email dari Admin kami untuk perhitungan Ongkirnya~');
+        redirect(base_url('asclepedia'));
+
+    }
+
     function quickBuy()
     {
         $user_id = $this->input->post('user_id');
@@ -198,10 +272,10 @@ class Booking extends CI_Controller
 
 
         $data = [
-            'kode_transaksi' => 'ASC' . date("YmdHis"),
-            'user_id' => $user_id,
-            'total' => $total,
-            'status' => 'paid',
+            'kode_transaksi'    => 'ASC' . date("YmdHis"),
+            'user_id'           => $user_id,
+            'total'             => $total,
+            'status'            => 'paid',
             'metode_pembayaran' => 'free',
         ];
 
@@ -243,13 +317,13 @@ class Booking extends CI_Controller
 
             $detail[] = array(
                 'transaksi_id' => $id,
-                'product_id' => $this->input->post('product_id')[$i],
-                'harga' => 0,
-                'diskon' => 0,
-                'total_harga' => 0,
+                'product_id'   => $this->input->post('product_id')[$i],
+                'harga'        => 0,
+                'diskon'       => 0,
+                'total_harga'  => 0,
                 'code_voucher' => $voucher,
-                'status' => $status,
-                'status_link' => $status_link
+                'status'       => $status,
+                'status_link'  => $status_link
             );
         }
         $this->query->insert_batch('transaksi_detail', $detail);
@@ -295,10 +369,10 @@ class Booking extends CI_Controller
         $items = [];
         foreach ($get_data as $d) {
             $item = array(
-                'id' => $d->id,
-                'price' => $d->total_harga,
+                'id'       => $d->id,
+                'price'    => $d->total_harga,
                 'quantity' => 1,
-                'name' => $d->judul_kelas
+                'name'     => $d->judul_kelas
             );
             array_push($items, $item);
         }
@@ -401,7 +475,7 @@ class Booking extends CI_Controller
             $response = [
                 'status' => 400,
                 'msg_type' => 'error',
-                'msg' => 'Pembayaran gagall di acc',
+                'msg' => 'Pembayaran gagal di acc',
             ];
         }
         echo json_encode($response);
@@ -581,8 +655,10 @@ class Booking extends CI_Controller
         $mail->SMTPSecure = "tls"; // sets the prefix to the servier
         $mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
         $mail->Port = 587; // set the SMTP port for the GMAIL server
-        $mail->Username = 'asclepio.website@gmail.com'; // GMAIL username
-        $mail->Password = 'websiteasclepiofamos'; // GMAIL password
+        // $mail->Username = 'asclepio.website@gmail.com'; // GMAIL username
+        // $mail->Password = 'websiteasclepiofamos'; // GMAIL password
+        $mail->Username = ACCESS_EMAIL; // GMAIL username
+        $mail->Password = ACCESS_EMAIL_PASSWORD; // GMAIL password
         $mail->AddAddress($email);
         $mail->SetFrom('asclepio.website@gmail.com', 'Asclepio');
         $mail->Subject = 'Transaksi Berhasil #' . $order_id;
@@ -630,8 +706,8 @@ class Booking extends CI_Controller
         $mail->SMTPSecure = "tls"; // sets the prefix to the servier
         $mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
         $mail->Port = 587; // set the SMTP port for the GMAIL server
-        $mail->Username = 'asclepio.website@gmail.com'; // GMAIL username
-        $mail->Password = 'websiteasclepiofamos'; // GMAIL password
+        $mail->Username = ACCESS_EMAIL; // GMAIL username
+        $mail->Password = ACCESS_EMAIL_PASSWORD; // GMAIL password
         $mail->AddAddress($email);
         $mail->SetFrom('asclepio.website@gmail.com', 'Asclepio');
         $mail->Subject = 'INVOICE #' . $order_id;
@@ -648,55 +724,6 @@ class Booking extends CI_Controller
         } catch (Exception $e) {
             // echo "Something went bad";
             return $mail->ErrorInfo;
-        }
-
-        // $parsing = ['judul' => $judul, 'link' => $link, 'email' => $email];
-        // $config = [
-        //     'mailtype' => 'html', 'charset' => 'utf-8', 'crlf' => "\r\n", 'newline' => "\r\n"
-        // ];
-        // $this->load->library('email', $config);
-        // $this->email->from('asclepio.website@gmail.com');
-        // $this->email->to($email);
-        // $this->email->subject('Link Zoom');
-        // $body = $this->load->view('front/mail_zoom', $parsing, true);
-        // $this->email->message($body);
-        // if ($this->email->send()) {
-        //     return "berhasil";
-        // } else {
-        //     return "gagal";
-        // }
-    }
-
-    function sent_mail_cadbury()
-    {
-        $this->load->library('phpmailer_lib');
-        $mail = $this->phpmailer_lib->load();
-
-        $email = $this->input->post('email');
-        $mail->IsSMTP(); // telling the class to use SMTP
-        $mail->SMTPAuth = true; // enable SMTP authentication
-        $mail->SMTPAutoTLS = true; // enable SMTP authentication
-        $mail->SMTPSecure = "ssl"; // sets the prefix to the servier
-        $mail->Host = "cadburyungkapanhati.com"; // sets GMAIL as the SMTP server
-        $mail->Port = 465; // set the SMTP port for the GMAIL server
-        $mail->Username = 'no-reply@cadburyungkapanhati.com'; // GMAIL username
-        $mail->Password = 'cadburydm26'; // GMAIL password
-        $mail->AddAddress($email);
-        $mail->SetFrom('no-reply@cadburyungkapanhati.com', 'Asclepio');
-        $mail->Subject = 'tes';
-        $mail->Body = $this->load->view('front/mail_invoice', null, true);
-        $mail->isHTML(true);
-
-
-        try {
-            $mail->Send();
-            echo "Success!";
-            print($mail->ErrorInfo);
-            // $resp['msg'] = 'Registration complete, please open your email for verify';
-
-        } catch (Exception $e) {
-            echo "Something went bad";
-            print($mail->ErrorInfo);
         }
 
         // $parsing = ['judul' => $judul, 'link' => $link, 'email' => $email];
@@ -804,13 +831,13 @@ class Booking extends CI_Controller
         $mail = $this->phpmailer_lib->load();
 
         $mail->IsSMTP(); // telling the class to use SMTP
-        $mail->SMTPAuth = true; // enable SMTP authentication
-        $mail->SMTPAutoTLS = true; // enable SMTP authentication
-        $mail->SMTPSecure = "tls"; // sets the prefix to the servier
-        $mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
-        $mail->Port = 587; // set the SMTP port for the GMAIL server
-        $mail->Username = ACCESS_EMAIL; // GMAIL username
-        $mail->Password = ACCESS_EMAIL_PASSWORD; // GMAIL password
+        $mail->SMTPAuth    = true;                   // enable SMTP authentication
+        $mail->SMTPAutoTLS = true;                   // enable SMTP authentication
+        $mail->SMTPSecure  = "tls";                  // sets the prefix to the servier
+        $mail->Host        = "smtp.gmail.com";       // sets GMAIL as the SMTP server
+        $mail->Port        = 587;                    // set the SMTP port for the GMAIL server
+        $mail->Username    = ACCESS_EMAIL;           // GMAIL username
+        $mail->Password    = ACCESS_EMAIL_PASSWORD;  // GMAIL password
         // $mail->SMTPOptions = array(
         //     'ssl' => array(
         //         'verify_peer' => false,

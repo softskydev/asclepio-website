@@ -1,15 +1,7 @@
 <section class="page-heading">
     <div class="left">
         <h2>Cek Transaksi</h2>
-    </div>
-    <div class="right">
-        <a href="<?= base_url() ?>Transaksi/export" class="btn btn-transparent">
-            <div class="icon">
-                <img class="svg" src="<?= base_url() ?>assets/admin/images/ic_download.svg" alt="ic-download" />
-            </div>
-            <span></span>
-        </a>
-    </div>
+    </div>    
 </section>
 <section class="section">
     <div class="section-heading">
@@ -24,8 +16,8 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th><span>Member</span></th>
-                    <th><span>No WA</span></th>
+                    <th><span>Nama User</span></th>
+                    <th><span>NO Transaksi</span></th>
                     <th width="25%"><span>Order Kelas</span></th>
                     <th><span>Pembayaran</span></th>
                     <th><span>Tanggal Order</span></th>
@@ -34,6 +26,35 @@
                 </tr>
             </thead>
             <tbody id="table_body">
+                
+            </tbody>
+        </table>
+        
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <div class="left"> 
+            <h3>Set Ongkir Transaksi (Khusus Bundling / Tools)</h3>
+        </div>
+        <div class="right">
+            
+        </div>
+    </div>
+    <div class="benefits-table">
+        <table class="table"  id="table_body_tools_only">
+            <thead>
+                <tr>
+                    <th><span>Member</span></th>
+                    <th><span>Kode Transaksi</span></th>
+                    <th><span>Status</span></th>
+                    <th><span>Tanggal Order</span></th>
+                    <th><span>Action</span></th>
+                    <!-- <th class="action"><span>Action</span></th> -->
+                </tr>
+            </thead>
+            <tbody >
                 
             </tbody>
         </table>
@@ -83,4 +104,45 @@
             </div>
         </div>
     </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="addOngkir" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form action="<?= base_url() ?>Asclepedia/input_ongkir/" method="POST">
+        <div class="modal-header">
+            <h5 class="modal-title"> Detail Ongkir Transaksi   </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>   
+            </button>
+        </div>
+        <div class="box-form-materi">
+            <input type="hidden" id="transaksi_id" name="transaksi_id" >
+            <div class="form-group">
+                <label> Nama Member </label>
+                <input class="form-control" id="nama_member" name="nama_member" type="text" readonly/>
+            </div>
+            <div class="form-group">
+                <label> Kelas Tools yang dipilih Member </label>
+                <input class="form-control" id="nama_kelas" name="nama_kelas"  type="text"  readonly/>
+            </div>
+            <div class="form-group">
+                <label> Kode Pos</label>
+                <input class="form-control" id="kode_pos" name="kode_pos" type="text"  />
+            </div>
+            <div class="form-group">
+                <label>Alamat Lengkap</label>
+                <textarea class="form-control" id="alamat_lengkap" name="adress_lengkap" value="address_lengkap" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Nominal Ongkir</label>
+                <input type="text" class="form-control" id="ongkir" name="ongkir" value="" onkeyup="onchange_num(this.id,this.value)"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </form>
+        </div>
+    </div>
+  </div>
 </div>

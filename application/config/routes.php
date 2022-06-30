@@ -80,7 +80,7 @@ $route['login/(:any)']                 = 'Front/login/$1';
 $route['kelas-terusan/(:any)']         = 'Front/tiket_terusan_detail/$1';
 $route['register']                     = 'Front/register';
 $route['verify']                       = 'Auth/verify';
-$route['asclepedia-bundling']          = 'Front/bundling';
+$route['asclepedia-bundling/(:any)']          = 'Front/bundling/$1';
 /*
  * ============ Routes dari Master DATA =============*
  * ===== URL == ( if:num == id) =	== Controller == *

@@ -45,36 +45,51 @@
                     </div>
                 </div>
                 <div class="body-card pt-md-4">
-                    <form action="#" method="POST" id="form-bundling">
+                    <form action="<?= base_url() ?>Booking/buyBundling/" method="POST" id="form-bundling">
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="full_name">Full name</label>
-                                <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Your Name" required>
+                                <input type="text" class="form-control" value="<?= $detail->nama_lengkap ?>" id="full_name" name="full_name" placeholder="Your Name" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="email">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="email@example.com" required>
+                                <input type="email" class="form-control" value="<?= $detail->email ?>" id="email" name="email" placeholder="email@example.com" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="phone_number">Number Phone</label>
-                                <input type="number" class="form-control" id="phone_number" name="phone_number" placeholder="* * * * * * * * * * * " required>
+                                <input type="text" class="form-control" id="phone_number" value="<?= $detail->no_wa ?>" name="phone_number" placeholder="" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="postcode">Post Code</label>
-                                <input type="number" class="form-control" id="postcode" name="postcode" placeholder="* * * * * *" required>
+                                <input type="text" class="form-control" id="postcode"  value="<?= $detail->postal_code ?>" name="postcode" placeholder="" required>
                             </div>
+
+                            <input type="hidden" name="kelas_id" id="kelas_id" value="<?= $kelas_id ?>">
                             <div class="form-group col-md-6">
                                 <label for="expedition"> Expedition</label>
                                 <select class="form-control" id="expedition" name="expedition" required>
-                                    <option  hidden>Select Expedition</option>
-                                    <?php for ($i=1; $i < 6 ; $i++) {  ?>
-                                        <option class="py-2" value="<?= $i?>">Ekspedisi<?= $i?></option>
-                                    <?php }?>
+                                    <option Value="0" disabled selected>Select Expedition</option>
+                                    <option Value="j&t">J&T</option>
+                                    <option Value="sicepat">SiCepat</option>
                                 </select>
+                            </div>
+                            <div class="form-check col-md-6" style="padding-left: 1rem">
+                                <label for="">Methode Checkout</label>
+                                <br>
+                                <input class="form-check-inputmr-" required type="radio" name="metode_pembayaran" id="manual" value="manual" >
+                                <label class="form-check-label" for="manual">
+                                    Manual (Mengirim Bukti Transfer)
+                                </label>
+                                <br>
+
+                                <input class="form-check-inputmr-" required type="radio" name="metode_pembayaran" id="oto" value="otomatis" >
+                                <label class="form-check-label" for="oto">
+                                    Otomatis (Di Cek Otomatis)
+                                </label>
                             </div>
                             <div class="form-group col-md-12">
                                 <label for="address">Address</label>
-                                <textarea class="form-control" id="address" rows="3" name="address" placeholder="Full Address"></textarea>
+                                <textarea class="form-control" id="address" required minlength="10" rows="6" name="address" placeholder="Full Address"><?= $detail->address ?></textarea>
                             </div>
                             <div class="ml-auto px-3">
                                 <button type="submit" class="btn btn-primary px-5 mt-3">Submit</button>

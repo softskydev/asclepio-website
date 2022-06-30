@@ -75,7 +75,12 @@
                                     // } else {
 
                                     // }
-                                    echo '<button class="btn btn-primary" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $data->id . ')">Daftar</button>';
+                                    echo '<button class="btn btn-primary " onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $data->id . ')">Daftar</button>';
+                                    if ($data->tools_price > 0) {
+                                        echo '&nbsp;<a class="btn btn-warning " href="'. base_url('asclepedia-bundling/') .strtoupper(md5($data->id)).'">Bundling</a>';
+                                    }
+
+
                                 } else {
                                     if ($kategori == 'open') {
                                         if ($new_price == 0) {
@@ -92,7 +97,7 @@
                             }
 
                             ?>
-                            <a class="btn btn-primary" href="<?= base_url('asclepedia-bundling')?>">Bundling</a>
+                            
                             <!-- <button class="btn btn-primary" onclick="addToCart('<?= $this->session->userdata('id') ?>',<?= $data->id ?>)">Book Class</button> -->
                         </div>
                     </div>
@@ -242,9 +247,9 @@
 
                             foreach ($review as $r) {
                                 $post_date = strtotime($r->date);
-                                $now = time();
-                                $units = 1;
-                                $newtime = timespan($post_date, $now, $units);
+                                $now       = time();
+                                $units     = 1;
+                                $newtime   = timespan($post_date, $now, $units);
 
 
                         ?>

@@ -1,9 +1,9 @@
 <?php
 $this->load->helper('text');
 // $product_name = $this->query->get_data('judul_kelas', 'kelas', ['id' => $transaction->product_id])->row()->judul_kelas;
-$product = $this->query->get_query("SELECT k.judul_kelas,d.total_harga FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.id = d.product_id AND t.kode_transaksi = '" . $this->uri->segment('2') . "' ")->result();
+$product  = $this->query->get_query("SELECT k.judul_kelas,d.total_harga FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE k.id = d.product_id AND t.kode_transaksi = '" . $this->uri->segment('2') . "' ")->result();
 $order_id = $this->uri->segment(2);
-$email = $this->query->get_data('email', 'user', ['id'  => $this->session->userdata('id')])->row()->email;
+$email    = $this->query->get_data('email', 'user', ['id'  => $this->session->userdata('id')])->row()->email;
 ?>
 <div class="page-freebox cart pembayaran">
     <div class="container">

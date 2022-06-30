@@ -10,6 +10,7 @@ class Asclepiogo extends CI_Controller
         $this->load->helper('url_helper');
         $this->load->library('pagination');
         $this->load->helper('string');
+        // ini_set('display_erros' , 0);
     }
 
     // private $tbl = 'categories';
@@ -169,7 +170,7 @@ class Asclepiogo extends CI_Controller
             'judul_kelas'     => $this->input->post('judul_kelas_edit'),
             'topik_id'        => $this->input->post('topik_edit'),
             'deskripsi_kelas' => $this->input->post('deskripsi_kelas_edit'),
-            'kategori_go'  => $this->input->post('kategori_edit'),
+            'kategori_go'     => $this->input->post('kategori_edit'),
             'tgl_kelas'       => $this->input->post('year_edit') . '-' . $this->input->post('month_edit') . '-' . $this->input->post('date_edit'),
             'waktu_mulai'     => $this->input->post('waktu_mulai_edit'),
             'waktu_akhir'     => $this->input->post('waktu_akhir_edit'),
@@ -363,14 +364,14 @@ class Asclepiogo extends CI_Controller
     }
     function get_upcoming()
     {
-        $type = $_GET['type'];
+        $type   = $_GET['type'];
         $search = $_GET['search'];
         $query1 = "SELECT * FROM kelas WHERE jenis_kelas = 'asclepio_go' AND tgl_kelas >= CURDATE() AND is_delete = 0";
         if ($type != 'semua') {
             if ($search) {
                 $query1 .= " AND kategori_go = '" . $type . "' AND judul_kelas LIKE '%$search%' ";
             } else {
-                $query1 .= " AND kategori_go = '" . $type . "' ";
+                $query1 .= " AND kategori_go = '" . $type . "'";
             }
         } else {
             if ($search) {
@@ -404,10 +405,10 @@ class Asclepiogo extends CI_Controller
                 $label = 'Open Class';
             } else if ($k->kategori_go == 'private') {
                 $label = 'Private Class';
-                $tag = '';
+                $tag   = '';
             } else {
                 $label = 'Expert Class';
-                $tag = '';
+                $tag   = '';
             }
             $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
             $item['id'] = $k->id;
@@ -571,18 +572,18 @@ class Asclepiogo extends CI_Controller
                 $label = 'Expert Class';
                 $tag = '';
             }
-            $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
-            $item['id'] = $k->id;
-            $item['judul'] = $k->judul_kelas;
-            $item['kategori'] = $label;
+                  $pemateri      = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
+            $item['id']          = $k->id;
+            $item['judul']       = $k->judul_kelas;
+            $item['kategori']    = $label;
             $item['waktu_mulai'] = $k->waktu_mulai;
             $item['waktu_akhir'] = $k->waktu_akhir;
-            $item['harga'] = $harga;
-            $item['tgl_kelas'] = format_indo($k->tgl_kelas);
-            $item['thumbnail'] = $k->thumbnail;
-            $item['slug'] = $k->slug;
-            $item['pemateri'] = $pemateri;
-            $item['tag'] = $tag;
+            $item['harga']       = $harga;
+            $item['tgl_kelas']   = format_indo($k->tgl_kelas);
+            $item['thumbnail']   = $k->thumbnail;
+            $item['slug']        = $k->slug;
+            $item['pemateri']    = $pemateri;
+            $item['tag']         = $tag;
             array_push($items, $item);
         }
         if ($kelas) {
@@ -688,32 +689,29 @@ class Asclepiogo extends CI_Controller
     }
     function get_with_benefit($page = 0)
     {
-        $limit = $this->input->post('limit');
-        $sort = $this->input->post('sort');
+        $limit  = $this->input->post('limit');
+        $sort   = $this->input->post('sort');
         $search = $this->input->post('search');
-        $query = "SELECT * FROM kelas WHERE jenis_kelas = 'asclepio_go' AND link_rekaman IS NOT NULL AND link_materi IS NOT NULL AND is_delete = 0";
+        $query  = "SELECT * FROM kelas WHERE jenis_kelas = 'asclepio_go' AND link_rekaman IS NOT NULL AND link_materi IS NOT NULL AND is_delete = 0";
         $config['base_url'] = base_url() . 'Asclepiogo/get_with_benefit/';
         $config['total_rows'] = $this->db->query($query)->num_rows();
         $config['per_page'] = $limit;
 
         if ($sort == 'terbaru') {
             if ($search) {
-                $query .= " AND judul_kelas LIKE '%$search%' ORDER BY id DESC LIMIT $limit OFFSET $page";
+                $query .= " AND judul_kelas LIKE '%$search%' ORDER BY id DESC LIMIT $limit , $page";
             } else {
-                $query .= " ORDER BY id DESC LIMIT $limit OFFSET $page";
+                $query .= " ORDER BY id DESC LIMIT $limit , $page";
             }
         } else {
             if ($search) {
-                $query .= " AND judul_kelas LIKE '%$search%' ORDER BY id ASC LIMIT $limit OFFSET $page";
+                $query .= " AND judul_kelas LIKE '%$search%' ORDER BY id ASC LIMIT $limit , $page";
             } else {
-                $query .= " ORDER BY id ASC LIMIT $limit OFFSET $page";
+                $query .= " ORDER BY id ASC LIMIT $limit , $page";
             }
         }
         $data = $this->query->get_query($query)->result();
-
-
         $this->pagination->initialize($config);
-
 
         $items = [];
         foreach ($data as $d) {

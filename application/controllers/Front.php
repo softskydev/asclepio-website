@@ -281,33 +281,44 @@ class Front extends CI_Controller
     }
     function payment($code)
     {
-        $data['meta_title'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
-        $data['meta_desc'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
+        $data['meta_title']   = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
+        $data['meta_desc']    = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
         $data['meta_keyword'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_keyword;
-        $data['meta_url'] = base_url();
-        $data['meta_img'] = '';
+        $data['meta_url']     = base_url();
+        $data['meta_img']     = '';
         $user_id = $this->session->userdata('id');
-        $data['title']       =  ' Kelas Online Kedokteran #1 di Indonesia | Payment';
+        $data['title']        = ' Kelas Online Kedokteran #1 di Indonesia | Payment';
         $data['script'][] = $this->js_path() . 'booking.js';
-        if ($user_id == '') {
-            redirect(base_url('login'));
+        $transaksi_detail = $this->query->get_data_simple('transaksi' , ['kode_transaksi' => $code])->row();
+        if($transaksi_detail->metode_pembayaran == 'manual'){
+
+            $data['detail']   = $transaksi_detail;
+            $page['content']  = $this->load->view('front/manual', $data, true);
+
         } else {
-            $data['transaction'] = $this->query->get_data_simple('transaksi', ['kode_transaksi' => $code])->row();
-            if ($data['transaction']->total == 0) {
-                redirect(base_url('profile'));
-            }
-            $cek = $this->cek_status($code);
-            // print_r($cek->payment_code);
-            if ($cek->status_code != 404) {
-                if ($cek->transaction_status == 'settlement' || $cek->transaction_status == 'pending' || $cek->transaction_status == 'capture') {
-                    redirect('Booking/finish/?order_id=' . $code . '&status_code=201&transaction_status=pending');
-                } else if ($cek->transaction_status == 'expired' || $cek->transaction_status == 'deny' || $cek->transaction_status == 'cancel') {
-                    redirect('profile');
+
+            if ($user_id == '') {
+                redirect(base_url('login'));
+            } else {
+                $data['transaction'] = $this->query->get_data_simple('transaksi', ['kode_transaksi' => $code])->row();
+                if ($data['transaction']->total == 0) {
+                    redirect(base_url('profile'));
+                }
+                $cek = $this->cek_status($code);
+                // print_r($cek->payment_code);
+                if ($cek->status_code != 404) {
+                    if ($cek->transaction_status == 'settlement' || $cek->transaction_status == 'pending' || $cek->transaction_status == 'capture') {
+                        redirect('Booking/finish/?order_id=' . $code . '&status_code=201&transaction_status=pending');
+                    } else if ($cek->transaction_status == 'expired' || $cek->transaction_status == 'deny' || $cek->transaction_status == 'cancel') {
+                        redirect('profile');
+                    }
                 }
             }
-        }
+    
+            $page['content']  = $this->load->view('front/payment', $data, true);
 
-        $page['content']  = $this->load->view('front/payment', $data, true);
+        }
+        
 
         // $data['data'] = $this->query->get_query("SELECT k.* FROM cart c JOIN kelas k ON c.`product_id` = k.`id` WHERE c.user_id = $user_id")->row();
 
@@ -638,15 +649,40 @@ class Front extends CI_Controller
         $this->load->view('front/layout', $page);
     }
 
-    function bundling(){
-        $data['title']       =  'Asclepedia Bundling';
-        $data['meta_title'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
-        $data['meta_desc'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
-        $data['meta_keyword'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_keyword;
-        $data['meta_url'] = base_url();
-        $data['meta_img'] = '';
-        $data['script'][] = $this->js_path() . 'bundling.js';
-        $page['content']  = $this->load->view('front/bundling', $data, true);
-        $this->load->view('front/layout', $page);
+    function bundling($class_id = null){
+            $class_detail = $this->query->get_data_simple('kelas' , ['md5(id)' => $class_id]);
+            if($class_detail->num_rows() == 0){
+                $this->session->set_flashdata('msg_type', 'warning');
+                $this->session->set_flashdata('msg', 'Kelas tidak ditemukan');
+                redirect( base_url('asclepedia') );
+            } else {
+
+                if($class_detail->row()->tools_price > 0){
+                    if( $this->session->userdata('id') !== null ){
+    
+                        $data['title']        = 'Asclepedia Bundling';
+                        $data['meta_title']   = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
+                        $data['meta_desc']    = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
+                        $data['meta_keyword'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_keyword;
+                        $data['meta_url']     = base_url();
+                        $data['meta_img']     = '';
+                        $data['detail']       = $this->query->get_data_simple('user' , ['id' => $this->session->userdata('id')])->row();
+                        $data['kelas_id']     = $class_detail->row()->id;
+                        $data['script'][]     = $this->js_path() . 'bundling.js';
+                        $page['content']      = $this->load->view('front/bundling', $data, true);
+                        $this->load->view('front/layout', $page);
+                        
+            
+                    } else {
+                        
+                        redirect( base_url('register') );
+                    }
+                } else {
+                    $this->session->set_flashdata('msg_type', 'warning');
+                    $this->session->set_flashdata('msg', 'Tidak ada bundling untuk kelas ini');
+                    redirect( base_url('asclepedia') );
+                }
+
+            }
     }
 }
