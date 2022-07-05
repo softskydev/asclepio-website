@@ -19,6 +19,7 @@
 
                 <div class="col-md-8">
                     <?php
+                    // data kelas // 
                     foreach ($data as $d) {
                     ?>
                         <div class="wrap-box-card listview">
@@ -28,9 +29,11 @@
                                 $jenis_kelas = 'asclepedia';
                                 if ($d->kategori_kelas == 'good morning knowledge') {
                                     $label = "<span class='tag'>Good morning knowledge</span>";
+                                } else if ($d->kategori_kelas == 'drill the case'){
+                                    $label = "<span class='tag tag-scndry'>Drill the Case</span>";
                                 } else {
                                     $label = "<span class='tag tag-scndry'>Skill Lab</span>";
-                                }
+                                } 
                             } else {
                                 $jenis_kelas = 'asclepiogo';
                                 if ($d->kategori_go == 'open') {
@@ -43,12 +46,26 @@
                             }
 
                             $date = $d->public_date;
-                            $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-
-                            if ($new_date > date('Y-m-d')) {
-                                $new_price = $d->early_price;
+                            if ( $d->early_daterange != null) {
+                                $early_daterange     = $d->early_daterange;
+                                $early_date1         = explode(' - ', $early_daterange)[0];
+                                $early_date2         = explode(' - ', $early_daterange)[1];
+                                $early_convert_date1 = date('Y-m-d', strtotime($early_date1));
+                                $early_convert_date2 = date('Y-m-d', strtotime($early_date2));
+                                if ((date('Y-m-d') >= $early_convert_date1) && (date('Y-m-d') <= $early_convert_date2)) {
+                                    $new_price = $d->early_price;
+                                }else {
+                                    $new_price = $d->late_price;
+                                }
                             } else {
-                                $new_price = $d->late_price;
+                                $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
+
+                                if ($new_date > date('Y-m-d')) {
+                                    $new_price = $d->early_price;
+                                } else {
+                                    $new_price = $d->late_price;
+                                }
+
                             }
                             if ($new_price == 0) {
                                 $harga = 'FREE';
@@ -176,10 +193,12 @@
                         </ul>
                         <div class="row mx-0">
                             <div class="col-6 pl-md-0 pr-md-1">
-                                <button class="btn btn-primary btn-checkout w-100" onclick="makeTransaction(<?= $this->session->userdata('id') ?>)">Checkout Otomatis</button>
+                                <button title='Pesanan bisa langsung dibayar menggunakan E-Wallet / Mbanking yang nanti akan otomatis Sukses bila membayar.' class="btn btn-primary btn-checkout w-100" onclick="makeTransaction(<?= $this->session->userdata('id') ?> , 'midtrans')">Checkout Otomatis</button>
                             </div>
                             <div class="col-6 pr-md-0 pl-md-1">
-                                <a href="<?= base_url()?>manual"><button class="btn btn-primary w-100">Checkout Manual</button></a>
+                                <!-- <a href="<?= base_url()?>manual"><button class="btn btn-primary w-100">Checkout Manual</button></a> -->
+                                <button title="Pesanan bisa dibayar dengan menyertakan Bukti Transfer yang nanti akan di validasi oleh Admin Kami"  class="btn btn-primary btn-checkout w-100" onclick="makeTransaction(<?= $this->session->userdata('id') ?> , 'manual')">Checkout Manual</button>
+                                
                             </div>
                         </div>
                     </div>

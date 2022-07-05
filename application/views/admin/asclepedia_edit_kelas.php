@@ -169,7 +169,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label >Early Bird </label>
-                <input type="text" name="price_early" onkeyup="onchange_num(this.id,this.value)" value="<?= number_format($data->late_price) ?>" class="form-control do-readonly" id="price_early" aria-describedby="linkZoom">
+                <input type="text" name="price_early" onkeyup="onchange_num(this.id,this.value)" value="<?= number_format($data->early_price) ?>" class="form-control do-readonly" id="price_early" aria-describedby="linkZoom">
             </div>
         </div>
         <div class="col-md-3">
@@ -181,7 +181,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label >Late Bird</label>
-                <input type="text" name="price_late" onkeyup="onchange_num(this.id,this.value)" value="<?= number_format($data->early_price) ?>" class="form-control do-readonly" id="price_late" aria-describedby="limit">
+                <input type="text" name="price_late" onkeyup="onchange_num(this.id,this.value)" value="<?= number_format($data->late_price) ?>" class="form-control do-readonly" id="price_late" aria-describedby="limit">
             </div>
         </div>
     </div>
@@ -208,10 +208,10 @@
               <thead>
                   <tr>
                       <th>No </th>
-                      <th>Materi </th>
+                      <th>Pertemuan </th>
                       <th>Deskripsi </th>
-                      <th>Link Materi</th>
-                      <th width="30%">Jadwal Materi </th>
+                      <th>Link Zoom</th>
+                      <th width="30%">Jadwal Pertemuan </th>
                       <th>Benefit Action </th>
                   </tr>
               </thead>
@@ -255,23 +255,23 @@
         <div class="box-form-materi">
             <input type="hidden" name="kelas_id" value="<?= $data->id ?>">
             <div class="form-group">
-                <label>Judul materi</label>
-                <input class="form-control" id="judul_materi"  type="text" value="" name="judul_materi" placeholder="Masukan judul materi" />
+                <label>Judul Pertemuan</label>
+                <input class="form-control" id="judul_materi"  type="text" value="" name="judul_materi" placeholder="Masukan judul Pertemuan" />
             </div>
             <div class="form-group">
                 <label>Deskripsi</label>
-                <textarea class="form-control" id="deskripsi_materi" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi" required></textarea>
+                <textarea class="form-control" id="deskripsi_materi" rows="4" placeholder="Masukan deskripsi Pertemuan" name="deskripsi_materi" required></textarea>
             </div>
             <div class="form-group show_on_banyak">
-                <label>Link Materi </label>
-                <input class="form-control" id="link_materi" type="text" value="" name="link_materi" placeholder="Tuliskan Link Zoom untuk Materi ini" />
+                <label>Link Zoom </label>
+                <input class="form-control" id="link_materi" type="text" value="" name="link_materi" placeholder="Tuliskan Link Zoom untuk Pertemuan ini" />
             </div>
             <div class="form-group show_on_banyak">
-                <label>Tanggal Materi </label>
-                <input class="form-control" id="tanggal_materi" type="date" value="" name="tanggal_materi" placeholder="Masukan Tanggal Materi" />
+                <label>Tanggal Pertemuan </label>
+                <input class="form-control" id="tanggal_materi" type="date" value="" name="tanggal_materi" placeholder="Masukan Tanggal Pertemuan" />
             </div>
             <div class="form-group show_on_banyak">
-                <label>Waktu Materi </label>
+                <label>Waktu Pertemuan </label>
                 <input class="form-control" id="time_materi" type="time" value="" name="time_materi"  />
             </div>
             <div class="form-group waktu">

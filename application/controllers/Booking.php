@@ -135,21 +135,25 @@ class Booking extends CI_Controller
     function makeTransaction()
     {
         $user_id = $this->input->post('user_id');
-        $total = $this->input->post('total');
-
-        $email = $this->query->get_data('email', 'user', ['id' => $user_id])->row()->email;
-
-
+        $total   = $this->input->post('total');
+        $email   = $this->query->get_data('email', 'user', ['id' => $user_id])->row()->email;
 
         $data = [
             'kode_transaksi' => 'ASC' . date("YmdHis"),
-            'user_id' => $user_id,
-            'total' => $total,
-            'status' => 'wait_for_payment',
+            'user_id'        => $user_id,
+            'sub_total'       => $total,
+            'ongkir'         => 0,
+            'total'          => $total,
+            'status'         => 'wait_for_payment',
         ];
+        
+        if($this->input->post('payment_type') == 'manual'){
+            $data['payment_method']     = 'manual';
+            $data['expired_at']         =  date('Y-m-d', strtotime(date('Y-m-d') . " +1 days"));
+        }
 
-        $save = $this->query->insert_for_id('transaksi', null, $data);
-        $id = $save->output;
+        $save             = $this->query->insert_for_id('transaksi', null, $data);
+        $id               = $save->output;
         $code_transaction = $this->query->get_data('kode_transaksi', 'transaksi', ['id' => $id])->row()->kode_transaksi;
 
         $harga   = count($this->input->post('harga'));
@@ -159,14 +163,19 @@ class Booking extends CI_Controller
             } else {
                 $voucher = '';
             }
+            $kelas_id       = $this->input->post('product_id')[$i];
+            $get_name_kelas = 'select judul_kelas from kelas where id = '. $kelas_id;
+            $judul_kelas    = $this->query->get_query($get_name_kelas)->row()->judul_kelas;
+
             $detail[] = array(
                 'transaksi_id' => $id,
-                'product_id' => $this->input->post('product_id')[$i],
-                'harga' => $this->input->post('harga')[$i],
-                'diskon' => $this->input->post('diskon')[$i],
-                'total_harga' => $this->input->post('harga_total')[$i],
+                'name'         => $judul_kelas,
+                'product_id'   => $kelas_id,
+                'harga'        => $this->input->post('harga')[$i],
+                'diskon'       => $this->input->post('diskon')[$i],
+                'total_harga'  => $this->input->post('harga_total')[$i],
                 'code_voucher' => $voucher,
-                'status' => 'pending',
+                'status'       => 'pending',
             );
         }
         $this->query->insert_batch('transaksi_detail', $detail);
@@ -177,20 +186,21 @@ class Booking extends CI_Controller
             $this->notifToAdmin();
             $this->sent_mail_invoice($email, $code_transaction);
             $response = [
-                'status' => 200,
-                'msg' => 'Success',
+                'status'           => 200,
+                'msg'              => 'Success',
                 'code_transaction' => $code_transaction,
             ];
         } else {
             $response = [
-                'status' => 400,
-                'msg' => 'Failed',
+                'status'           => 400,
+                'msg'              => 'Failed',
                 'code_transaction' => null,
             ];
         }
 
         echo json_encode($response);
     }
+    
 
     function buyBundling(){
 
@@ -359,6 +369,68 @@ class Booking extends CI_Controller
         }
         redirect('/profile/pemesanan/wait_for_payment');
     }
+
+    // Pembayaran Manual //
+    function manualTransaction($code)
+    {
+        
+        $rek_bank       = $_POST['manual_no_rekening'];
+        $atas_nama_bank = $_POST['manual_nama_rekening'];
+        $nama_bank      = $_POST['manual_nama_bank'];
+
+        $update_users = [
+            'manual_no_rekening'   => $rek_bank,
+            'manual_nama_rekening' => $atas_nama_bank,
+            'manual_nama_bank'     => $nama_bank,
+        ];
+
+        $this->query->insert_for_id('user' , ['id' => $this->session->userdata('id')] , $update_users);
+
+        $update_transaction = [
+            'picture_image'
+        ];
+
+        $config['upload_path']   = './assets/uploads/bukti_transfer/';
+        $config['allowed_types'] = 'jpg|jpeg|png';
+        $config['file_name']     = 'INV_'.$code.'_'.date('Ymd');
+        $this->load->library('upload', $config);
+
+        if ( $this->upload->do_upload('bukti_tf') ) {
+            
+            $data   =   $this->upload->data();
+
+            $update_transaction = [
+                'picture_image'     => $data['file_name'],
+                'metode_pembayaran' => $nama_bank . ' A/N '.$atas_nama_bank .' '.$rek_bank,
+                'status'            => 'pending'
+            ];
+
+            $this->query->insert_for_id('transaksi' , ['kode_transaksi' => $code ] , $update_transaction); 
+
+            $response  = [
+                'status' => 200,
+                'msg'    => 'BUkti Transfer berhasil di upload, tunggu konfirmasi admin ',
+                'redirected_url' => base_url('/profile/pemesanan/semua'),
+            ];
+
+
+        } else {
+
+            $error = $this->upload->display_errors();
+
+            $response  = [
+                'status' => 400,
+                'msg'    => 'Error upload : '.$error,
+                'redirected_url' => '',
+            ];
+
+        }
+
+        echo json_encode($response);
+
+
+    }
+
     function makePayment()
     {
 
@@ -457,6 +529,40 @@ class Booking extends CI_Controller
         }
         // $this->finish();
     }
+
+
+    function manualTransactionProcess(){
+        $status = $_POST['status'];
+        $order_id = $_POST['code'];
+
+        if ($status == 'success') {
+            $get_transaksi = $this->query->get_query("SELECT t.id,u.email FROM transaksi t JOIN user u ON t.user_id = u.id WHERE t.kode_transaksi = '$order_id'")->row();
+            $this->query->update_data('transaksi', ['kode_transaksi' => $order_id], ['status' => 'paid', 'metode_pembayaran' => 'manual']);
+            $this->query->update_data('transaksi_detail', ['transaksi_id' => $get_transaksi->id], ['status' => 'success']);
+            $email = $get_transaksi->email;
+            $this->sent_mail_link($email, $order_id);
+            $this->notifToAdmin();
+
+            $response = [
+                'status' => 200,
+                'msg'    => 'Berhasil update Transaksi - Pembayaran di Terima',
+                'payment'=> 'acc'
+            ];
+            
+        } else {
+            $this->query->update_data('transaksi', ['kode_transaksi' => $order_id], ['status' => 'fail', 'metode_pembayaran' => 'manual']);
+
+            $response = [
+                'status' => 200,
+                'msg'    => 'Berhasil update Transaksi - Pembayaran di Tolak',
+                'payment'=> 'declined'
+            ];
+        }
+
+        echo json_encode($response);
+    }
+
+
     function accPayment($id)
     {
         $get_transaksi = $this->query->get_query("SELECT t.id,u.email,t.kode_transaksi FROM transaksi t JOIN user u ON t.user_id = u.id WHERE t.id = '$id'")->row();

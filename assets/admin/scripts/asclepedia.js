@@ -127,6 +127,7 @@ function change_val(val) {
        $("textarea[name='deskripsi_kelas']").removeAttr('required');
        $(".deskripsi_materi").removeAttr('required');
        $("#select_pemateri").removeAttr('required');
+       $("#tools_price").attr('required' , false);
        $("#form_add").attr('action'  , global_url + 'Asclepedia/save_tiket_terusan');
     }
 }
@@ -332,15 +333,15 @@ var wrapper_materi = $(".main_materi"); //Input fields wrapper
 var add_materi = $("#add_materi"); //Add button class or ID
 var y = 1;
 var tambahan = `<div class="form-group show_on_banyak">
-                    <label>Link Materi </label>
+                    <label>Link Pertemuan </label>
                     <input class="form-control" type="text" value="" name="link_materi[]" placeholder="Tuliskan Link Zoom untuk Materi ini" />
                 </div>
                 <div class="form-group show_on_banyak">
-                    <label>Tanggal Materi </label>
+                    <label>Tanggal Pertemuan </label>
                     <input class="form-control" type="date" value="" name="tanggal_materi[]" placeholder="Masukan Tanggal Materi" />
                 </div>
                 <div class="form-group show_on_banyak">
-                    <label>Waktu Materi </label>
+                    <label>Waktu Pertemuan </label>
                     <input class="form-control" type="time" value="" name="time_materi[]"  />
                 </div>`;
 var max_fields = 10;
@@ -352,9 +353,9 @@ $(add_materi).click(function (e) {
         y++; //input field increment
         //add input field
         var input_materi = '<div class="box-form-materi">' +
-            '<h4>Materi ' + y + '<a class="delete-materi remove_field" href="javascript:void(0)"><img src="' + global_url + 'assets/admin/images/ic-delete-grey.svg" /></a></h4>' +
+            '<h4>Pertemuan ' + y + '<a class="delete-materi remove_field" href="javascript:void(0)"><img src="' + global_url + 'assets/admin/images/ic-delete-grey.svg" /></a></h4>' +
             '<div class="form-group">' +
-            '<label>Judul materi</label>' +
+            '<label>Judul Pertemuan</label>' +
             '<input class="form-control" type="text" value="" name="judul_materi[]" placeholder="Masukan judul materi" />' +
             '</div>' +
             '<div class="form-group">' +
@@ -434,12 +435,18 @@ function getUpcoming() {
                     var verif       = global_url + 'Front/verif_kelas/';
                     
                     if (response.data[i]['in_public'] == 0) {
-                        var public = 'Publish';
-                        var btn_edit = "<li><a href='javascript:void(0)' onclick='edit_kelas(" + id + ")'>Edit Kelas</a></li>";
+                        var public = 'Publish'; 
                     } else {
                         var public = 'Unpublish';
-                        var btn_edit = " ";
                     }
+
+
+                    var btn_edit = "<li><a href='javascript:void(0)' onclick='edit_kelas(" + id + ")'>Edit Kelas</a></li>";
+
+                    if (response.data[i]['in_public'] == 0) {
+
+                    }
+
                     var img = '';
                     if (kategori == 'Good morning knowledge') {
                         var label = "<span class='tag'>" + kategori + "</span>"

@@ -8,20 +8,24 @@
                 <div class="col-md-7">
                     <div class="class-detail__banner-content">
                         <?php
-                        $date = $data->public_date;
-                        $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-                        $tipe_kelas = $data->tipe_kelas;
-                        if ($new_date > date('Y-m-d')) {
-                            $new_price = $data->early_price;
-                        } else {
-                            $new_price = $data->late_price;
+                        $new_price = 0;
+                        if ( $data->early_daterange != null) {
+                            $early_daterange     = $data->early_daterange;
+                            $early_date1         = explode(' - ', $early_daterange)[0];
+                            $early_date2         = explode(' - ', $early_daterange)[1];
+                            $early_convert_date1 = date('Y-m-d', strtotime($early_date1));
+                            $early_convert_date2 = date('Y-m-d', strtotime($early_date2));
+                            if ((date('Y-m-d') >= $early_convert_date1) && (date('Y-m-d') <= $early_convert_date2)) {
+                                $new_price = $data->early_price;
+                            }else {
+                                $new_price = $data->late_price;
+                            }
                         }
                         if ($new_price == 0) {
                             $harga = 'FREE';
                         } else {
-                            $harga = 'Rp.' . rupiah($new_price);
+                            $harga = 'Rp ' . rupiah($new_price);
                         }
-
                         if ($data->jenis_kelas == 'asclepedia') {
                             $kategori = $data->kategori_kelas;
                             if ($kategori == 'good morning knowledge') {
@@ -61,7 +65,16 @@
                                 echo start_created($rating) . ' ' . '<div class="mt-3"><span class="btn btn-success btn-small">' . $rating . ' / 5 <small>Dari seluruh ulasan Asclepian</small></span></div>';
                                 ?>
                             </div>
-                            <div class="class-price mt-5"><b><?= $harga ?></b></div>
+                            <div class="class-price mt-5 row mx-0">
+                                <div class="col-md-4 col-6 p-md-0">
+                                    <small style="color:#a95c02">Harga Skills Only</small><br>
+                                    <b style="color:#a95c02"><?= $harga ?></b>
+                                </div>    
+                                <div class="col-md-4 col-6 p-md-0 ml-md-3">
+                                    <small style="color:#d39e00;">Harga Bundling Alat</small><br>
+                                    <b style="color:#d39e00;">Rp <?= number_format($data->tools_price) ?></b>
+                                </div>
+                           </div>
                         </div>
                         <div class="class-btnwrap">
                             <?php
@@ -75,12 +88,10 @@
                                     // } else {
 
                                     // }
-                                    echo '<button class="btn btn-primary " onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $data->id . ')">Daftar</button>';
+                                    echo '<button title="Skills only peserta hanya mendapatkan materi saja" class="btn btn-primary " onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $data->id . ')">Daftar Skills Only</button>';
                                     if ($data->tools_price > 0) {
-                                        echo '&nbsp;<a class="btn btn-warning " href="'. base_url('asclepedia-bundling/') .strtoupper(md5($data->id)).'">Bundling</a>';
+                                        echo '&nbsp;<a title="Bundling alat adalah peserta mendapatkan kelas dengan alat prakteknya" class="btn btn-warning " href="'. base_url('asclepedia-bundling/') .strtoupper(md5($data->id)).'">Daftar Bundling Alat</a>';
                                     }
-
-
                                 } else {
                                     if ($kategori == 'open') {
                                         if ($new_price == 0) {

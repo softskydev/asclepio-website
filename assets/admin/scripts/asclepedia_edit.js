@@ -2,7 +2,6 @@ $(document).ready(function($) {
   $("#materi_tbl").DataTable();
 	var today = new Date();
 	$('.daterange').daterangepicker({
-        minDate: today,
         locale: {
           format: 'DD/MM/YYYY'
         }
@@ -199,6 +198,7 @@ function editRecord(course_id){
         $("#tanggal_materi_edit").val(response.data.date_materi);
         $("#time_materi_edit").val(response.data.hour_materi);
         $("#durasi_materi_edit").val(response.data.durasi_materi);
+        $("#durasi_materi_edit").selectpicker("refresh");
       }
     }
   });

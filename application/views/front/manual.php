@@ -34,7 +34,7 @@
         box-shadow: 0px 0px 10px rgba(0, 0, 0, .3);
     }
 </style>
-
+<input type="hidden" id="kode_transaksi" value="<?= $this->uri->segment(2) ?>">
 <div class="w-100 px-md-5 px-3">
     <div class="row my-5 pt-5">
         <div class="col-md-8 col-12">
@@ -50,7 +50,7 @@
                 <div class="body-card pt-md-4">
                     <h4 class="text-capitalize">Rekening tujuan</h4>
                     <div class="row mx-0">
-                        <div class="col-md-6 col-12 p-1">
+                        <!-- <div class="col-md-6 col-12 p-1">
                             <label class="card p-3 mb-2 rekening-payment" for="payment-bri">
                                 <input type="radio" name="payment_channel" id="payment-bri" class="d-none" value="bca">
                                 <div class=" payment-image">
@@ -72,14 +72,13 @@
                                         <div class="text-14 text-dark">
                                             <b>-- 123 --</b> 
                                         </div>
-                                        <!-- font awesome copy icon -->
                                     </div>
                                 </div>
                             </label>
-                        </div>
+                        </div> -->
                         <div class="col-md-6 col-12 p-1">
                             <label class="card p-3 mb-2 rekening-payment" for="payment-bca">
-                                <input type="radio" name="payment_channel" id="payment-bca" class="d-none" value="bca">
+                                <input type="radio" checked name="payment_channel" id="payment-bca" class="d-none" value="bca">
                                 <div class=" payment-image">
                                     <img src="<?= base_url('assets/front/images/logo-bank-bca.png')?>" alt="payment-channel" class="w-100">
                                 </div>
@@ -89,7 +88,7 @@
                                             Nama Rekening
                                         </div>
                                         <div class="text-14 text-dark">
-                                            <b>-- nama --</b> 
+                                            <b>Asclepio Edukasi Medika Indonesia</b> 
                                         </div>
                                     </div>
                                     <div class="col-6 pr-md-0">
@@ -97,7 +96,7 @@
                                             Nomor Rekaning
                                         </div>
                                         <div class="text-14 text-dark">
-                                            <b>-- 123 --</b> 
+                                            <b>4727101020</b> 
                                         </div>
                                         <!-- font awesome copy icon -->
                                     </div>
@@ -107,24 +106,25 @@
                     </div>
                     <hr>
                     <div class="row mx-0 mt-2 my-md-5">
-                        <div class="col-md-6 form-group">
-                            <label for="bank_name">BANK / Nama Rekening</label>
-                            <input type="text" placeholder="Your name" class="form-control" id="bank_name">
+                        <div class="col-md-3 form-group">
+                            <label for="nama_bank">Nama Bank</label>
+                            <input type="text" placeholder="Nama Bank" class="form-control" value="<?= $user->manual_nama_bank ?>" id="nama_bank">
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label for="rekening_bank">Nama Rekening Pengirim</label>
+                            <input type="text" placeholder="Rekening Pengirim" class="form-control" value="<?= $user->manual_nama_rekening ?>" id="rekening_bank">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="rekening_number">Nomor Rekening</label>
-                            <input type="text" placeholder="" class="form-control" id="rekening_number">
+                            <label for="norek_bca">Nomor Rekening</label>
+                            <input type="text" placeholder="" class="form-control" value="<?= $user->manual_no_rekening ?>" id="norek_bca">
                         </div>
                     </div>
-                    <div class="mt-2 mt-md-5 mb-md-5">
-                        <h4 class="text-capitalize">Harga Total</h4>
-                        <h3 class="text-capitalize px-4 py-1 bg-secondary text-white col-md-4 col-8 text-center rounded">Rp. 998.000,00</h3>
-                    </div>
+                   
                     <div class="my-md-3 mb-1">
                         <h3 class="text-capitalize">unggah bukti pembayaran</h3>
                         <p class="text-14">*Unggah bukti pembayaran untuk mempermudah verifikasi.</p>
                     </div>
-                    <input class="btn btn-success btn-upload" type="file" name="" id="">
+                    <input class="btn btn-success btn-upload" type="file" name="image_bukti" id="image_bukti">
                 </div>
             </div>
         </div>
@@ -133,24 +133,41 @@
                 <h4 class="text-capitalize mb-2">rincian pembayaran</h4>
                 <hr>
                 <table width="100%" class="border-0">
-                    <tr>
-                        <td class="text-13 fw-bold">Product name</td>
-                        <td class="text-13 text-right">Rp. 1.000.000,00</td>
-                    </tr>
-                    <tr>
-                        <td class="text-13 fw-bold">Voucher</td>
-                        <td class="text-13 text-right">Rp. 2.000,00</td>
-                    </tr>
+                <?php $total = 0;?>
+                <?php foreach($response['transaksi_det'] as $row){ ?>
+
+                    <?php if ($row->diskon != 0){ ?>
+                        <tr>
+                            <td class="text-13 fw-bold"><?= $row->name ?></td>
+                            <td class="text-13 text-right" style="text-decoration:line-through">Rp. <?= number_format($row->harga) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="text-13 fw-bold">Voucher : <?= strtoupper($row->code_voucher) ?></td>
+                            <td class="text-13 text-right">Rp. <?= number_format($row->diskon) ?></td>
+                        </tr>
+                    <?php } else { ?>
+                        
+                        <tr>
+                            <td class="text-13 fw-bold"><?= $row->name ?></td>
+                            <td class="text-13 text-right">Rp. <?= number_format($row->total_harga) ?></td>
+                        </tr>
+
+                    <?php } ?>
+                    <?php $total +=  $row->total_harga ?>
+
+                <?php } ?>
                     <tr>
                         <td colspan="2" class="border-bottom py-3"></td>
                     </tr>
                     <tr>
-                        <td class="text-13 fw-bold">Total</td>
-                        <td class="text-13 text-right">Rp. 998.000,00</td>
+                        <td class="text-13 fw-bold">Harga Total</td>
+                        <td class="text-13 text-right">Rp. <?= number_format($total) ?></td>
                     </tr>
+
+
                 </table>
-                <a href="#" class=" text-13 text-dark text-underline">Unduh Kwitansi Pembayaran</a>
-                <button class="btn btn-primary mt-3">Konfirmasi Pembayaran</button>
+                <!-- <a href="#" class=" text-13 text-dark text-underline">Unduh Kwitansi Pembayaran</a> -->
+                <button class="btn btn-primary mt-3" type="button" onclick="makeTransactionManual()">Konfirmasi Pembayaran</button>
             </div>
         </div>
     </div>

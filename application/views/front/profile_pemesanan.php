@@ -107,17 +107,27 @@
                             foreach ($transaksi as $t) {
                                 if ($t->status == 'wait_for_payment') {
                                     $label = '<small class="card-header card-header-transaksi bg-warning text-white">Menunggu Pembayaran</small>';
-                                    if ($t->metode_pembayaran == '') {
+                                    if ($t->metode_pembayaran == '' && $t->payment_method == 'auto' ) {
                                         $link = base_url() . 'payment/' . $t->kode_transaksi;
-                                    } else {
+                                    } else if ($t->metode_pembayaran == '' && $t->payment_method == 'manual'){
+                                        $link = base_url() . 'manual/' . $t->kode_transaksi;
+                                    } else if ($t->metode_pembayaran != ''){
                                         $link = base_url() . 'Booking/finish/?order_id=' . $t->kode_transaksi . '&status_code=201&transaction_status=pending';
+                                    } else {
+
                                     }
                                 } else if ($t->status == 'pending') {
                                     $label = '<small class="card-header card-header-transaksi bg-success text-white">Transaksi Pending</small>';
                                     $link = base_url() . 'payment/' . $t->kode_transaksi;
-                                } else if ($t->status == 'expired') {
-                                    $label = '<small class="card-header card-header-transaksi bg-danger text-white">Transaksi Expired</small>';
-                                    $link = base_url() . 'Booking/finish/?order_id=' . $t->kode_transaksi . '&status_code=201&transaction_status=pending';
+                                } else if ($t->status == 'expired' || $t->status == 'fail') {
+                                    $label = '<small class="card-header card-header-transaksi bg-danger text-white">Transaksi '.$t->status.'</small>';
+
+                                    if($t->status == 'fail'){
+                                        $link = base_url() . 'manual/'. $t->kode_transaksi ;
+                                    } else {
+                                        $link = base_url() . 'Booking/finish/?order_id=' . $t->kode_transaksi ;
+                                    }
+                                   
                                     // $zoom = '';
                                 } else {
                                     $label = '<small class="card-header card-header-transaksi bg-success text-white">Transaksi Sukses</small>';
@@ -213,11 +223,14 @@
                                                 echo "<a class='btn btn-link btn-small ' style='float: right;' href='$link'>Detail Pesanan</a>";
                                             }
                                         } else {
-                                            if ($t->status == 'expired') {
+                                            if ($t->status == 'wait_for_payment' || $t->status == 'pending') {
+                                                echo "<a class='btn btn-link btn-small ' style='float: right;' href='$link'>Detail Pesanan</a>";
+                                            } else if ( $t->status == 'expired') {
                                                 echo "<small class='text-danger'><i class='fa fa-info-circle'></i> Waktu pembayaran telah expired, silahkan lakukan pembelian ulang</small>";
-                                            } else if ($t->status == 'wait_for_payment' || $t->status == 'pending') {
-                                                echo "<a class='btn btn-link btn-small ' style='float: right;' href='https://wa.me/6281370225009?text=Saya ingin konfirmasi pembayaran dengan kode transaksi $t->kode_transaksi sebesar Rp " . rupiah($t->total) . " ' target='_blank'>Konfirmasi pembayaran via Whatsapp</a>";
-                                            } else {
+                                            } else if ( $t->status == 'fail') {
+                                                echo "<small class='text-danger'><i class='fa fa-info-circle'></i> Pembayaran ditolak , bukti transfer salah </small>";
+                                                echo "<a class='btn btn-link btn-small ' style='float: right;' href='$link'>Lakukan Pembayaran Ulang</a>";
+                                            } else   {
                                                 echo "Pesanan berhasil dikonfirmasi oleh Admin";
                                             }
                                         }

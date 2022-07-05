@@ -659,7 +659,7 @@ class Asclepedia extends CI_Controller
         ];
 
         if (isset($_FILES['foto_kelas']['name'])) {
-            $config['upload_path']   = './assets/uploads/kelas/asclepedia/';
+            $config['upload_data_transaction_toolspath']   = './assets/uploads/kelas/asclepedia/';
             $config['allowed_types'] = '*';
             $config['encrypt_name']  = true;
             $this->upload->initialize($config);
@@ -1203,6 +1203,7 @@ class Asclepedia extends CI_Controller
                         
                     } else {
                         $status=  '<label class="label bg-warning"> '.$val->status.' </label>';
+                        $action .= '<button  class="btn bg-success" onclick="liat_detail('.$val->id.')"> Cek Detail Payment </button>';
                     }
 
 					$response['data'][] = array(
@@ -1228,6 +1229,7 @@ class Asclepedia extends CI_Controller
 
 		echo json_encode($response);
     }
+    
 
     function load_transaksi_detail($transaksi_id){
         
@@ -1273,6 +1275,96 @@ class Asclepedia extends CI_Controller
         };
         
     }
+
+    function load_manual_transaction(){
+
+        $tbl = 'transaksi a';
+		$select = 'a.* , b.nama_lengkap ';
+		//LIMIT
+		$limit = array(
+			'start'  => $this->input->get('start'),
+			'finish' => $this->input->get('length')
+		);
+		//WHERE LIKE
+		$where_like['data'][] = array(
+			'column' => 'b.nama_lengkap,a.kode_transaksi,a.status,a.tgl_pembelian',
+			'param'	 => $this->input->get('search[value]')
+		);
+		
+        $index_order = $this->input->get('order[0][column]');
+
+		$order['data'][] = [
+			'column' => $this->input->get('columns['.$index_order.'][name]'),
+			'type'	 => $this->input->get('order[0][dir]')
+		];
+
+        $join['data'][] = [
+			'table' => 'user b',
+			'join'  => 'a.user_id = b.id',
+			'type'  => 'join'
+		];
+
+		$where['data'][] = [
+            'column' => 'a.jenis_transaksi' ,
+            'param'  => 'kelas'
+        ];
+
+        $where['data'][] = [
+            'column' => 'a.payment_method' ,
+            'param'  => 'manual'
+        ];
+
+
+		$query_total      = $this->query->get_data_complex($select,$tbl,NULL,null,null,$join,$where);
+		$query_filter     = $this->query->get_data_complex($select,$tbl,NULL,$where_like,$order,$join,$where);
+		$query            = $this->query->get_data_complex($select,$tbl,$limit,$where_like,$order,$join ,$where);
+
+		$response['data'] = array();
+		if ($query<>false) {
+			$no = 1;
+			foreach ($query->result() as $val) {
+				if ($val->id>0) {
+                    
+                    $action = '';
+                    if($val->status == 'pending'){
+                        $status  = '<label style="color:white" class="btn bg-warning"> Pending </label>';
+                        $action .= '<button  class="btn bg-success" onclick="liat_detail('.$val->id.')"> Cek Detail Payment </button>';
+                    } else {
+
+                        if($val->status == 'fail'){
+                            $status=  '<label style="color:white" class="btn bg-danger"> '.ucwords($val->status).' </label>';
+                        } else if ($val->status == 'expired') {
+                            $status=  '<label style="color:white" class="btn bg-warning"> '.ucwords($val->status).' </label>';
+                        } else {
+                            $status=  '<label style="color:white" class="btn bg-success"> '.ucwords($val->status).' </label>';
+                        }
+                        $action .= '<button  class="btn bg-success" onclick="liat_detail('.$val->id.')"> Cek Detail Payment </button>';
+                    }
+
+					$response['data'][] = array(
+						$val->nama_lengkap,
+						$val->kode_transaksi,
+						$status,
+						$val->tgl_pembelian,
+						$action,
+						
+					);
+				}
+			}
+		}
+
+		$response['recordsTotal'] = 0;
+		if ($query_total<>false) {
+			$response['recordsTotal'] = $query_total->num_rows();
+		}
+		$response['recordsFiltered'] = 0;
+		if ($query_filter<>false) {
+			$response['recordsFiltered'] = $query_filter->num_rows();
+		}
+
+		echo json_encode($response);
+    }
+
     
     function send_invoice_manual($transaksi_id , $user_id)
     {

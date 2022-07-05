@@ -349,7 +349,7 @@
                         <input class="form-control" id="late_price" name="late_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group" id="box_tool_price">
-                        <label>Harga Tools Aja</label>
+                        <label>Harga Bundling</label>
                         <input class="form-control" type="text"  id="tools_price" onkeyup="onchange_num(this.id,this.value)" name="harga_tools" placeholder="Masukan Harga Tools" required />
                         <small>Kosongkan bila tidak ada bundling tools</small>
                     </div>
@@ -361,7 +361,7 @@
                         <label>Link Youtube</label>
                         <input class="form-control" type="text" name="youtube" placeholder="Masukan link youtube" />
                     </div>
-                    <h4>Tambah member gratis</h4>
+                    <!-- <h4>Tambah member gratis</h4>
                     <p>Berikut adalah form untuk menambah member yang akan mendapatkan fitur gratis kelas ini.</p>
                     <div class="form-group">
 
@@ -373,12 +373,12 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <hr />
+                    <hr /> -->
                     <h4>Materi yang akan dibahas</h4>
                     <div class="box-form-materi">
-                        <h4>Materi 1</h4>
+                        <h4>Pertemuan 1</h4>
                         <div class="form-group">
-                            <label>Judul materi</label>
+                            <label>Judul Pertemuan</label>
                             <input class="form-control" type="text" value="" name="judul_materi[]" placeholder="Masukan judul materi" />
                         </div>
                         <div class="form-group">
@@ -386,15 +386,15 @@
                             <textarea class="form-control deskripsi_materi" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi[]" required></textarea>
                         </div>
                         <div class="form-group show_on_banyak">
-                            <label>Link Materi </label>
+                            <label>Link Zoom </label>
                             <input class="form-control" type="text" value="" name="link_materi[]" placeholder="Tuliskan Link Zoom untuk Materi ini" />
                         </div>
                         <div class="form-group show_on_banyak">
-                            <label>Tanggal Materi </label>
+                            <label>Tanggal Pertemuan </label>
                             <input class="form-control" type="date" value="" name="tanggal_materi[]" placeholder="Masukan Tanggal Materi" />
                         </div>
                         <div class="form-group show_on_banyak">
-                            <label>Waktu Materi </label>
+                            <label>Waktu Pertemuan </label>
                             <input class="form-control" type="time" value="" name="time_materi[]"  />
                         </div>
                         <div class="form-group waktu">

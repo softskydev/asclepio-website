@@ -4,11 +4,7 @@ $(document).ready(function () {
 
 
 var harga = $("#harga").val();
-// var diskon = $("#diskon").val();
 var product_id = $("#product_id").val();
-// var code_voucher = $("#code_voucher").val();
-// var total = harga - diskon;
-// var total = harga;
 
 function countAll() {
     var sum = 0;
@@ -65,19 +61,20 @@ function addToCart(user, id) {
 
 }
 
-function makeTransaction(user) {
+function makeTransaction(user , type) {
     // var diskon = $('#diskon').val();
-    var total = $('#total').val();
-    var product_id = $("input[name='product_id[]']");
-    var harga = $("input[name='harga[]']");
-    var diskon = $("input[name='diskon[]']");
-    var harga_total = $("input[name='harga_total[]']");
+    var total        = $('#total').val();
+    var product_id   = $("input[name='product_id[]']");
+    var harga        = $("input[name='harga[]']");
+    var diskon       = $("input[name='diskon[]']");
+    var harga_total  = $("input[name='harga_total[]']");
     var code_voucher = $("input[name='voucher[]']");
+    
 
-    var product_ar = [];
-    var harga_ar = [];
-    var diskon_ar = [];
-    var harga_total_ar = [];
+    var product_ar      = [];
+    var harga_ar        = [];
+    var diskon_ar       = [];
+    var harga_total_ar  = [];
     var code_voucher_ar = [];
 
     $.each(product_id, function (index, value) {
@@ -138,6 +135,7 @@ function makeTransaction(user) {
                     harga_total: harga_total_ar,
                     total: total,
                     code_voucher: code_voucher_ar,
+                    payment_type: type,
                 },
                 dataType: "json",
                 success: function (response) {
@@ -145,7 +143,11 @@ function makeTransaction(user) {
                         if (total == 0) {
                             window.location.href = global_url + 'profile/pemesanan/semua';
                         } else {
-                            window.location.href = global_url + 'payment/' + response.code_transaction;
+                            if(type == 'midtrans'){
+                                window.location.href = global_url + 'payment/' + response.code_transaction;
+                            } else {
+                                window.location.href = global_url + 'manual/' + response.code_transaction;
+                            }
                         }
 
                     } else {

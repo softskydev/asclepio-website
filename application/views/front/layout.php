@@ -167,11 +167,11 @@ $this->load->helper('text');
         </a>
     <?php } ?> -->
     <div id="menu">
-        <a href="javascript:void(0)" class="buttons" tooltip="Admin ASCLEPIO TOOLS">
+        <a href="https://wa.me/6281327257373" target="_blank"class="buttons" tooltip="Tim CS PIYO">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
         </a>
 
-        <a href="https://wa.me/6281327257373" target="_blank" class="buttons" tooltip="Tim CS PIYO">
+        <a href="javascript:void(0)"  class="buttons" tooltip="Butuh bantuan ? Chat PIYO yuk">
             <i class="fab fa-whatsapp" style="font-size: 30px;"></i>
         </a>
 

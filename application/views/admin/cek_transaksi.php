@@ -13,19 +13,18 @@
         </div>
     </div>
     <div class="benefits-table">
-        <table class="table">
+        <table class="table" id="table_body">
             <thead>
                 <tr>
-                    <th><span>Nama User</span></th>
+                    <th><span>Member </span></th>
                     <th><span>NO Transaksi</span></th>
-                    <th width="25%"><span>Order Kelas</span></th>
                     <th><span>Pembayaran</span></th>
                     <th><span>Tanggal Order</span></th>
                     <th><span>Action</span></th>
                     <!-- <th class="action"><span>Action</span></th> -->
                 </tr>
             </thead>
-            <tbody id="table_body">
+            <tbody >
                 
             </tbody>
         </table>
@@ -140,6 +139,66 @@
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Simpan</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="verifyPayment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form action="<?= base_url() ?>Asclepedia/input_ongkir/" method="POST">
+        <div class="modal-header">
+            <h5 class="modal-title"> Detail Ongkir Transaksi   </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>   
+            </button>
+        </div>
+        <div class="box-form-materi">
+            <div class="form-group">
+                <img src="" id="bukti_transfer" alt="">
+            </div>
+            <div class="form-group">
+                <label> Nilai Tagihan harus dibayar </label>
+                <input class="form-control" id="tagihan_nominal" name="tagihan_nominal"  type="text"  readonly/>
+            </div>
+            <div class="form-group">
+                <label>Informasi Pengirim </label>
+                <textarea class="form-control" readonly id="metode_pembayaran" rows="4"></textarea>
+            </div>
+            <!-- <div class="form-group">
+                <label> Keterangan Pembayaran </label>
+                <table>
+                    <tr>
+                        <th>
+                            <td>Nama Bank </td>
+                            <td>:</td>
+                            <td id="nama_bank"></td>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <td>Nomor Rekneing </td>
+                            <td>:</td>
+                            <td id="norek"></td>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <td>Nama Pengirim </td>
+                            <td>:</td>
+                            <td id="nama_pemilik_rekening"></td>
+                        </th>
+                    </tr>
+                </table>
+            </div> -->
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="acc_button" class="btn btn-success">Terima Pembayaran</button>
+            <button type="button" id="dec_button" class="btn btn-danger">Tolak Pembayaran</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </form>
         </div>

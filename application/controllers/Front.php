@@ -637,14 +637,26 @@ class Front extends CI_Controller
         }
     }
 
-    function manual(){
-        $data['title']       =  ' Kelas Online Kedokteran #1 di Indonesia | Asclepio Login';
-        $data['meta_title'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
-        $data['meta_desc'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
+    function manual($transaction_code){
+
+        $transaction        = $this->query->get_data_simple('transaksi' , ['kode_transaksi' => $transaction_code])->row();
+        $transaction_detail = $this->query->get_data_simple('transaksi_detail' , ['transaksi_id' => $transaction->id] )->result();
+        $response           = [
+            'transaksi'     => $transaction,
+            'transaksi_det' => $transaction_detail
+        ];
+
+        $user = 'select manual_no_rekening,manual_nama_rekening,manual_nama_bank from user where id = '.$this->session->userdata('id');
+        $data['user']   = $this->query->get_query($user)->row();
+
+        $data['response']     = $response;
+        $data['title']        = ' Kelas Online Kedokteran #1 di Indonesia | Asclepio Login';
+        $data['meta_title']   = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
+        $data['meta_desc']    = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
         $data['meta_keyword'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_keyword;
-        $data['meta_url'] = base_url();
-        $data['meta_img'] = '';
-        // $data['script'][] = $this->js_path() . 'asclepedia.js';
+        $data['meta_url']     = base_url();
+        $data['meta_img']     = '';
+        $data['script'][] = $this->js_path() . 'manual.js';
         $page['content']  = $this->load->view('front/manual', $data, true);
         $this->load->view('front/layout', $page);
     }
