@@ -68,6 +68,7 @@ class Asclepedia extends CI_Controller
             'waktu_mulai'     => $this->input->post('waktu_mulai'),
             'waktu_akhir'     => $this->input->post('waktu_akhir'),
             'tipe_kelas'      => $this->input->post('tipe_kelas_sekali_or_banyak'),
+            'is_skp_idi'      => $this->input->post('skp_idi'),
             'jenis_kelas'     => 'asclepedia',
             'early_price'     => str_replace(',', '', $this->input->post('early_price')),
             'late_price'      => str_replace(',', '', $this->input->post('late_price')),

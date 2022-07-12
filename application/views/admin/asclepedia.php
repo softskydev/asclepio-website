@@ -262,6 +262,18 @@
                             <label for="val_banyak" class="form-check-label"> Banyak Pertemuan</label>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="">Apakah Sertifikat SKP IDI </label>
+                        
+                        <div class="radiobutton" style="margin-left: 20px;">
+                            <input id="skp_idi" type="radio" checked value="1" name="skp_idi" class="form-check-input">
+                            <label class="form-check-label" for="skp_idi"> Ber Sertifikat SKP - IDI </label>
+                            <input id="non_skp_idi" type="radio" value="0" name="skp_idi" class="form-check-input"> 
+                            <label for="non_skp_idi" class="form-check-label"> Non SKP - IDI</label>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>Topik Kelas</label>
                         <select class="select" data-live-search="true" data-size="5" id="topik" name="topik" required>

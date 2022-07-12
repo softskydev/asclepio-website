@@ -254,6 +254,15 @@
                         $early_date2         = explode(' - ', $early_daterange)[1];
                         $early_convert_date1 = date('Y-m-d', strtotime($early_date1));
                         $early_convert_date2 = date('Y-m-d', strtotime($early_date2));
+                        $today_time          = date("Y-m-d");
+                        $expire_time         = date("Y-m-d", strtotime("+20 day", strtotime($s->tgl_kelas)));
+                        // $expire_time    = strtotime($s->tgl_kelas . ' ' . $s->waktu_mulai);
+                        // $date           = $s->public_date;
+                        // if ($new_date > date('Y-m-d')) {
+                        //     $new_price = $s->early_price;
+                        // } else {
+                        //     $new_price = $s->late_price;
+                        // }
                         if ((date('Y-m-d') >= $early_convert_date1) && (date('Y-m-d') <= $early_convert_date2)) {
                             $new_price = $s->early_price;
                         }else {
@@ -265,48 +274,33 @@
                             $harga = 'Rp ' . rupiah($new_price);
                         }
                     }
-                    
-                    if ($s->tipe_kelas == 'sekali_pertemuan') {
-                        $today_time     = strtotime(date("Y-m-d H:i"));
-                        $expire_time    = strtotime($s->tgl_kelas . ' ' . $s->waktu_mulai);
-                        $date           = $s->public_date;
-                        $new_date       = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-
-                        // if ($new_date > date('Y-m-d')) {
-                        //     $new_price = $s->early_price;
-                        // } else {
-                        //     $new_price = $s->late_price;
-                        // }
-                       
-                        $cek_transaksi = $this->query->get_query("SELECT COUNT(d.id) as total FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE d.product_id = $s->id")->row();
-                        if ($expire_time <= $today_time) {
-                            $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                            $button = '';
-                        } else {
-                            if ($s->limit != 0) {
-                                if ($cek_transaksi->total >= $s->limit) {
-                                    $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                                    $button = '';
-                                } else {
-                                    $ribbon = '';
-                                    $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $s->id . ')">Daftar</button>';
-                                }
+                    $cek_transaksi = $this->query->get_query("SELECT COUNT(d.id) as total FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE d.product_id = $s->id")->row();
+                    if ($expire_time <= $today_time) {
+                        
+                        $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                        $button = '';
+                    } else {
+                        if ($s->limit != 0) {
+                            if ($cek_transaksi->total >= $s->limit) {
+                                $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                                $button = '';
                             } else {
                                 $ribbon = '';
                                 $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $s->id . ')">Daftar</button>';
                             }
+                        } else {
+                            $ribbon = '';
+                            $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $s->id . ')">Daftar</button>';
                         }
-                    } else {
-                         $ribbon = '';
-                         $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $s->id . ')">Daftar</button>';
-                         
                     }
-                ?>
+
+                    ?>
                     <div class="col-lg-3 col-md-6 slider__item">
                         <div class="box-card">
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?>asclepedia/<?= $s->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/asclepedia/<?= $s->thumbnail ?>" class="thumbnail" />
+                                    
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $s->id")->row()->rating;
@@ -316,12 +310,17 @@
                                             $rating = $rating;
                                         }
                                         ?>
+                                       
+                                        
                                         <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-star.png" /></div><span><?= $rating ?></span>
                                     </div>
+                                    
+                                    
                                 </div>
                                 <div class="box-card__text"><span class="tag tag-scndry">Skills Lab</span>
                                     <h4><?= $s->judul_kelas ?></h4>
                                     <div class="author">
+                                        
                                         <?php
                                         $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $s->id")->result();
                                         if (count($pemateri) > 1) {
@@ -334,6 +333,8 @@
                                             }
                                         }
                                         ?>
+                                        
+
                                         <!-- <div class="pp"><img src="<?= base_url() ?>assets/front/images/pp-author.png" /></div><span>Dr. Ahman Jayadi</span> -->
                                     </div>
                                 </div>
