@@ -529,7 +529,7 @@
 </div>
 <style>
     table, th, td {
-    border: 1px solid black;
+    /* border: 1px solid black; */
     }
 </style>
 <div class="modal fade bd-example-modal-lg" id="linkKelasBanyak" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -543,7 +543,7 @@
         </div>
         <div class="modal-body">
             
-            <table > 
+            <table class="table table-striped border-0" width="100%"> 
                 <thead>
                     <tr>
                         <th> Jadwal</th>
