@@ -92,6 +92,9 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?><?= $or->jenis_kelas ?>/<?= $or->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $or->jenis_kelas ?>/<?= $or->thumbnail ?>" class="thumbnail" />
+                                    <div class="position-absolute" style="left: 14px;bottom:10px">
+                                        <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
+                                    </div>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $or->id")->row()->rating;
@@ -195,6 +198,9 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?>asclepedia/<?= $morning_knowledge->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/asclepedia/<?= $morning_knowledge->thumbnail ?>" class="thumbnail" />
+                                    <div class="position-absolute" style="left: 14px;bottom:10px">
+                                        <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
+                                    </div>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $morning_knowledge->id")->row()->rating;
@@ -300,7 +306,9 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?>asclepedia/<?= $s->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/asclepedia/<?= $s->thumbnail ?>" class="thumbnail" />
-                                    
+                                    <div class="position-absolute" style="left: 14px;bottom:10px">
+                                        <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
+                                    </div>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $s->id")->row()->rating;
@@ -367,6 +375,9 @@
                         <div class="box-card">
                             <a href="<?= base_url() ?>kelas-terusan/<?= strtoupper(md5($data->code_kelas)) ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas_terusan/<?= $data->image ?>" class="thumbnail" />
+                                    <div class="position-absolute" style="left: 14px;bottom:10px">
+                                        <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
+                                    </div>
                                     <!-- <div class="rating">
                                         <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-star.png" /></div><span><?= $rating ?></span>
                                     </div> -->

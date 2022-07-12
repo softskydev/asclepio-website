@@ -707,4 +707,8 @@ class Front extends CI_Controller
 
             }
     }
+
+    function userCertificate(){ 
+        $this->load->view('front/certificate_user');
+    }
 }

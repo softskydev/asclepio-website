@@ -179,6 +179,9 @@
                                 <?= $ribbon ?>
                                 <a href="<?= base_url() ?><?= $jenis_kelas ?>/<?= $ot->slug ?>">
                                     <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $ot->jenis_kelas ?>/<?= $ot->thumbnail ?>" class="thumbnail" />
+                                        <div class="position-absolute" style="left: 14px;bottom:10px">
+                                            <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
+                                        </div>
                                         <div class="rating">
                                             <?php
                                             $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $ot->id")->row()->rating;
@@ -353,6 +356,9 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?><?= $jenis_kelas ?>/<?= $or->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $or->jenis_kelas ?>/<?= $or->thumbnail ?>" class="thumbnail" />
+                                    <div class="position-absolute" style="left: 14px;bottom:10px">
+                                        <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
+                                    </div>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $or->id")->row()->rating;
@@ -460,6 +466,9 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?><?= $a->jenis_kelas ?>/<?= $a->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $a->jenis_kelas ?>/<?= $a->thumbnail ?>" class="thumbnail" />
+                                    <div class="position-absolute" style="left: 14px;bottom:10px">
+                                        <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px" alt="">
+                                    </div>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $a->id")->row()->rating;

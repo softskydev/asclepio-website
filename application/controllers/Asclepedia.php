@@ -458,7 +458,7 @@ class Asclepedia extends CI_Controller
             $html .= '<tr>';
             $html .= '<td> '.set_date($m->date_materi) . '<br>'.substr($m->hour_materi,0,-3). '<br> ('.$m->durasi_materi.' Menit)'.'</td>';
             $html .= '<td> '.$m->judul_materi.'</td>';
-            $html .= '<td> <a href="'.$m->zoom_materi.'" target="_blank"> Link Kelas </a></td></tr>';
+            $html .= '<td> <a class="badge badge-success"  href="'.$m->zoom_materi.'" target="_blank"> Link Kelas </a></td></tr>';
         }
 
         echo $html;
