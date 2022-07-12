@@ -338,19 +338,19 @@
                     </div>
                     <div class="form-group" id="box_early">
                         <label>Early Bird - Harga Webinar</label>
-                        <input class="form-control daterange" data-date-format="dd/mm/yy" name="date_early" type="text" />
+                        <input autocomplete='off' class="form-control daterange" data-date-format="dd/mm/yy" name="date_early" type="text" />
                         <br>
                         <input class="form-control" id="early_price" name="early_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga early bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group" id="box_late">
                         <label>Late Bird - Harga Webinar</label>
-                        <input class="form-control daterange" data-date-format="dd/mm/yy" name="date_late" type="text" />
+                        <input autocomplete='off' class="form-control daterange" data-date-format="dd/mm/yy" name="date_late" type="text" />
                         <br>
                         <input class="form-control" id="late_price" name="late_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" value="0" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group" id="box_tool_price">
                         <label>Harga Bundling</label>
-                        <input class="form-control" type="text"  id="tools_price" onkeyup="onchange_num(this.id,this.value)" name="harga_tools" placeholder="Masukan Harga Tools" required />
+                        <input class="form-control" type="text" value="0"  id="tools_price" onkeyup="onchange_num(this.id,this.value)" name="harga_tools" placeholder="Masukan Harga Tools" required />
                         <small>Kosongkan bila tidak ada bundling tools</small>
                     </div>
                     <div class="form-group hide_when_banyak">
@@ -427,6 +427,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Deskripsi</label>
+                            <textarea class="form-control" rows="4" placeholder="Masukan deskripsi TIket Terusan" name="desc_tiket_terusan" ></textarea>
+                        </div>
+
+                        <div class="form-group">
                             <label for="">List Kelas</label>
                             <div class="list_">
                                 <label class="text-danger">Tidak Ada Kelas</label>
@@ -484,6 +489,10 @@
                 <div class="form-group">
                     <label>Judul Tiket Terusan</label>
                     <input class="form-control" id="editTitleTT" type="text" value="" name="judul_tiket_terusan" maxlength="50" placeholder="Juni Jago Pediatri" required />
+                </div>
+                <div class="form-group">
+                    <label>Deskripsi</label>
+                    <textarea class="form-control" id="editDescTT" rows="4" placeholder="Masukan deskripsi TIket Terusan" name="desc_tiket_terusan" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="">List Kelas</label>

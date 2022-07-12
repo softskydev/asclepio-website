@@ -203,16 +203,20 @@ class Profile extends CI_Controller
 
     function add_review()
     {
-        $user_id = $this->input->post('user_id');
+        $user_id  = $this->input->post('user_id');
         $kelas_id = $this->input->post('kelas_id');
-        $rating = $this->input->post('rating');
-        $ulasan = $this->input->post('ulasan');
+        $rating   = $this->input->post('rating');
+        $ulasan   = $this->input->post('ulasan');
+
+        $check = $this->query->get_data_simple('kelas' , ['id' => $kelas_id])->row();
+        
 
         $data = [
-            'user_id' => $user_id,
-            'kelas_id' => $kelas_id,
-            'rating' => $rating,
-            'ulasan' => $ulasan,
+            'user_id'         => $user_id,
+            'kelas_id'        => $check->id,
+            'actual_kelas_id' => $check->actual_kelas_id,
+            'rating'          => $rating,
+            'ulasan'          => $ulasan,
         ];
         $save = $this->query->save_data('ulasan', $data);
 

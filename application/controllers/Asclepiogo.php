@@ -34,38 +34,46 @@ class Asclepiogo extends CI_Controller
         $config['encrypt_name']  = true;
         $this->load->library('upload', $config);
 
-        $_FILES['images']['name'] = $_FILES['thumbnail']['name'];
-        $_FILES['images']['type'] = $_FILES['thumbnail']['type'];
+        $_FILES['images']['name']     = $_FILES['thumbnail']['name'];
+        $_FILES['images']['type']     = $_FILES['thumbnail']['type'];
         $_FILES['images']['tmp_name'] = $_FILES['thumbnail']['tmp_name'];
-        $_FILES['images']['error'] = $_FILES['thumbnail']['error'];
-        $_FILES['images']['size'] = $_FILES['thumbnail']['size'];
+        $_FILES['images']['error']    = $_FILES['thumbnail']['error'];
+        $_FILES['images']['size']     = $_FILES['thumbnail']['size'];
 
-        $gform = ($this->input->post('gform')) ? $this->input->post('gform') : '';
+        $gform   = ($this->input->post('gform')) ? $this->input->post('gform') : '';
         $youtube = ($this->input->post('youtube')) ? $this->input->post('youtube') : '';
-        $token = random_string('alnum', 16);
+        $tahun      = $this->input->post('year');
+        $bulan      = $this->input->post('month');
+        $tanggal    = $this->input->post('date');
+        $date_kelas = ( $this->input->post('tipe_kelas_sekali_or_banyak') == 'sekali_pertemuan') ? $tahun.'-'.$bulan.'-'.$tanggal : $this->input->post('tanggal_materi')[0];
+        $token   = random_string('alnum', 16);
 
         $this->upload->initialize($config);
         $this->upload->do_upload('images');
         $fileData = $this->upload->data();
         $uploadData = $fileData['file_name'];
         $data = [
-            'judul_kelas' => $this->input->post('judul_kelas'),
-            'topik_id' => $this->input->post('topik'),
+            'judul_kelas'     => $this->input->post('judul_kelas'),
+            'topik_id'        => $this->input->post('topik'),
             'deskripsi_kelas' => $this->input->post('deskripsi_kelas'),
-            'kategori_go' => $this->input->post('kategori'),
-            'tgl_kelas' => $this->input->post('year') . '-' . $this->input->post('month') . '-' . $this->input->post('date'),
-            'waktu_mulai' => $this->input->post('waktu_mulai'),
-            'waktu_akhir' => $this->input->post('waktu_akhir'),
-            'jenis_kelas' => 'asclepio_go',
+            'kategori_go'     => $this->input->post('kategori_go'),
+            'kategori_kelas'  => $this->input->post('kategori'),
+            'tgl_kelas'       => $this->input->post('year') . '-' . $this->input->post('month') . '-' . $this->input->post('date'),
+            'waktu_mulai'     => $this->input->post('waktu_mulai'),
+            'waktu_akhir'     => $this->input->post('waktu_akhir'),
+            'jenis_kelas'     => 'asclepio_go',
             'early_price'     => str_replace(',', '', $this->input->post('early_price')),
             'late_price'      => str_replace(',', '', $this->input->post('late_price')),
-            'link_zoom' => $this->input->post('link_zoom'),
-            'slug' => url_title($this->input->post('judul_kelas'), 'dash', true),
+            'early_daterange' => str_replace('/', '-', $this->input->post('date_early')),
+            'late_daterange'  => str_replace('/', '-', $this->input->post('date_late')),
+            'link_zoom'       => $this->input->post('link_zoom'),
+            'slug'            => url_title($this->input->post('judul_kelas'), 'dash', true),
             'gform_url'       => $gform,
-            'youtube'       => $youtube,
-            'token'       => $token,
-            'thumbnail' => $uploadData,
-            'limit' => $this->input->post('limit'),
+            'youtube'         => $youtube,
+            'token'           => $token,
+            'thumbnail'       => $uploadData,
+            'limit'           => $this->input->post('limit'),
+            'in_public'       => 1,
         ];
         $save = $this->query->insert_for_id('kelas', null, $data);
         $id = $save->output;
@@ -79,10 +87,10 @@ class Asclepiogo extends CI_Controller
 
             for ($i = 0; $i < $free_member; $i++) {
                 $member = array(
-                    'user_id' => $this->input->post('free_member')[$i],
-                    'kode_transaksi' => 'ASC' . date("YmdHis") . $i,
-                    'total' => 0,
-                    'status' => 'paid',
+                    'user_id'           => $this->input->post('free_member')[$i],
+                    'kode_transaksi'    => 'ASC' . date("YmdHis") . $i,
+                    'total'             => 0,
+                    'status'            => 'paid',
                     'metode_pembayaran' => 'free'
                 );
                 $save_trans = $this->query->insert_for_id('transaksi', null, $member);
@@ -90,11 +98,11 @@ class Asclepiogo extends CI_Controller
 
                 $detail[] = array(
                     'transaksi_id' => $trans_id,
-                    'product_id' => $id,
-                    'harga' => 0,
-                    'diskon' => 0,
-                    'total_harga' => 0,
-                    'status' => 'success',
+                    'product_id'   => $id,
+                    'harga'        => 0,
+                    'diskon'       => 0,
+                    'total_harga'  => 0,
+                    'status'       => 'success',
                 );
             }
             $this->query->insert_batch('transaksi_detail', $detail);
@@ -108,24 +116,27 @@ class Asclepiogo extends CI_Controller
         }
         for ($i = 0; $i < $judul_materi; $i++) {
             $materi[] = array(
-                'kelas_id' => $id,
-                'judul_materi' => $this->input->post('judul_materi')[$i],
+                'kelas_id'         => $id,
+                'judul_materi'     => $this->input->post('judul_materi')[$i],
                 'deskripsi_materi' => $this->input->post('deskripsi_materi')[$i],
-                'durasi_materi' => $this->input->post('durasi_materi')[$i],
+                'date_materi'      => $this->input->post('tanggal_materi')[$i],
+                'hour_materi'      => $this->input->post('time_materi')[$i],
+                'zoom_materi'      => $this->input->post('link_materi')[$i],
+                'durasi_materi'    => $this->input->post('durasi_materi')[$i],
             );
         }
-        for ($i = 0; $i < $free_member; $i++) {
-            $member[] = array(
-                'product_id' => $id,
-                'user_id' => $this->input->post('free_member')[$i],
-                'kode_transaksi' => 'ASC' . date("YmdHis") . $i,
-                'harga' => 0,
-                'diskon' => 0,
-                'total' => 0,
-                'status' => 'paid',
-                'metode_pembayaran' => 'free'
-            );
-        }
+        // for ($i = 0; $i < $free_member; $i++) {
+        //     $member[] = array(
+        //         'product_id'        => $id,
+        //         'user_id'           => $this->input->post('free_member')[$i],
+        //         'kode_transaksi'    => 'ASC' . date("YmdHis") . $i,
+        //         'harga'             => 0,
+        //         'diskon'            => 0,
+        //         'total'             => 0,
+        //         'status'            => 'paid',
+        //         'metode_pembayaran' => 'free'
+        //     );
+        // }
 
         $this->update_log($id, $this->input->post('link_zoom'));
 
@@ -410,21 +421,22 @@ class Asclepiogo extends CI_Controller
                 $label = 'Expert Class';
                 $tag   = '';
             }
-            $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
-            $item['id'] = $k->id;
-            $item['judul'] = $k->judul_kelas;
-            $item['kategori'] = $label;
+                  $pemateri      = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
+            $item['id']          = $k->id;
+            $item['judul']       = $k->judul_kelas;
+            $item['kategori_go'] = $label;
+            $item['kategori']    = strtoupper($k->kategori_kelas);
             $item['waktu_mulai'] = $k->waktu_mulai;
             $item['waktu_akhir'] = $k->waktu_akhir;
-            $item['harga'] = $harga;
-            $item['tgl_kelas'] = format_indo($k->tgl_kelas);
-            $item['thumbnail'] = $k->thumbnail;
-            $item['slug'] = $k->slug;
-            $item['token'] = $k->token;
-            $item['tag'] = $tag;
-            $item['pemateri'] = $pemateri;
-            $item['in_public'] = $k->in_public;
-            $item['is_delete'] = $k->is_delete;
+            $item['harga']       = $harga;
+            $item['tgl_kelas']   = format_indo($k->tgl_kelas);
+            $item['thumbnail']   = $k->thumbnail;
+            $item['slug']        = $k->slug;
+            $item['token']       = $k->token;
+            $item['tag']         = $tag;
+            $item['pemateri']    = $pemateri;
+            $item['in_public']   = $k->in_public;
+            $item['is_delete']   = $k->is_delete;
             array_push($items, $item);
         }
         if ($kelas) {

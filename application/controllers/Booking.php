@@ -15,10 +15,45 @@ class Booking extends CI_Controller
         return base_url() . 'assets/front/scripts/';
     }
 
+    function addCartTerusan(){
+        $user_id    = $this->input->post('user_id');
+        $product_terusan_id = $this->input->post('product_id');
+
+        if ($user_id == '') {
+            $response = [
+                'status' => 402,
+                'msg' => 'Silahkan Login terlebih dahulu',
+            ];
+        } else {
+
+            $data = [
+                'user_id' => $user_id,
+                'product_id' => 0,
+                'product_terusan_id' => $product_terusan_id
+            ];
+
+            $save = $this->query->save_data('cart', $data);
+            if ($save) {
+                $response = [
+                    'status' => 200,
+                    'msg' => 'Success add to cart',
+                ];
+            } else {
+                $response = [
+                    'status' => 400,
+                    'msg' => 'Failed add to cart',
+                ];
+            }
+          
+        }
+        echo json_encode($response);
+
+    }
+
     function addtocart()
     {
 
-        $user_id = $this->input->post('user_id');
+        $user_id    = $this->input->post('user_id');
         $product_id = $this->input->post('product_id');
 
         if ($user_id == '') {
@@ -111,12 +146,9 @@ class Booking extends CI_Controller
                 }
             }
         }
-
-
-
-
         echo json_encode($response);
     }
+
 
     function delete_cart($user_id, $id)
     {

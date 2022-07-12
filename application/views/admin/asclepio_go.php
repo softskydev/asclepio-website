@@ -46,105 +46,7 @@
         </div>
     </div>
     <div class="row wrap-box-card" id="box_upcoming">
-        <!-- <div class="col-md-3">
-            <div class="box-card">
-                <div class="box-card__img"><img src="<?= base_url() ?>assets/admin/images/img-card-01.png" /></div>
-                <div class="box-card__text"><span class="tag">Good morning knowledge</span>
-                    <h4><a href="#">Siap Tanggapi Trauma Urogenital</a></h4>
-                    <ul class="schedule">
-                        <ul>
-                            <li>
-                                <div class="ic"><img src="<?= base_url() ?>assets/admin/images/ic-date.svg" /></div><span>16 Aug 2020</span>
-                            </li>
-                            <li>
-                                <div class="ic"><img src="<?= base_url() ?>assets/admin/images/ic-time.svg" /></div><span>20:00 - 22:30 WIB</span>
-                            </li>
-                        </ul>
-                    </ul>
-                    <div class="author">
-                        <div class="pp"><img src="<?= base_url() ?>assets/admin/images/pp-author.png" /></div><span>Dr. Ahman Jayadi</span>
-                    </div>
-                </div>
-                <div class="box-card__footer">
-                    <div class="price">Free</div>
-                    <div class="action">
-                        <div class="dot"><img src="<?= base_url() ?>assets/admin/images/ic-three-dots.svg" /></div>
-                        <div class="action-sub">
-                            <ul>
-                                <li><a href="#">Edit Kelas</a></li>
-                                <li class="dlt"><a href="#">Delete Kelas</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="box-card">
-                <div class="box-card__img"><img src="<?= base_url() ?>assets/admin/images/img-card-02.png" /></div>
-                <div class="box-card__text"><span class="tag">Siap Tanggapi Trauma Urogenital</span>
-                    <h4><a href="#">Siap Tanggapi Trauma Urogenital</a></h4>
-                    <ul class="schedule">
-                        <ul>
-                            <li>
-                                <div class="ic"><img src="<?= base_url() ?>assets/admin/images/ic-date.svg" /></div><span>16 Aug 2020</span>
-                            </li>
-                            <li>
-                                <div class="ic"><img src="<?= base_url() ?>assets/admin/images/ic-time.svg" /></div><span>20:00 - 22:30 WIB</span>
-                            </li>
-                        </ul>
-                    </ul>
-                    <div class="author">
-                        <div class="pp"><img src="<?= base_url() ?>assets/admin/images/pp-author.png" /></div><span>Dr. Ahman Jayadi</span>
-                    </div>
-                </div>
-                <div class="box-card__footer">
-                    <div class="price">Rp. 250,000,-</div>
-                    <div class="action">
-                        <div class="dot"><img src="<?= base_url() ?>assets/admin/images/ic-three-dots.svg" /></div>
-                        <div class="action-sub">
-                            <ul>
-                                <li><a href="#">Edit Kelas</a></li>
-                                <li class="dlt"><a href="#">Delete Kelas</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="box-card">
-                <div class="box-card__img"><img src="<?= base_url() ?>assets/admin/images/img-card-03.png" /></div>
-                <div class="box-card__text"><span class="tag tag-scndry">Skills Lab</span>
-                    <h4><a href="#">Siap Tanggapi Trauma Urogenital</a></h4>
-                    <ul class="schedule">
-                        <ul>
-                            <li>
-                                <div class="ic"><img src="<?= base_url() ?>assets/admin/images/ic-date.svg" /></div><span>16 Aug 2020</span>
-                            </li>
-                            <li>
-                                <div class="ic"><img src="<?= base_url() ?>assets/admin/images/ic-time.svg" /></div><span>20:00 - 22:30 WIB</span>
-                            </li>
-                        </ul>
-                    </ul>
-                    <div class="author">
-                        <div class="pp"><img src="<?= base_url() ?>assets/admin/images/pp-author.png" /></div><span>Dr. Ahman Jayadi</span>
-                    </div>
-                </div>
-                <div class="box-card__footer">
-                    <div class="price">Free</div>
-                    <div class="action">
-                        <div class="dot"><img src="<?= base_url() ?>assets/admin/images/ic-three-dots.svg" /></div>
-                        <div class="action-sub">
-                            <ul>
-                                <li><a href="#">Edit Kelas</a></li>
-                                <li class="dlt"><a href="#">Delete Kelas</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+        
     </div>
 </section>
 <section class="section">
@@ -175,16 +77,7 @@
                 </tr>
             </thead>
             <tbody id="table_body">
-                <!-- <tr>
-                    <td>
-                        <p>Siap Tanggapi Trauma Urogenital</p><small>Good Morning Knowledge • 20 Agustus 2020</small>
-                    </td>
-                    <td><a href="https://www.youtube.com/" target="_blank">www.youtube.com</a></td>
-                    <td><a href="http://www.google.drive.com/" target="_blank">www.google.drive.com</a></td>
-                    <td>
-                        <div class="action"><a href="#addAsclepediaBenefit" data-toggle="modal" data-target="#addAsclepediaBenefit"><img src="<?= base_url() ?>assets/admin/images/ic-action-edit.svg" /></a><a href="#"><img src="<?= base_url() ?>assets/admin/images/ic-action-delete.svg" /></a></div>
-                    </td>
-                </tr> -->
+                
             </tbody>
         </table>
         <div class="pagination-box">
@@ -360,7 +253,7 @@
         <div class="modal-content">
             <form action="<?= base_url() ?>Asclepiogo/save_kelas" method="post" id="form_add" enctype="multipart/form-data">
                 <div class="modal-body" id="box_add">
-                    <h3 class="modal-title">Membuat Asclepedia</h3>
+                    <h3 class="modal-title">Membuat Asclepio Go</h3>
                     <a class="close" href="#" data-dismiss="modal" aria-label="Close"><img src="<?= base_url() ?>assets/admin/images/ic-xclose.svg" /></a>
                     <h4>Informasi Kelas</h4>
                     <div class="form-group">
@@ -376,16 +269,44 @@
                     </div>
                     <div class="form-group">
                         <label>Kategori</label>
-                        <select class="select" name="kategori" onchange="change_val(this.value)">
+                        <select class="select" name="kategori_go" onchange="change_val(this.value)">
                             <option selected="selected" value="open">Open Class</option>
                             <option value="expert">Expert Class</option>
                             <!-- <option value="private">Private Class</option> -->
                         </select>
                     </div>
-                    <div class="form-group" id="link_gform">
+
+                    <div class="form-group cstm-btnradio">
+                        <label>Kategori Kelas</label>
+                        <div class="d-flex flex-wrap">
+                            <div class="form-check-inline col-md-4 mr-0">
+                                <input class="form-check-input " id="optkategori1" type="radio" name="kategori" value="road to doctor" checked="" required />
+                                <label class="form-check-label min-w-auto w-100 h-100 d-flex align-items-center" for="optkategori1">Road to Doctor</label>
+                            </div>
+                            <div class="form-check-inline col-md-4 mr-0">
+                                <input class="form-check-input " id="optkategori2" type="radio" name="kategori" value="siap ukmppd" required />
+                                <label class="form-check-label min-w-auto w-100 h-100 d-flex align-items-center" for="optkategori2">SIAP UKMPPD</label>
+                            </div> 
+                            <div class="form-check-inline col-md-4 mr-0">
+                                <input class="form-check-input " id="optkategori3" type="radio" name="kategori" value="ppds prep" required />
+                                <label class="form-check-label min-w-auto w-100 h-100 d-flex align-items-center" for="optkategori3">PPDS Prep</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Banyak Pertemuan / Sekali Pertemuan </label>
+                        
+                        <div class="radiobutton" style="margin-left: 20px;">
+                            <input id="val_sekali" type="radio" checked value="sekali_pertemuan" name="tipe_kelas_sekali_or_banyak" class="form-check-input">
+                            <label class="form-check-label" for="val_sekali">Sekali Pertemuan</label>
+                            <input id="val_banyak" type="radio" value="banyak_pertemuan" name="tipe_kelas_sekali_or_banyak" class="form-check-input"> 
+                            <label for="val_banyak" class="form-check-label"> Banyak Pertemuan</label>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group" id="link_gform">
                         <label>Link Google Form</label>
                         <input type="text" class="form-control" value="" name="gform">
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label>Topik Kelas</label>
                         <select class="select" data-live-search="true" data-size="5" id="topik" name="topik" required>
@@ -409,7 +330,7 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="form-group tgl">
+                    <div class="form-group tgl hide_when_banyak">
                         <label>Tanggal</label>
                         <div class="row">
                             <div class="col-3">
@@ -442,15 +363,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group waktu">
+                    <div class="form-group waktu hide_when_banyak">
                         <div class="row">
                             <div class="col-3">
                                 <label>Waktu Mulai</label>
-                                <input type="time" class="form-control" name="waktu_mulai" required>
+                                <input type="time" class="form-control" name="waktu_mulai" >
                             </div>
                             <div class="col-3">
                                 <label>Waktu Selesai</label>
-                                <input type="time" class="form-control" name="waktu_akhir" required>
+                                <input type="time" class="form-control" name="waktu_akhir" >
                             </div>
                         </div>
                     </div>
@@ -460,17 +381,21 @@
                     </div>
                     <div class="form-group">
                         <label>Early Bird - Harga Webinar</label>
+                        <input autocomplete='off' class="form-control daterange" data-date-format="dd/mm/yy" name="date_early" type="text" />
+                        <br>
                         <input class="form-control" id="early_price" name="early_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga early bird" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group">
                         <label>Late Bird - Harga Webinar</label>
+                        <input autocomplete='off' class="form-control daterange" data-date-format="dd/mm/yy" name="date_late" type="text" />
+                        <br>
                         <input class="form-control" id="late_price" name="late_price" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group hide_when_banyak">
                         <label>Link Zoom Meeting</label>
-                        <input class="form-control" type="text" name="link_zoom" placeholder="Masukan link zoom meeting" required />
+                        <input class="form-control" type="text" name="link_zoom" placeholder="Masukan link zoom meeting" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group hide_when_banyak">
                         <label>Link Youtube</label>
                         <input class="form-control" type="text" name="youtube" placeholder="Masukan link youtube" />
                     </div>
@@ -498,15 +423,27 @@
                             <label>Deskripsi</label>
                             <textarea class="form-control" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi[]" required></textarea>
                         </div>
+                        <div class="form-group show_on_banyak">
+                            <label>Link Zoom </label>
+                            <input class="form-control" type="text" value="" name="link_materi[]" placeholder="Tuliskan Link Zoom untuk Materi ini" />
+                        </div>
+                        <div class="form-group show_on_banyak">
+                            <label>Tanggal Pertemuan </label>
+                            <input class="form-control" type="date" value="" name="tanggal_materi[]" placeholder="Masukan Tanggal Materi" />
+                        </div>
+                        <div class="form-group show_on_banyak">
+                            <label>Waktu Pertemuan </label>
+                            <input class="form-control" type="time" value="" name="time_materi[]"  />
+                        </div>
                         <div class="form-group waktu">
                             <div class="row">
                                 <div class="col-3">
                                     <label>Durasi</label>
                                     <select class="select" name="durasi_materi[]">
-                                        <option value="30">30 menit</option>
-                                        <option value="40">40 menit</option>
-                                        <option value="50">50 menit</option>
                                         <option value="60">60 menit</option>
+                                        <option value="90">90 menit</option>
+                                        <option value="120">120 menit</option>
+                                        <option value="180">180 menit</option>
                                     </select>
                                 </div>
                             </div>
@@ -632,11 +569,11 @@
                     </div>
                     <div class="form-group">
                         <label>Early Bird - Harga Webinar</label>
-                        <input class="form-control" id="early_price_edit" name="early_price_edit" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga early bird" /><small>*input harga hanya angka, Contoh 200:000</small>
+                        <input class="form-control"  id="early_price_edit" name="early_price_edit" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga early bird" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group">
                         <label>Late Bird - Harga Webinar</label>
-                        <input class="form-control" id="late_price_edit" name="late_price_edit" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" /><small>*input harga hanya angka, Contoh 200:000</small>
+                        <input class="form-control"  id="late_price_edit" name="late_price_edit" onkeyup="onchange_num(this.id,this.value)" type="text" placeholder="Masukan harga late bird" /><small>*input harga hanya angka, Contoh 200:000</small>
                     </div>
                     <div class="form-group">
                         <label>Link Zoom Meeting</label>

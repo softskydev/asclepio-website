@@ -4,7 +4,7 @@ function addCartTerusan(user, id) {
     } else {
         $.ajax({
             type: "post",
-            url: global_url + "Booking/addtocart",
+            url: global_url + "Booking/addCartTerusan",
             data: {
                 user_id: user,
                 product_id: id,

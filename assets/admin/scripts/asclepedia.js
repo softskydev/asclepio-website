@@ -79,9 +79,24 @@ $(document).ready(function () {
             editImgTT.src = URL.createObjectURL(file)
         }
     }
-      
-
 });
+
+function copy_kelas(kelas_id){
+    $.ajax({
+        type: "POST",
+        url: global_url + 'Asclepedia/clone_kelas/'+ kelas_id,
+        dataType: "json",
+        success: function (response) {
+            if(response.status == 200){
+                toastr['success'](response.msg);
+                setTimeout(() => {window.location.reload()}, 2500);
+            } else {
+                toastr['error'](response.msg);
+            }
+        }
+    });
+}
+
 let dokter = [];
 function change_val(val) {
     if (val == 'good morning knowledge') {
@@ -98,10 +113,11 @@ function change_val(val) {
         $("#box_tool_price").hide();
         $("#for_tiket_terusan").show();
         $("#form_add").attr('action'  , global_url + 'Asclepedia/save_kelas');
-        $("input[name='judul_kelas']").addAttr('required');
-        $("#select_pemateri").addAttr('required');
-        $("#deskripsi_kelas").addAttr('required');
-        $(".deskripsi_materi").addAttr('required');
+        $("input[name='judul_kelas']").attr('required',true);
+        $("#select_pemateri").attr('required',true);
+        $("#deskripsi_kelas").attr('required',true);
+        $(".deskripsi_materi").attr('required',true);
+        $("textarea[name='desc_tiket_terusan']").attr('required',false);
     } else if(val == 'skill labs' || val == 'drill the case'  ) {
         $("#showWhenTiketTerusan").hide();
         $("#hideWhenTiketTerusan").show();
@@ -116,18 +132,22 @@ function change_val(val) {
         $("#late_price").val('');
         $("#for_tiket_terusan").show();
         $("#form_add").attr('action'  , global_url + 'Asclepedia/save_kelas');
-        $("input[name='judul_kelas']").addAttr('required');
-        $("#select_pemateri").addAttr('required');
-        $("#deskripsi_kelas").addAttr('required');
-        $(".deskripsi_materi").addAttr('required');
+        $("input[name='judul_kelas']").attr('required',true);
+        $("#select_pemateri").attr('required',true);
+        $("#deskripsi_kelas").attr('required',true);
+        $(".deskripsi_materi").attr('required',true);
+        $("textarea[name='desc_tiket_terusan']").attr('required',false);
     } else {
        $("#hideWhenTiketTerusan").hide();
        $("#showWhenTiketTerusan").show();
-       $("input[name='judul_kelas']").removeAttr('required');
-       $("textarea[name='deskripsi_kelas']").removeAttr('required');
-       $(".deskripsi_materi").removeAttr('required');
-       $("#select_pemateri").removeAttr('required');
-       $("#tools_price").attr('required' , false);
+       $("input[name='judul_kelas']").attr('required',false);
+       $("textarea[name='deskripsi_kelas']").attr('required',false);
+       $("textarea[name='desc_tiket_terusan']").attr('required',true);
+       $(".deskripsi_materi").attr('required',false);
+       $("#select_pemateri").attr('required',false);
+       $("#tools_price").attr('required',false);
+       $("#select_pemateri").attr('required',false);
+       $(".deskripsi_materi").attr('required',false);
        $("#form_add").attr('action'  , global_url + 'Asclepedia/save_tiket_terusan');
     }
 }
@@ -192,17 +212,19 @@ function show_materi() {
 function detailTiket(id){
 
     $("#modalEditTIketTerusan").modal('show');
+    $('.list_kelas').empty();
     $.ajax({
         url: global_url+"Asclepedia/detailTiketTT/"+id,
         type: "GET",
         dataType: "json",
         success: function (response) {
-            // console.log(response);
+            console.log(response);
             $("#editKelasTT").html(response.data_kelas);
             $("#editKelasTT").selectpicker("refresh");
             $("#editImgTT").attr("src" , global_url+'assets/uploads/kelas_terusan/'+response.data_row.image);
             $("#editPriceTT").val(numeral(response.data_row.price_kelas_terusan).format('0,0'));
             $("#editTitleTT").val(response.data_row.judul_kelas_terusan);
+            $("#editDescTT").html(response.data_row.deskripsi_tiket_terusan);
             if(response.judul_kelas.length > 0){
                 $.each(response.judul_kelas, function(key, value){
                     var html = `<input type="text" readonly class="form-control mb-2" value="${value}"></input>`
@@ -344,7 +366,7 @@ var tambahan = `<div class="form-group show_on_banyak">
                     <label>Waktu Pertemuan </label>
                     <input class="form-control" type="time" value="" name="time_materi[]"  />
                 </div>`;
-var max_fields = 10;
+var max_fields = 9999;
 //When user click on add input button
 $(add_materi).click(function (e) {
     e.preventDefault();
@@ -432,6 +454,7 @@ function getUpcoming() {
                     var waktu_akhir = response.data[i]['waktu_akhir'];
                     var harga       = response.data[i]['harga'];
                     var tgl_kelas   = response.data[i]['tgl_kelas'];
+                    var hour   = response.data[i]['hour'];
                     var verif       = global_url + 'Front/verif_kelas/';
                     
                     if (response.data[i]['in_public'] == 0) {
@@ -442,6 +465,7 @@ function getUpcoming() {
 
 
                     var btn_edit = "<li><a href='javascript:void(0)' onclick='edit_kelas(" + id + ")'>Edit Kelas</a></li>";
+                        btn_edit +=  "<li><a href='javascript:void(0)' onclick='copy_kelas(" + id + ")'>Bikin Batch Baru </a></li>";
 
                     if (response.data[i]['in_public'] == 0) {
 
@@ -478,7 +502,7 @@ function getUpcoming() {
                         "<div class='ic'><img src='" + global_url + "assets/admin/images/ic-date.svg' /></div><span>" + tgl_kelas + "</span>" +
                         "</li>" +
                         "<li>" +
-                        "<div class='ic'><img src='" + global_url + "assets/admin/images/ic-time.svg' /></div><span>" + waktu_mulai + " - " + waktu_akhir + " WIB</span>" +
+                        "<div class='ic'><img src='" + global_url + "assets/admin/images/ic-time.svg' /></div><span>" +hour+" WIB</span>" +
                         "</li>" +
                         "</ul>" +
                         "</ul>" +

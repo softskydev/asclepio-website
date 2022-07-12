@@ -34,7 +34,7 @@
                     <div class="col-md-7">
                         <div class="left">
                             <h4>Deskripsi Kelas</h4>
-                            <p>Kelas terusan ini memiliki banyak paket dari bermacam kelas :</p>
+                            <p><?= $data->deskripsi_tiket_terusan ?></p>
                             <!-- <a class="btn-link" href="#">Baca lebih</a> -->
                         </div>
                     </div>

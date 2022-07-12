@@ -223,7 +223,15 @@
                           <td><?= $key->judul_materi ?></td>
                           <td><?= $key->deskripsi_materi ?></td>
                           <td><?= $key->zoom_materi ?></td>
-                          <td><?= set_date($key->date_materi) . '<br>'.$key->hour_materi. ' ('.$key->durasi_materi.' Menit)'  ?></td>
+                          <td>
+                            <?php 
+                                if($key->date_materi != null){
+                                    echo set_date($key->date_materi) . '<br>'.$key->hour_materi. ' ('.$key->durasi_materi.' Menit)';
+                                } else {
+                                    echo ' - ';
+                                }
+                            ?>
+                          </td>
                           <td>
                               
                              
@@ -313,6 +321,7 @@
                 <label>Judul materi</label>
                 <input type="hidden" id="materi_id_edit" name="materi_id">
                 <input class="form-control" id="judul_materi_edit"  type="text" value="" name="judul_materi" placeholder="Masukan judul materi" />
+                <input type="hidden" value="<?= $data->id ?>" name="kelas_id">
             </div>
             <div class="form-group">
                 <label>Deskripsi</label>

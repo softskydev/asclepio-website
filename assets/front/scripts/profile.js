@@ -171,6 +171,19 @@ function changeLinkMateri() {
     $("#link_materi").attr("href", link);
 }
 
+function listLinkKelas(id){
+    $("#linkKelasBanyak").modal('show');
+
+    $.ajax({
+        type: "GET",
+        url: global_url + "Asclepedia/link_kelas_materi/"+id,
+        dataType: "html",
+        success: function (response) {
+            $("#tbodyLink").html(response)
+        }
+    });
+
+}
 
 function getVoucher(code) {
     var user = $("#user_id").val();

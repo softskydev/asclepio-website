@@ -1,4 +1,4 @@
-<style>
+<1style>
     .box-card__img {
         padding-top: 100% !important;
     }
@@ -129,7 +129,9 @@
                                             <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $f->jenis_kelas ?>/<?= $f->thumbnail ?>" class="thumbnail" />
                                                 <div class="rating">
                                                     <?php
-                                                    $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $f->id")->row()->rating;
+                                                    $kelas_id = ($f->actual_kelas_id == 0) ? $f->id: $f->actual_kelas_id;
+
+                                                    $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = ". $f->id )->row()->rating;
                                                     if ($rating == '') {
                                                         $rating = 0;
                                                     } else {
@@ -160,7 +162,8 @@
                                                 <div class="mt-3 ">
 
                                                     <?php
-                                                    $is_rated = $this->query->get_query("SELECT COUNT(*) AS is_rated FROM ulasan WHERE `user_id` = " . $this->session->userdata('id') . " AND kelas_id = $f->id")->row()->is_rated;
+                                                    $kelas_id = ($f->actual_kelas_id == 0) ? $f->id: $f->actual_kelas_id;
+                                                    $is_rated = $this->query->get_query("SELECT COUNT(*) AS is_rated FROM ulasan WHERE `user_id` = " . $this->session->userdata('id') . " AND kelas_id =  $f->id")->row()->is_rated;
                                                     // echo $is_rated;
 
                                                     // echo $get_rating;
@@ -222,8 +225,7 @@
                 }
 
                 $ontopik = $this->db->query($txt)->result();
-                // echo $this->db->last_query();
-
+               
                 foreach ($ontopik as $ot) {
                     $today_time = strtotime(date("Y-m-d H:i"));
                     // $expire_time = strtotime($ot->tgl_kelas);

@@ -10,6 +10,27 @@ $(document).ready(function () {
     getUpcoming();
     getFinished();
     getUnbenefit();
+
+    var today = new Date();
+    $('.daterange').daterangepicker({
+        minDate: today,
+        locale: {
+          format: 'DD/MM/YYYY'
+        }
+    });
+
+    $("input[type=radio][name='tipe_kelas_sekali_or_banyak'").change(function() {
+        if (this.value == 'sekali_pertemuan') {
+             $(".hide_when_banyak").show();
+             $(".show_on_banyak").hide();
+        }
+        else if (this.value == 'banyak_pertemuan') {
+             $(".hide_when_banyak").hide();
+             $(".show_on_banyak").show();
+             
+        }
+    });
+    
 });
 
 function show_materi() {
@@ -246,7 +267,19 @@ function getTopik() {
 var wrapper_materi = $(".main_materi"); //Input fields wrapper
 var add_materi = $("#add_materi"); //Add button class or ID
 var y = 1;
-var max_fields = 10;
+var max_fields = 9999;
+var tambahan = `<div class="form-group show_on_banyak">
+                    <label>Link Pertemuan </label>
+                    <input class="form-control" type="text" value="" name="link_materi[]" placeholder="Tuliskan Link Zoom untuk Materi ini" />
+                </div>
+                <div class="form-group show_on_banyak">
+                    <label>Tanggal Pertemuan </label>
+                    <input class="form-control" type="date" value="" name="tanggal_materi[]" placeholder="Masukan Tanggal Materi" />
+                </div>
+                <div class="form-group show_on_banyak">
+                    <label>Waktu Pertemuan </label>
+                    <input class="form-control" type="time" value="" name="time_materi[]"  />
+                </div>`;
 //When user click on add input button
 $(add_materi).click(function (e) {
     e.preventDefault();
@@ -255,29 +288,31 @@ $(add_materi).click(function (e) {
         y++; //input field increment
         //add input field
         var input_materi = '<div class="box-form-materi">' +
-            '<h4>Materi ' + y + '<a class="delete-materi remove_field" href="#"><img src="' + global_url + 'assets/admin/images/ic-delete-grey.svg" /></a></h4>' +
-            '<div class="form-group">' +
-            '<label>Judul materi</label>' +
-            '<input class="form-control" type="text" value="" name="judul_materi[]" placeholder="Masukan judul materi" />' +
-            '</div>' +
-            '<div class="form-group">' +
-            '<label>Deskripsi</label>' +
-            '<textarea class="form-control" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi[]"></textarea>' +
-            '</div>' +
-            '<div class="form-group waktu">' +
-            '<div class="row">' +
-            '<div class="col-3">' +
-            '<label>Durasi</label>' +
-            '<select class="select" name="durasi_materi[]">' +
-            '<option value="30">30 menit</option>' +
-            '<option value="40">40 menit</option>' +
-            '<option value="50">50 menit</option>' +
-            '<option value="60">60 menit</option>' +
-            '</select>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>';
+        '<h4>Pertemuan ' + y + '<a class="delete-materi remove_field" href="javascript:void(0)"><img src="' + global_url + 'assets/admin/images/ic-delete-grey.svg" /></a></h4>' +
+        '<div class="form-group">' +
+        '<label>Judul Pertemuan</label>' +
+        '<input class="form-control" type="text" value="" name="judul_materi[]" placeholder="Masukan judul materi" />' +
+        '</div>' +
+        '<div class="form-group">' +
+        '<label>Deskripsi</label>' +
+        '<textarea class="form-control" rows="4" placeholder="Masukan deskripsi materi" name="deskripsi_materi[]"></textarea>' +
+        '</div>' ;
+        
+        if ($("[name='tipe_kelas_sekali_or_banyak']:checked").val() == 'banyak_pertemuan') {
+             input_materi += tambahan;
+         
+        } 
+        input_materi +=  '<div class="form-group waktu"><div class="row"><div class="col-3"><label>Durasi</label>' +
+                           '<select class="select" name="durasi_materi[]">' +
+                                '<option value="60">60 menit</option>' +
+                                '<option value="90">90 menit</option>' +
+                                '<option value="120">120 menit</option>' +
+                                '<option value="180">180 menit</option>' +
+                            '</select>' +
+                            '</div>' +
+                        '</div>' +
+                     '</div>' +
+                '</div>';
         $(wrapper_materi).append(input_materi);
         $('.select').selectpicker('refresh');
     }
@@ -308,17 +343,18 @@ function getUpcoming() {
                 var len = response.data.length;
 
                 for (var i = 0; i < len; i++) {
-                    var id = response.data[i]['id'];
-                    var thumbnail = response.data[i]['thumbnail'];
-                    var judul = response.data[i]['judul'];
-                    var kategori = response.data[i]['kategori'];
+                    var id          = response.data[i]['id'];
+                    var thumbnail   = response.data[i]['thumbnail'];
+                    var judul       = response.data[i]['judul'];
+                    var kategori_go = response.data[i]['kategori_go'];
+                    var kategori    = response.data[i]['kategori'];
                     var waktu_mulai = response.data[i]['waktu_mulai'];
                     var waktu_akhir = response.data[i]['waktu_akhir'];
-                    var harga = response.data[i]['harga'];
-                    var tgl_kelas = response.data[i]['tgl_kelas'];
-                    var tag = response.data[i]['tag'];
-                    var verif = global_url + 'Front/verif_kelas/';
-                    var img = '';
+                    var harga       = response.data[i]['harga'];
+                    var tgl_kelas   = response.data[i]['tgl_kelas'];
+                    var tag         = response.data[i]['tag'];
+                    var verif       = global_url + 'Front/verif_kelas/';
+                    var img         = '';
                     if (response.data[i]['in_public'] == 0) {
                         var public = 'Publish';
                         var btn_edit = "<li><a href='javascript:void(0)' onclick='edit_kelas(" + id + ")'>Edit Kelas</a></li>";
@@ -326,12 +362,20 @@ function getUpcoming() {
                         var public = 'Unpublish';
                         var btn_edit = "";
                     }
-                    if (kategori == 'Open Class') {
-                        var label = "<span class='tag tag-open'>" + kategori + " | " + tag + "</span>";
-                    } else if (kategori == 'Expert Class') {
-                        var label = "<span class='tag tag-expert'>" + kategori + "</span>";
+                    if (kategori_go == 'Open Class') {
+                        var label = "<span class='tag tag-open'>" + kategori_go + " | " + tag + "</span>";
+                    } else if (kategori_go == 'Expert Class') {
+                        var label = "<span class='tag tag-expert'>" + kategori_go + "</span>";
                     } else {
-                        var label = "<span class='tag tag-private'>" + kategori + "</span>";
+                        var label = "<span class='tag tag-private'>" + kategori_go + "</span>";
+                    }
+
+                    if (kategori == 'ROAD TO DOCTOR') {
+                        var label_kat = "<span class='tag'>" + kategori + "</span>"
+                    } else if (kategori == 'SIAP UKMPPD'){
+                        var label_kat = "<span class='tag tag-primary'>" + kategori + "</span>"
+                    } else {
+                        var label_kat = "<span class='tag tag-scndry'>" + kategori + "</span>"
                     }
 
                     if (response.data[i]['pemateri'].length > 1) {
@@ -348,7 +392,7 @@ function getUpcoming() {
                     var html = "<div class='col-md-3 mb-3'>" +
                         "<div class='box-card'>" +
                         "<div class='box-card__img'><img src='" + global_url + "assets/uploads/kelas/asclepio_go/" + thumbnail + "' class='thumbnail'/></div>" +
-                        "<div class='box-card__text'>" + label +
+                        "<div class='box-card__text'>" + label + label_kat +
                         "<h4><a href='#'>" + judul + "</a></h4>" +
                         "<ul class='schedule'>" +
                         "<ul>" +

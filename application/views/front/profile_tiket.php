@@ -89,14 +89,19 @@
                             <?php
                             $tiket = $this->query->get_query("SELECT row_number() over (ORDER BY t.tgl_pembelian ASC) AS urutan, k.*,d.total_harga, d.status,d.status_link FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE t.user_id = " . $this->session->userdata('id') . " AND k.tgl_kelas >= CURDATE() AND t.status = 'paid' ORDER BY t.tgl_pembelian DESC")->result();
                             if (count($tiket) > 0) {
+                             
                                 foreach ($tiket as $t) {
-                                    $date = $t->public_date;
-                                    $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-                                    if ($new_date > date('Y-m-d')) {
+                                    $early_daterange     = $t->early_daterange;
+                                    $early_date1         = explode(' - ', $early_daterange)[0];
+                                    $early_date2         = explode(' - ', $early_daterange)[1];
+                                    $early_convert_date1 = date('Y-m-d', strtotime($early_date1));
+                                    $early_convert_date2 = date('Y-m-d', strtotime($early_date2));
+                                    if ((date('Y-m-d') >= $early_convert_date1) && (date('Y-m-d') <= $early_convert_date2)) {
                                         $new_price = $t->early_price;
-                                    } else {
+                                    }else {
                                         $new_price = $t->late_price;
                                     }
+                                   
                                     if ($new_price == 0) {
                                         $harga = 'FREE';
                                     } else {
@@ -124,7 +129,11 @@
                                             if ($t->status == 'pending') {
                                                 $zoom = '';
                                             } else if ($t->status == 'success') {
-                                                $zoom = '<a class="btn btn-primary btn-small" href="' . $t->link_zoom . '" target="_blank">Link Kelas</a>';
+                                                if ($t->tipe_kelas == 'banyak_pertemuan'){
+                                                    $zoom = '<a class="btn btn-primary btn-small" href="javascript:void(0)" onclick="listLinkKelas('.$t->id.')">Link Kelas</a>';
+                                                } else {
+                                                    $zoom = '<a class="btn btn-primary btn-small" href="' . $t->link_zoom . '" target="_blank">Link Kelas</a>';
+                                                }
                                             }
                                         }
                                     } else {
@@ -517,4 +526,41 @@
             </div>
         </div>
     </div>
+</div>
+<style>
+    table, th, td {
+    border: 1px solid black;
+    }
+</style>
+<div class="modal fade bd-example-modal-lg" id="linkKelasBanyak" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"> Link Kelas  </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>   
+            </button>
+        </div>
+        <div class="modal-body">
+            
+            <table > 
+                <thead>
+                    <tr>
+                        <th> Jadwal</th>
+                        <th> Nama Materi</th>
+                        <th> Link</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyLink">
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="modal-footer">
+            
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
 </div>

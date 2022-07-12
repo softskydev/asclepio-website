@@ -81,6 +81,7 @@ class Asclepedia extends CI_Controller
             'thumbnail'       => $uploadData,
             'token'           => $token,
             'limit'           => $this->input->post('limit'),
+            'in_public'       => 1,
         ];
         $save = $this->query->insert_for_id('kelas', null, $data);
         $id = $save->output;
@@ -166,9 +167,10 @@ class Asclepedia extends CI_Controller
         $_FILES['images']['size']     = $_FILES['thumbnail']['size'];
 
 
-        $judul_tiket_terusan  = $_POST['judul_tiket_terusan'];
-        $code_terusan         = 'ASCTT-'.rand(0,99).strtoupper(substr(md5( date('Y-m-d') ) , 0 , 6));
-        $harga_terusan        = str_replace(',' , '' , $_POST['tiket_terusan_price']);
+        $judul_tiket_terusan     = $_POST['judul_tiket_terusan'];
+        $deskripsi_tiket_terusan = $_POST['desc_tiket_terusan'];
+        $code_terusan            = 'ASCTT-'.rand(0,99).strtoupper(substr(md5( date('Y-m-d') ) , 0 , 6));
+        $harga_terusan           = str_replace(',' , '' , $_POST['tiket_terusan_price']);
         
         if ( !  $this->upload->do_upload('images'))
         {
@@ -186,11 +188,12 @@ class Asclepedia extends CI_Controller
                 $data_images = $data['file_name'];
 
                 $terusan = [
-                    'code_kelas'          => $code_terusan,
-                    'image'               => $data_images,
-                    'judul_kelas_terusan' => $judul_tiket_terusan,
-                    'price_kelas_terusan' => $harga_terusan,
-                    'price_actual'        => str_replace(',','' ,$_POST['price_actual']),
+                    'code_kelas'              => $code_terusan,
+                    'image'                   => $data_images,
+                    'judul_kelas_terusan'     => $judul_tiket_terusan,
+                    'deskripsi_tiket_terusan' => $deskripsi_tiket_terusan,
+                    'price_kelas_terusan'     => $harga_terusan,
+                    'price_actual'            => str_replace(',','' ,$_POST['price_actual']),
                 ];
 
                 $id = $this->query->insert_for_id('kelas_terusan' , null , $terusan);
@@ -334,7 +337,131 @@ class Asclepedia extends CI_Controller
 
     }
 
-    
+    function clone_kelas($kelas_id){
+
+        $kelas     = $this->query->get_data_simple('kelas' , ['id' => $kelas_id])->row();
+        if($kelas != null){
+            
+            $id            = $kelas->id;
+            $actual_id     = $kelas->actual_kelas_id;
+            $true_id       = ( $actual_id == 0 ) ? $id : $actual_id;
+
+            $data_row      = $this->query->get_data_simple('kelas',['id' => $true_id])->row();
+            $data_materi   = $this->query->get_data_simple('kelas_materi' , ['kelas_id' => $true_id] );
+            $data_pemateri = $this->query->get_data_simple('kelas_pemateri' , ['kelas_id' => $true_id] );
+
+            // check batch ke berapa sih ini? 
+
+            $jml      = $this->query->get_query('select count(*) as jml from kelas where actual_kelas_id = '.$true_id.' and is_delete = 0')->row()->jml;
+            $jml      = $jml + 2;
+            $newJudul = $data_row->judul_kelas . ' - Batch '.$jml;
+
+            $newImageName = 'copy_from_'.date('ymd').$data_row->thumbnail;
+
+            $image    = './assets/uploads/kelas/asclepedia/'.$data_row->thumbnail;
+            $newImage = './assets/uploads/kelas/asclepedia/'.$newImageName;
+            copy($image , $newImage);
+
+
+            $created_clone = [
+                'judul_kelas'     => $newJudul,
+                'actual_kelas_id' => $true_id,
+                'topik_id'        => $data_row->topik_id,
+                'tipe_kelas'      => $data_row->tipe_kelas,
+                'jenis_kelas'     => $data_row->jenis_kelas,
+                'kategori_kelas'  => $data_row->kategori_kelas,
+                'kategori_go'     => $data_row->kategori_go,
+                'waktu_mulai'     => $data_row->waktu_mulai,
+                'waktu_akhir'     => $data_row->waktu_akhir,
+                'early_price'     => $data_row->early_price,
+                'late_price'      => $data_row->late_price,
+                'tools_price'     => $data_row->tools_price,
+                'early_daterange' => $data_row->early_daterange,
+                'late_daterange'  => $data_row->late_daterange,
+                'link_zoom'       => $data_row->link_zoom,
+                'deskripsi_kelas' => $data_row->deskripsi_kelas,
+                'thumbnail'       => $data_row->thumbnail,
+                'tgl_kelas'       => $data_row->tgl_kelas,
+                'link_rekaman'    => $data_row->link_rekaman,
+                'link_materi'     => $data_row->link_materi,
+                'created_date'    => $data_row->created_date,
+                'slug'            => url_title($newJudul, 'dash', true),
+                'created_at'      => $data_row->created_at,
+                'updated_at'      => $data_row->updated_at,
+                'gform_url'       => $data_row->gform_url,
+                'youtube'         => $data_row->youtube,
+                'token'           => random_string('alnum', 16),
+                'password_materi' => $data_row->password_materi,
+                'link_sertifikat' => $data_row->link_sertifikat,
+            ];
+
+            $saved    = $this->query->insert_for_id('kelas' , null , $created_clone);
+            $clone_id = $saved->output;
+
+            
+            if($data_materi){
+                $data_clone_materi = [];
+                foreach($data_materi->result() as $materi){
+                    $data_clone_materi[] = [
+                        'kelas_id'            => $clone_id,
+                        'judul_materi'        => $materi->judul_materi,
+                        'deskripsi_materi'    => $materi->deskripsi_materi,
+                        'durasi_materi'       => $materi->durasi_materi,
+                        'date_materi'         => ($materi->date_materi != null ) ? $materi->date_materi : null,
+                        'hour_materi'         => ($materi->hour_materi != null ) ? $materi->date_materi : null,
+                        'zoom_materi'         => '',
+                        'link_materi_rekaman' => '',
+                        'link_materi_youtube' => '',
+                        'password_materi'     => '',
+                    ];
+                }
+                $saved = $this->query->insert_batch('kelas_materi' , $data_clone_materi);
+            }
+
+            if($data_pemateri){
+                $data_clone_pemateri = [];
+                foreach($data_pemateri->result() as $pemateri){
+                    $data_clone_pemateri[] = [
+                        'kelas_id'            => $clone_id,
+                        'pemateri_id'         => $pemateri->pemateri_id,
+                    ];
+                }
+                $saved = $this->query->insert_batch('kelas_pemateri' , $data_clone_pemateri);
+            }
+            
+            $response = [
+                'status' => 200,
+                'msg'   => "Berhasil membuat Batch kelas baru",
+            ];
+
+            echo json_encode($response);
+            
+
+        } else {
+
+            $response = [
+                'status' => 400,
+                'msg'   => "Error : Kelas tidak ditemukan",
+            ];
+
+            // exit('Kelas tidak ditemukan');
+        }
+
+    }
+
+    function link_kelas_materi($kelas_id){
+
+        $materi     =   $this->query->get_data_simple('kelas_materi' , ['kelas_id' => $kelas_id])->result();
+        $html = '';
+        foreach($materi as $m){
+            $html .= '<tr>';
+            $html .= '<td> '.set_date($m->date_materi) . '<br>'.substr($m->hour_materi,0,-3). '<br> ('.$m->durasi_materi.' Menit)'.'</td>';
+            $html .= '<td> '.$m->judul_materi.'</td>';
+            $html .= '<td> <a href="'.$m->zoom_materi.'" target="_blank"> Link Kelas </a></td></tr>';
+        }
+
+        echo $html;
+    }
 
     function get_upcoming()
     {
@@ -344,8 +471,9 @@ class Asclepedia extends CI_Controller
                     CASE 
                         WHEN a.tipe_kelas = 'banyak_pertemuan' THEN b.date_materi 
                         WHEN a.tipe_kelas = 'sekali_pertemuan' THEN a.tgl_kelas
-                    END AS tanggal_mulai , a.* , b.date_materi
-                    FROM kelas a JOIN kelas_materi b ON a.id = b.kelas_id WHERE a.jenis_kelas = 'asclepedia' ";
+                    END AS tanggal_mulai ,
+                     a.* , b.date_materi , b.hour_materi
+                    FROM kelas a JOIN kelas_materi b ON a.id = b.kelas_id WHERE a.jenis_kelas = 'asclepedia' and a.is_delete = 0 ";
         if ($type != '' && $type != 'semua') {
             $query1 .= ' AND kategori_kelas = "' . $type . '"';
         }
@@ -394,22 +522,28 @@ class Asclepedia extends CI_Controller
                 else {
                     $label = 'Skill Labs';
                 }
+
+
+
                 $pemateri = $this->query->get_query("SELECT p.foto,p.nama_pemateri FROM pemateri p JOIN kelas_pemateri kp ON p.id = kp.pemateri_id WHERE kp.kelas_id = $k->id")->result();
+
+                $hour = ( $k->hour_materi == '00:00:00' || $k->hour_materi == null ) ? $k->waktu_mulai . ' - ' . $k->waktu_akhir : substr($k->hour_materi, 0, -3);
 
                 // debug($pemateri);
 
-                $item['id'] = $k->id;
-                $item['judul'] = $k->judul_kelas;
-                $item['kategori'] = $label;
+                $item['id']          = $k->id;
+                $item['judul']       = $k->judul_kelas;
+                $item['kategori']    = $label;
                 $item['waktu_mulai'] = $k->waktu_mulai;
-                $item['in_public'] = $k->in_public;
                 $item['waktu_akhir'] = $k->waktu_akhir;
-                $item['harga'] = $harga;
-                $item['tgl_kelas'] = format_indo($k->tanggal_mulai);
-                $item['thumbnail'] = $k->thumbnail;
-                $item['slug'] = $k->slug;
-                $item['pemateri'] = $pemateri;
-                $item['is_delete'] = $k->is_delete;
+                $item['hour']        = $hour;
+                $item['in_public']   = $k->in_public;
+                $item['harga']       = $harga;
+                $item['tgl_kelas']   = format_indo($k->tanggal_mulai);
+                $item['thumbnail']   = $k->thumbnail;
+                $item['slug']        = $k->slug;
+                $item['pemateri']    = $pemateri;
+                $item['is_delete']   = $k->is_delete;
                 array_push($items, $item); 
             }
         }
@@ -773,12 +907,24 @@ class Asclepedia extends CI_Controller
             $response_msg = 'Materi berhasil di tambahkan';
         }
 
+        if($this->input->post('tanggal_materi')) {
+            $tgl = $this->input->post('tanggal_materi');
+        } else {
+            $tgl = null;
+        } 
+
+        if($this->input->post('time_materi')) {
+            $time = $this->input->post('time_materi');
+        } else {
+            $time = null;
+        } 
+
         $materi = array(
             'kelas_id'         => $this->input->post('kelas_id'),
             'judul_materi'     => $this->input->post('judul_materi'),
             'deskripsi_materi' => $this->input->post('deskripsi_materi'),
-            'date_materi'      => $this->input->post('tanggal_materi'),
-            'hour_materi'      => $this->input->post('time_materi'),
+            'date_materi'      => $tgl,
+            'hour_materi'      => $time,
             'zoom_materi'      => $this->input->post('link_materi'),
             'durasi_materi'    => $this->input->post('durasi_materi'),
         );

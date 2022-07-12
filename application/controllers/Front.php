@@ -105,15 +105,24 @@ class Front extends CI_Controller
 
     function tiket_terusan_detail($slug){
         $data['data']         = $this->query->get_data_simple('kelas_terusan' , ['md5(code_kelas)' => $slug])->row();
-        $data['title']   = $data['data']->judul_kelas_terusan;
-        $data['meta_title']   = $data['data']->judul_kelas_terusan;
-        $data['meta_desc']    = $data['data']->judul_kelas_terusan;
-        $data['meta_keyword'] = $data['data']->judul_kelas_terusan .','. $data['data']->code_kelas;
-        $data['meta_url']     = base_url('kelas-terusan');
-        $data['meta_img'] = '';
-        $data['script'][] = $this->js_path() . 'tiket-terusan.js';
-        $page['content']      = $this->load->view('front/class_detail_terusan', $data, true);
-        $this->load->view('front/layout', $page);
+        if(($data['data'])){
+            $data['title']        = $data['data']->judul_kelas_terusan;
+            $data['meta_title']   = $data['data']->judul_kelas_terusan;
+            $data['meta_desc']    = $data['data']->judul_kelas_terusan;
+            $data['meta_keyword'] = $data['data']->judul_kelas_terusan .','. $data['data']->code_kelas;
+            $data['meta_url']     = base_url('kelas-terusan');
+            $data['meta_img']     = '';
+            $data['script'][]     = $this->js_path() . 'tiket-terusan.js';
+            $page['content']      = $this->load->view('front/class_detail_terusan', $data, true);
+            $this->load->view('front/layout', $page);
+        } else {
+
+            $this->session->set_flashdata('msg_type', 'error');
+            $this->session->set_flashdata('msg', 'Tiket Terusan tidak ditemukan');
+            redirect(base_url('asclepedia'));
+            
+        }
+        
     }
 
 
@@ -261,19 +270,20 @@ class Front extends CI_Controller
     }
     function cart()
     {
-        $data['meta_title'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
-        $data['meta_desc'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
+        $data['meta_title']   = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_title;
+        $data['meta_desc']    = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_desc;
         $data['meta_keyword'] = $this->query->get_data_simple('seo', ['page' => 'home'])->row()->meta_keyword;
-        $data['meta_url'] = base_url();
-        $data['meta_img'] = '';
-        $user_id = $this->session->userdata('id');
-        $data['title']       =  ' Kelas Online Kedokteran #1 di Indonesia | Cart';
+        $data['meta_url']     = base_url();
+        $data['meta_img']     = '';
+              $user_id        = $this->session->userdata('id');
+        $data['title']        = 'Kelas Online Kedokteran #1 di Indonesia | Cart';
+
         if ($user_id == '') {
             redirect(base_url('login'));
         } else {
             $data['script'][] = '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js';
             $data['script'][] = $this->js_path() . 'booking.js';
-            $data['data'] = $this->query->get_query("SELECT k.* FROM cart c JOIN kelas k ON c.`product_id` = k.`id` WHERE c.user_id = $user_id")->result();
+            $data['data']     = $this->query->get_query("SELECT k.* FROM cart c JOIN kelas k ON c.`product_id` = k.`id` WHERE c.user_id = $user_id")->result();
             $page['content']  = $this->load->view('front/cart', $data, true);
         }
 

@@ -41,7 +41,7 @@
                                                 <div class="col-md-8">
                                                     <select name="" id="select_rekaman" class="form-control">
                                                        <?php foreach ($materi as $key) { ?>
-                                                       <option value=" <?= $key->link_materi_youtube ?>"> <?= $key->judul_materi ?></option>
+                                                       <option value="<?= str_replace('https://www.youtube.com/watch?v=','',$key->link_materi_youtube) ?>"> <?= $key->judul_materi ?></option>
                                                        <?php } ?>
                                                     </select>
                                                 </div>
@@ -54,7 +54,7 @@
                                                 <div class="col-md-8">
                                                     <select name="" id="select_materi" class="form-control">
                                                        <?php foreach ($materi as $key) { ?>
-                                                       <option value=" <?= $key->link_materi_rekaman ?>"> <?= $key->judul_materi ?></option>
+                                                       <option value="<?= $key->link_materi_rekaman ?>"> <?= $key->judul_materi ?></option>
                                                        <?php } ?>
                                                     </select>
                                                 </div>
