@@ -45,6 +45,12 @@
                                 <h4>Waktu & Tempat</h4>
                                 <ul>
                                     <li>
+                                        <div class="ic">
+                                            <img src="<?=base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
+                                        </div>
+                                        <span>IDI</span>
+                                    </li>
+                                    <li>
                                         <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-tp-location.svg" /></div><span>Zoom Meeting</span>
                                     </li>
                                 </ul>
