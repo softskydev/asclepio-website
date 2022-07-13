@@ -201,6 +201,21 @@ class Profile extends CI_Controller
         echo json_encode($response);
     }
 
+    function download_certificate(){
+     
+        $data = [];
+        // $this->load->view('front/certificate_user');
+       
+        $this->load->library('pdf');
+
+        
+        $this->pdf->setPaper('A4', 'landscape');
+        $this->pdf->set_option('isRemoteEnabled', true);
+        $this->pdf->filename = "certificate.pdf";
+        $this->pdf->load_view('front/certificate_user', $data);
+            
+    }
+
     function add_review()
     {
         $user_id  = $this->input->post('user_id');

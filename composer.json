@@ -13,7 +13,8 @@
 	"require": {
 		"php": ">=5.2.4",
 		"pusher/pusher-php-server": "^4.1",
-		"midtrans/midtrans-php": "^2.5"
+		"midtrans/midtrans-php": "^2.5",
+		"dompdf/dompdf": "^2.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

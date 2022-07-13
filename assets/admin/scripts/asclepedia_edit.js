@@ -64,20 +64,40 @@ $("#status_unpublish").change(function(event) {
   }
 });
 
+$("#status_idi").change(function(event) {
+  /* Act on the event */
+  if ($("#status_idi").is(':checked')) {
+    $("#idi-status").text('SKP IDI');
+  } else {
+    $("#idi-status").text('Non - SKP IDI');
+  }
+});
+
 image_upload.onchange = evt => {
   const [file] = image_upload.files
   if (file) {
     image_upload_preview.src = URL.createObjectURL(file)
+ 
   }
 }
 
+ceritificate_files.onchange = evt => {
+  const [file] = ceritificate_files.files
+  if (file) {
+    certificate_preview.src = URL.createObjectURL(file)
+  }
+}
+
+
+function addCertificate(){
+  var fd                          = new FormData();
+
+  $("#addCertificate").modal('show');
+  
+
+}
+
 function savethisClass(){
-
-
-  // var doctors = [];
-
-  // console.log($("#pemateri_doctor").val());
-
   var fd                          = new FormData();
   var foto_kelas                  = $("#image_upload")[0].files;
   var judul_kelas                 = $("#judul_kelas").val();
@@ -120,10 +140,15 @@ function savethisClass(){
     fd.append('waktu_start', $("#waktu_start").val());
     fd.append('waktu_end', $("#waktu_end").val());
   }
-   if ($("#status_unpublish").is(':checked')) {
+  if ($("#status_unpublish").is(':checked')) {
      fd.append('status_publish', '1');
   } else {
      fd.append('status_publish', '0');
+  }
+  if ($("#status_idi").is(':checked')) {
+    fd.append('is_skp_idi', '1');
+  } else {
+    fd.append('is_skp_idi', '0');
   }
 
 

@@ -42,9 +42,9 @@
                 <div class="header-card">
                     <div class="row mx-0 align-items-center">
                         <h2>Pembayaran</h2>
-                        <div class="bg-primary rounded ml-auto p-2 text-white">
-                            <p>Bayar Sebelum 13 April 2022</p>  
-                        </div>
+                        <!-- <div class="bg-primary rounded ml-auto p-2 text-white"> -->
+                            <!-- <p>Bayar Sebelum 13 April 2022</p>   -->
+                        <!-- </div> -->
                     </div>
                 </div>
                 <div class="body-card pt-md-4">

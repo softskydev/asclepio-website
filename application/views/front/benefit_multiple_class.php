@@ -59,11 +59,15 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <?php if($data->certificate_image != null){ ?>
                                             <div class="row mt-5">
                                                 <div class="col-md-12">
-                                                    <a href="" class="btn btn-success btn-small" id="link_sertifikat" target="_blank"><i class="fa fa-download"></i> Unduh Sertifikat </a>
+                                                    <a href="<?= base_url() ?>Profile/download_certificate" target="_blank" class="btn btn-success btn-small" id="link_sertifikat" ><i class="fa fa-download"></i> Unduh Sertifikat </a>
                                                 </div>
                                             </div>
+                                            <?php } else { ?>
+                                                Sertifikat belum terupload. Mohon tunggu dulu yaa~ 
+                                            <?php } ?>
                                             <?php foreach ($materi as $key) { ?>
                                             <div class="form-group can-copy mt-3">
                                                 <label>Password Materi <?= $key->judul_materi ?></label>

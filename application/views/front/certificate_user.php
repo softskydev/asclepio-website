@@ -25,7 +25,7 @@
 <body>
 
 <div class="position-relative">
-    <img src="<?= base_url()?>assets/front/images/certificate.jpeg" width="100%" alt="">
+    <img src="http://localhost/asclepio-website/assets/front/images/certificate.jpeg" width="100%" alt="">
     <div class="name">
         <h2>Galuh Nugroho</h2>
     </div>

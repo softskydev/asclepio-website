@@ -779,6 +779,7 @@ class Asclepedia extends CI_Controller
             'early_daterange' => $this->input->post('linkyoutube'),
             'late_daterange'  => $this->input->post('linkyoutube'),
             'limit'           => $this->input->post('limit'),
+            'is_skp_idi'       => $this->input->post('is_skp_idi'),
             'early_daterange' => str_replace('/', '-', $this->input->post('daterange_early')),
             'late_daterange'  => str_replace('/', '-', $this->input->post('daterange_late')),
             'jenis_kelas'     => 'asclepedia',
@@ -888,6 +889,46 @@ class Asclepedia extends CI_Controller
         }
 
         echo json_encode($response);
+    }
+
+    function update_certificate($kelas_id){
+
+        $row = $this->query->get_data_simple('kelas' , ['id' => $kelas_id])->row()->is_skp_idi;
+        if($row == 1){
+            $directory = './assets/uploads/certificate/skp_idi/';
+        } else {
+            $directory = './assets/uploads/certificate/non_skp_idi/';
+        }
+
+        $config['upload_path']   = $directory;
+        $config['allowed_types'] = 'png|img|jpeg|jpg';
+        $config['encrypt_name']  = true;
+        $this->load->library('upload', $config);
+        $uploaded = $this->upload->do_upload('files');
+
+        if($uploaded){
+
+            $imgs = $this->upload->data();
+            $update= [
+                'certificate_image' => $imgs['file_name'],
+            ];
+
+            $this->query->insert_for_id('kelas' , ['id' => $kelas_id] , $update );
+
+            $this->session->flashdata('msg' ,'Sertifikat sudah terupload~');
+            $this->session->set_flashdata('msg_t' , 'success');
+
+        } else {
+
+            $error = $this->upload->display_errors();
+
+            $this->session->flashdata('msg' ,'Sertifikat gagal terupload :' . $error );
+            $this->session->set_flashdata('msg_t' , 'success');
+
+        }
+
+        redirect(base_url('admin/kelas_detail/'.$kelas_id));
+
     }
 
     function course_detail($id){

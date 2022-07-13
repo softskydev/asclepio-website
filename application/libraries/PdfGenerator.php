@@ -8,7 +8,7 @@ class PdfGenerator
     define('DOMPDF_ENABLE_REMOTE', true);
     define('DOMPDF_ENABLE_JAVASCRIPT', true);
     ini_set('memory_limit', '-1');
-    require_once("./vendor/dompdf/dompdf/autoload.inc.php");
+    require_once("./vendor/autoload.php");
  
     $dompdf = new Dompdf();
     $dompdf->set_paper($paper,$orientation);

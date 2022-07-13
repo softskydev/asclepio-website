@@ -4,7 +4,7 @@
         <h2><?= ucwords($title) ?></h2>
     </div>
     <div class="right">
-        <button class="btn btn-sm btn-info" > <i class="fa fa-trophy"></i> Sertifikat</button>
+        <button class="btn btn-sm btn-info" onclick="addCertificate()"> <i class="fa fa-trophy"></i> Sertifikat</button>
         <a id="btnEdit" onclick="editButton()" class="btn btn-link" href="javascript:void(0)" >Edit Kelas ini</a>
         <a id="btnSave" style="display:none;" class="btn btn-link" href="javascript:void(0)" onclick="savethisClass()" >Simpan </a>
         <a id="btnCancel" onclick="cancelButton()" style="display:none;" class="btn btn-link" href="javascript:void(0)" >Cancel </a>
@@ -79,6 +79,14 @@
                 <div class="custom-control custom-switch">
                   <input type="checkbox" disabled class="do-disabled custom-control-input" value="1" id="status_unpublish" <?= $data->in_public == 1 ? 'checked' : ''; ?>>
                   <label class="custom-control-label" for="status_unpublish"> <span id="publish-status"><?= $data->in_public == 1 ? 'Sudah terpublish' : 'Tidak Terpublish'; ?></span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label> Apakah Kelas ber SKP - IDI </label>
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" disabled class="do-disabled custom-control-input" value="1" id="status_idi" <?= $data->is_skp_idi == 1 ? 'checked' : ''; ?>>
+                  <label class="custom-control-label" for="status_idi"> <span id="idi-status"><?= $data->is_skp_idi == 1 ? 'SKP IDI': 'Non - SKP IDI' ; ?></span></label>
                 </div>
             </div>
 
@@ -392,6 +400,53 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" onclick="saveCourse()">Simpan</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="addCertificate" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form action="<?= base_url() ?>Asclepedia/update_certificate/<?= $data->id ?>" enctype="multipart/form-data" method="POST">
+        <div class="modal-header">
+            <h5 class="modal-title"> Upload Sertifikat </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>   
+            </button>
+        </div>
+        <div class="box-form-materi">
+            
+            <?php
+
+                if($data->certificate_image == null){
+                    
+                    $img = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';
+
+                } else {
+
+                    if($data->is_skp_idi == 1){
+                        $directory = 'uploads/certificate/skp_idi/';
+                    } else {
+                        $directory = 'uploads/certificate/non_skp_idi/';
+                    }
+                    $img = 'assets/'.$directory.$data->certificate_image;
+                }
+
+
+                
+
+            ?>
+            <img src="<?= base_url().$img ?>" style="width:300px;height:220px;" id="certificate_preview"  alt="">
+            <br>
+            <input type="file" id="ceritificate_files" name="files" >
+
+            
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Simpan</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </form>
         </div>
