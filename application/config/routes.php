@@ -82,6 +82,7 @@ $route['register']                     = 'Front/register';
 $route['verify']                       = 'Auth/verify';
 $route['asclepedia-bundling/(:any)']          = 'Front/bundling/$1';
 $route['certificate-user']      = 'Front/userCertificate';
+$route['certificate-skills-lab']      = 'Front/SkillsLabCertificate';
 /*
  * ============ Routes dari Master DATA =============*
  * ===== URL == ( if:num == id) =	== Controller == *
