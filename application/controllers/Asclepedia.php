@@ -903,6 +903,8 @@ class Asclepedia extends CI_Controller
         $config['upload_path']   = $directory;
         $config['allowed_types'] = 'png|img|jpeg|jpg';
         $config['encrypt_name']  = true;
+        $config['width']         = 1600;
+        $config['height']        = 1130;
         $this->load->library('upload', $config);
         $uploaded = $this->upload->do_upload('files');
 

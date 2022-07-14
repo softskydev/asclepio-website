@@ -62,7 +62,7 @@
                                             <?php if($data->certificate_image != null){ ?>
                                             <div class="row mt-5">
                                                 <div class="col-md-12">
-                                                    <a href="<?= base_url() ?>Profile/download_certificate" target="_blank" class="btn btn-success btn-small" id="link_sertifikat" ><i class="fa fa-download"></i> Unduh Sertifikat </a>
+                                                    <a href="<?= base_url() ?>Profile/download_certificate/<?= $data->id ?>" target="_blank" class="btn btn-success btn-small" id="link_sertifikat" ><i class="fa fa-download"></i> Unduh Sertifikat </a>
                                                 </div>
                                             </div>
                                             <?php } else { ?>

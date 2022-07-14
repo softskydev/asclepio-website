@@ -1,4 +1,4 @@
-<1style>
+<style>
     .box-card__img {
         padding-top: 100% !important;
     }

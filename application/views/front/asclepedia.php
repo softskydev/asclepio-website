@@ -38,63 +38,56 @@
                     } else {
                         $harga = 'Rp ' . rupiah($new_price);
                     }
-                    if ($or->tipe_kelas == 'sekali_pertemuan') {
-                        $today_time = strtotime(date("Y-m-d H:i"));
-                        // $expire_time = strtotime("-1 day", strtotime($or->tgl_kelas));
-                        $expire_time = strtotime($or->tgl_kelas . ' ' . $or->waktu_mulai);
-                        $date = $or->public_date;
-                        $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-                        $cek_transaksi = $this->query->get_query("SELECT COUNT(d.id) as total FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE d.product_id = $or->id")->row();
-                        if ($or->kategori_kelas == 'good morning knowledge') {
-                           
+                    $today_time = date("Y-m-d");
+                    $expire_time = date("Y-m-d" , strtotime("+20 day", strtotime($or->tgl_kelas)));
+                    $date        = $or->public_date;
+                    $cek_transaksi = $this->query->get_query("SELECT COUNT(d.id) as total FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id WHERE d.product_id = $or->id")->row();
+                    if ($or->kategori_kelas == 'good morning knowledge') {
+                        
+                        if ($expire_time <= $today_time) {
+                            $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                            $button = '';
+                        } else {
+                            $ribbon = '';
+                            $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
+                        }
+
+                    } else {
+
+                        if ($harga == '?') {
+                                $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Pendaftaran belum dibuka</div></div>";
+                                $button = '';
+                        } else {
                             if ($expire_time <= $today_time) {
                                 $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
                                 $button = '';
                             } else {
-                                $ribbon = '';
-                                $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
-                            }
-                        } else {
-                            
-                            if ($harga == '?') {
-                                 $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Pendaftaran belum dibuka</div></div>";
-                                 $button = '';
-                            } else {
-                                if ($expire_time <= $today_time) {
-                                    $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                                    $button = '';
-                                } else {
-                                    if ($or->limit != 0) {
-                                        if ($cek_transaksi->total >= $or->limit) {
-                                            $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
-                                            $button = '';
-                                        } else {
-                                            $ribbon = '';
-                                            $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
-                                        }
+                                if ($or->limit != 0) {
+                                    if ($cek_transaksi->total >= $or->limit) {
+                                        $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
+                                        $button = '';
                                     } else {
                                         $ribbon = '';
                                         $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
                                     }
+                                } else {
+                                    $ribbon = '';
+                                    $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
                                 }
                             }
-                            
-                         }
-                     } else {
-                        $ribbon = '';
-                        $button = '<button class="btn btn-primary btn-small" onclick="addToCart(\'' . $this->session->userdata('id') . '\',' . $or->id . ')">Daftar</button>';
-                        
-                     }
-
+                        }
+                        }
                 ?>
                     <div class="col-lg-3 col-md-6 slider__item">
                         <div class="box-card">
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?><?= $or->jenis_kelas ?>/<?= $or->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $or->jenis_kelas ?>/<?= $or->thumbnail ?>" class="thumbnail" />
+                                    <?php if($or->is_skp_idi == 1){ ?>
                                     <div class="position-absolute" style="left: 14px;bottom:10px">
                                         <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
                                     </div>
+                                    <?php } ?>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $or->id")->row()->rating;
@@ -170,16 +163,6 @@
                         $date           = $morning_knowledge->public_date;
                         $new_date       = date("Y-m-d", strtotime("+2 day", strtotime($date)));
 
-                
-                        
-
-                        // if ($new_date > date('Y-m-d')) {
-                        //     $new_price = $morning_knowledge->early_price;
-                        // } else {
-                        //     $new_price = $morning_knowledge->late_price;
-                        // }
-                        
-
                         if ($expire_time <= $today_time) {
                             $ribbon = "<div class='box-ribbon'><div class='corner-ribbon top-left red shadow'>Sold</div></div>";
                             $button = '';
@@ -198,9 +181,11 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?>asclepedia/<?= $morning_knowledge->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/asclepedia/<?= $morning_knowledge->thumbnail ?>" class="thumbnail" />
+                                    <?php if($morning_knowledge->is_skp_idi == 1){ ?>
                                     <div class="position-absolute" style="left: 14px;bottom:10px">
                                         <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
                                     </div>
+                                    <?php } ?>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $morning_knowledge->id")->row()->rating;
@@ -306,9 +291,11 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?>asclepedia/<?= $s->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/asclepedia/<?= $s->thumbnail ?>" class="thumbnail" />
+                                    <?php if($s->is_skp_idi == 1){ ?>
                                     <div class="position-absolute" style="left: 14px;bottom:10px">
                                         <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
                                     </div>
+                                    <?php } ?>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $s->id")->row()->rating;
@@ -375,9 +362,9 @@
                         <div class="box-card">
                             <a href="<?= base_url() ?>kelas-terusan/<?= strtoupper(md5($data->code_kelas)) ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas_terusan/<?= $data->image ?>" class="thumbnail" />
-                                    <div class="position-absolute" style="left: 14px;bottom:10px">
+                                    <!-- <div class="position-absolute" style="left: 14px;bottom:10px">
                                         <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
-                                    </div>
+                                    </div> -->
                                     <!-- <div class="rating">
                                         <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-star.png" /></div><span><?= $rating ?></span>
                                     </div> -->

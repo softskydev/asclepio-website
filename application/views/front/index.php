@@ -233,9 +233,10 @@
             <div class="row wrap-box-card slider" data-items="4">
                 <?php
                 foreach ($onrating as $or) {
-                    $today_time = strtotime(date("Y-m-d H:i"));
+                    $today_time = date("Y-m-d");
                     // $expire_time = strtotime("-1 day", strtotime($or->tgl_kelas));
-                    $expire_time = strtotime($or->tgl_kelas . ' ' . $or->waktu_mulai);
+                    // $expire_time = strtotime($or->tgl_kelas . ' ' . $or->waktu_mulai);
+                    $expire_time         = date("Y-m-d", strtotime("+20 day", strtotime($or->tgl_kelas)));
                     $date = $or->public_date;
                     $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
 
@@ -356,9 +357,11 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?><?= $jenis_kelas ?>/<?= $or->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $or->jenis_kelas ?>/<?= $or->thumbnail ?>" class="thumbnail" />
+                                    <?php if($or->is_skp_idi == 1){ ?>
                                     <div class="position-absolute" style="left: 14px;bottom:10px">
                                         <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
                                     </div>
+                                    <?php } ?>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $or->id")->row()->rating;
@@ -408,10 +411,10 @@
             <div class="row wrap-box-card slider" data-items="3">
                 <?php
                 foreach ($asclepedia as $a) {
-                    $today_time = strtotime(date("Y-m-d H:i"));
+                    $today_time = date("Y-m-d H:i");
                     // $expire_time = strtotime("-1 day", strtotime($a->tgl_kelas));
-                    $expire_time = strtotime($a->tgl_kelas . ' ' . $a->waktu_mulai);
-
+                    // $expire_time = strtotime($a->tgl_kelas . ' ' . $a->waktu_mulai);
+                    $expire_time         = date("Y-m-d", strtotime("+20 day", strtotime($a->tgl_kelas)));
                     $date = $a->public_date;
                     $new_date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
 
@@ -466,9 +469,11 @@
                             <?= $ribbon ?>
                             <a href="<?= base_url() ?><?= $a->jenis_kelas ?>/<?= $a->slug ?>">
                                 <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $a->jenis_kelas ?>/<?= $a->thumbnail ?>" class="thumbnail" />
+                                    <?php if($a->is_skp_idi == 1){ ?>
                                     <div class="position-absolute" style="left: 14px;bottom:10px">
-                                        <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px" alt="">
+                                        <img src="<?= base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
                                     </div>
+                                    <?php } ?>
                                     <div class="rating">
                                         <?php
                                         $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $a->id")->row()->rating;

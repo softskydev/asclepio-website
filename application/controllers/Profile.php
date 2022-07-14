@@ -201,19 +201,32 @@ class Profile extends CI_Controller
         echo json_encode($response);
     }
 
-    function download_certificate(){
-     
-        $data = [];
+    function download_certificate($kelas_id){
+        $kelas = $this->query->get_data_simple('kelas' , ['id' => $kelas_id])->row();
+        $is_idi = $kelas->is_skp_idi;
+        if($is_idi == 1){
+            $type_certificate = 'front/certificate_idi';
+            $img_certificate  = 'assets/uploads/certificate/skp_idi/';
+        } else {
+            $type_certificate = 'front/certificate_non_idi';
+            $img_certificate  = 'assets/uploads/certificate/non_skp_idi/';
+        }
+
+        $data = [
+            'nama_peserta'    => $this->session->userdata('nama_lengkap'),
+            'img_certificate' => base_url().$img_certificate.$kelas->certificate_image
+        ];
         // $this->load->view('front/certificate_user');
-       
+        // $this->load->view('front/skills_lab_certificate');
+        // exit;
         $this->load->library('pdf');
 
+        $nama =  create_slug($this->session->userdata('nama_lengkap'));
         
         $this->pdf->setPaper('A4', 'landscape');
         $this->pdf->set_option('isRemoteEnabled', true);
-        $this->pdf->filename = "certificate.pdf";
-        $this->pdf->load_view('front/certificate_user', $data);
-            
+        $this->pdf->filename = $nama.'_'.$kelas->slug.".pdf";
+        $this->pdf->load_view($type_certificate , $data);
     }
 
     function add_review()

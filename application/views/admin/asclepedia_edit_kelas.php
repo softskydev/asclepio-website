@@ -421,7 +421,7 @@
             
             <?php
 
-                if($data->certificate_image == null){
+                if($data->certificate_image == null || $data->certificate_image == '' ){
                     
                     $img = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';
 
@@ -432,14 +432,14 @@
                     } else {
                         $directory = 'uploads/certificate/non_skp_idi/';
                     }
-                    $img = 'assets/'.$directory.$data->certificate_image;
+                    $img =  base_url(). 'assets/'.$directory.$data->certificate_image;
                 }
 
 
                 
 
             ?>
-            <img src="<?= base_url().$img ?>" style="width:300px;height:220px;" id="certificate_preview"  alt="">
+            <img src="<?= $img ?>" style="width:300px;height:220px;" id="certificate_preview"  alt="">
             <br>
             <input type="file" id="ceritificate_files" name="files" >
 

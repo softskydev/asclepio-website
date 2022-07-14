@@ -117,10 +117,17 @@
 
                                     }
                                 } else if ($t->status == 'pending') {
-                                    $label = '<small class="card-header card-header-transaksi bg-success text-white">Transaksi Pending</small>';
+                                    $label = '<small class="card-header card-header-transaksi bg-warning text-white">Transaksi Pending</small>';
                                     $link = base_url() . 'payment/' . $t->kode_transaksi;
                                 } else if ($t->status == 'expired' || $t->status == 'fail') {
-                                    $label = '<small class="card-header card-header-transaksi bg-danger text-white">Transaksi '.$t->status.'</small>';
+
+                                    if($t->status == 'expired'){
+                                        $copy = 'Transaksi Expired';
+                                    } else {
+                                        $copy = 'Transaksi Gagal';
+                                    }
+
+                                    $label = '<small class="card-header card-header-transaksi bg-danger text-white"> '.$copy.'</small>';
 
                                     if($t->status == 'fail'){
                                         $link = base_url() . 'manual/'. $t->kode_transaksi ;

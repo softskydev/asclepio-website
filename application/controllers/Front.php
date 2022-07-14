@@ -708,10 +708,10 @@ class Front extends CI_Controller
             }
     }
 
-    function userCertificate(){ 
-        $this->load->view('front/certificate_user');
-    }
-    function SkillsLabCertificate(){ 
-        $this->load->view('front/skills_lab_certificate');
-    }
+    // function userCertificate(){ 
+    //     $this->load->view('front/certificate_user');
+    // }
+    // function SkillsLabCertificate(){ 
+    //     $this->load->view('front/skills_lab_certificate');
+    // }
 }
