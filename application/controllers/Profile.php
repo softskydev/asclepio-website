@@ -237,11 +237,13 @@ class Profile extends CI_Controller
         $ulasan   = $this->input->post('ulasan');
 
         $check = $this->query->get_data_simple('kelas' , ['id' => $kelas_id])->row();
+
+        $kelas_id_rating = ($check->actual_kelas_id == 0) ? $check->id: $check->actual_kelas_id;
         
 
         $data = [
             'user_id'         => $user_id,
-            'kelas_id'        => $check->id,
+            'kelas_id'        => $kelas_id_rating ,
             'actual_kelas_id' => $check->actual_kelas_id,
             'rating'          => $rating,
             'ulasan'          => $ulasan,

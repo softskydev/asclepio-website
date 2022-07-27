@@ -104,11 +104,16 @@ define("ACCESS_EMAIL_PASSWORD", 'ppnpapehyljmikvz');
 
 
 
-
 define("MSG_SUCCESS", 'success');
 define("MSG_INFO", 'info');
 define("MSG_WARNING", 'warning');
 define("MSG_ERROR", 'error');
+
+
+define('SB_MIDTRANS_KEY' , 'SB-Mid-client-Tvw85CfI7ZKU9RDE' );
+define('LV_MIDTRANS_KEY' , 'Mid-server-1Xd5iajkcLSzFTtyymFARow8');
+
+
 
 
 

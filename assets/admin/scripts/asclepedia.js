@@ -571,6 +571,7 @@ function getFinished() {
                         var public = 'Unpublish';
                         var btn_edit = " ";
                     }
+                    btn_edit +=  "<li><a href='javascript:void(0)' onclick='copy_kelas(" + id + ")'>Bikin Batch Baru </a></li>";
                     var img = '';
                     if (kategori == 'Good morning knowledge') {
                         var label = "<span class='tag'>" + kategori + "</span>"

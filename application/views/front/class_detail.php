@@ -1,4 +1,5 @@
 <?php $tipe_kelas = $data->tipe_kelas; ?>
+<?php $kelas_id = ($data->actual_kelas_id == 0) ? $data->id : $data->actual_kelas_id ; ?>
 <div class="class-detail">
     <section class="section class-detail__banner">
         <div class="container">
@@ -57,7 +58,7 @@
                         <div class="class-pricerate">
                             <div class="class-rating">
                                 <?php
-                                $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $data->id or actual_kelas_id = $data->id")->row()->rating;
+                                $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $kelas_id")->row()->rating;
                                 if ($rating == '') {
                                     $rating = 0;
                                 } else {
@@ -159,10 +160,12 @@
                                 <h4>Waktu & Tempat</h4>
                                 <ul>
                                     <li>
+                                        <?php if($data->is_skp_idi == 1){ ?>
                                         <div class="ic">
                                             <img src="<?=base_url()?>assets/idi-logo.png" style="width:30px"  alt="">
                                         </div>
-                                        <span>IDI</span>
+                                        <span>Akreditasi IDI </span>
+                                        <?php } ?>
                                     </li>
                                     <li>
                                         <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-tp-location.svg" /></div><span>Zoom Meeting</span>
@@ -258,7 +261,9 @@
                 <div class="col-md-9">
                     <div class="rate-card__list">
                         <?php
-                        $query = $this->db->query("SELECT u.nama_lengkap,r.rating,r.ulasan,r.date FROM ulasan r JOIN `user` u ON r.`user_id` = u.`id` WHERE r.`kelas_id` = $data->actual_kelas_id or r.`actual_kelas_id` = $data->actual_kelas_id ORDER BY r.`date` DESC");
+
+                        $kelas_id = ($data->actual_kelas_id == 0) ? $data->id : $data->actual_kelas_id ;
+                        $query = $this->db->query("SELECT u.nama_lengkap,r.rating,r.ulasan,r.date FROM ulasan r JOIN `user` u ON r.`user_id` = u.`id` WHERE r.`kelas_id` = $kelas_id ORDER BY r.`date` DESC");
                         if ($query->num_rows() == 0) {
                             echo 'Belum ada ulasan';
                         } else {

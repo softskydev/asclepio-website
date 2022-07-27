@@ -166,7 +166,8 @@
                                             <div class="box-card__img"><img src="<?= base_url() ?>assets/uploads/kelas/<?= $t->jenis_kelas ?>/<?= $t->thumbnail ?>" class="thumbnail" />
                                                 <div class="rating">
                                                     <?php
-                                                    $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $t->id")->row()->rating;
+                                                    $kelas_id = ($t->actual_kelas_id == 0) ? $t->id : $t->actual_kelas_id ;
+                                                    $rating = $this->query->get_query("SELECT FORMAT(AVG(rating),1) AS rating FROM ulasan WHERE kelas_id = $kelas_id")->row()->rating;
                                                     if ($rating == '') {
                                                         $rating = 0;
                                                     } else {

@@ -235,7 +235,8 @@
                                             } else if ( $t->status == 'expired') {
                                                 echo "<small class='text-danger'><i class='fa fa-info-circle'></i> Waktu pembayaran telah expired, silahkan lakukan pembelian ulang</small>";
                                             } else if ( $t->status == 'fail') {
-                                                echo "<small class='text-danger'><i class='fa fa-info-circle'></i> Pembayaran ditolak , bukti transfer salah </small>";
+                                                echo "<small class='text-danger'><i class='fa fa-info-circle'></i> Pembayaran ditolak , bukti transfer salah </small><br><span>";
+                                                echo "butuh bantuan ? <a href='https://api.whatsapp.com/send/?phone=6281327257373&text&type=phone_number&app_absent=0' target='_blank'>hubungi PIYO yuk!  </a> </span>";
                                                 echo "<a class='btn btn-link btn-small ' style='float: right;' href='$link'>Lakukan Pembayaran Ulang</a>";
                                             } else   {
                                                 echo "Pesanan berhasil dikonfirmasi oleh Admin";

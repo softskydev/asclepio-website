@@ -129,6 +129,7 @@
             </div>
         </div>
     </section>
+    <?php if(count($morning) > 0) { ?>
     <section class="section" id="good_morning">
         <div class="container">
             <div class="section__heading">
@@ -229,6 +230,8 @@
 
         </div>
     </section>
+    <?php } ?>
+    <?php if(count($skill) > 0){ ?>
     <section class="section highlight" id="skill_labs">
         <div class="aksen aksen-1" style="bottom: calc(50% - 146px);left: -51px;"><img src="<?= base_url() ?>assets/front/images/aksen-asclepedia-highlight1.svg" /></div>
         <div class="aksen aksen-2" style="top: calc(50% - 118px);right: -39px;"><img src="<?= base_url() ?>assets/front/images/aksen-asclepedia-highlight2.svg" /></div>
@@ -346,8 +349,9 @@
 
         </div>
     </section>
-    
+    <?php } ?>
     <!-- TIKET TERUSAN -->
+    <?php if(count($terusan) > 0){ ?>
     <section class="section highlight" id="tiket_terusan">
         <div class="aksen aksen-1" style="bottom: calc(50% - 146px);left: -51px;"><img src="<?= base_url() ?>assets/front/images/aksen-asclepedia-highlight1.svg" /></div>
         <div class="aksen aksen-2" style="top: calc(50% - 118px);right: -39px;"><img src="<?= base_url() ?>assets/front/images/aksen-asclepedia-highlight2.svg" /></div>
@@ -384,6 +388,7 @@
             </div>
         </div>
     </section>
+    <?php } ?>
     <?= count($drill); ?>
     <?php if(count($drill)>0) { ?>
     <section class="section" id="drill_the_case">
@@ -450,7 +455,7 @@
                                         <div class="ic"><img src="<?= base_url() ?>assets/front/images/ic-star.png" /></div><span><?= $rating ?></span>
                                     </div>
                                 </div>
-                                <div class="box-card__text"><span class="tag">Good morning knowledge</span>
+                                <div class="box-card__text"><span class="tag">Drill the Case</span>
                                     <h4><?= $drillthecase->judul_kelas ?></h4>
 
                                     <div class="author">

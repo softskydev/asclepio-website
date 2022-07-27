@@ -468,9 +468,9 @@ class Booking extends CI_Controller
 
         $code_transaction = $this->input->post('code_transaction');
         // $payment = $this->input->post('payment');
-        $total = $this->query->get_data('total', 'transaksi', ['kode_transaksi' => $code_transaction])->row()->total;
+        $total    = $this->query->get_data('total', 'transaksi', ['kode_transaksi' => $code_transaction])->row()->total;
         $get_data = $this->query->get_query("SELECT d.id,d.diskon,t.user_id,d.total_harga,t.tgl_pembelian,k.id as kelas_id,k.judul_kelas FROM transaksi t JOIN transaksi_detail d ON t.id = d.transaksi_id JOIN kelas k ON d.product_id = k.id WHERE t.kode_transaksi = '$code_transaction'")->result();
-        $items = [];
+        $items    = [];
         foreach ($get_data as $d) {
             $item = array(
                 'id'       => $d->id,
