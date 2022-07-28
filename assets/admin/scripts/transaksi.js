@@ -56,6 +56,7 @@ function loadPagination(pagno) {
 
 function createTable(response) {
     var html = '';
+    var link = global_url + 'Transaksi/delete';
     $.each(response.data, function(i, item) {
         if (item.status == 'paid') {
             $label = "<span class='tag tag-blue'>Sukses</span>";
@@ -83,7 +84,10 @@ function createTable(response) {
             "</td>" +
             "<td>" + $label + "</td>" +
             "<td>" + item.tgl_pembelian + "</td>" +
-            "<td>" + $act + "</td>" +
+            "<td>" + $act + 
+            '<a class="btn btn-danger btn-xs action" onclick="return confirm(\'Anda yakin ingin menghapus data ini?\')" href="'+link+'/'+item.id+'">'
+            +'<i class="fa fa-trash" style="color:white;"></i></a>' +
+            "</td>" +
             // "<td>" +
             // "<div class='action'><a style='cursor:pointer' onclick='detailTransaksi(" + item.id + ")'><img src='" + global_url + "assets/admin/images/ic-document.svg' /></a style='cursor:pointer'></div>" +
             // "</td>" +
