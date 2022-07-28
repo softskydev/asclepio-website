@@ -48,7 +48,6 @@
                     </div>
                 </div>
                 <div class="body-card pt-md-4">
-                    <h4 class="text-capitalize">Rekening tujuan</h4>
                     <div class="row mx-0">
                         <!-- <div class="col-md-6 col-12 p-1">
                             <label class="card p-3 mb-2 rekening-payment" for="payment-bri">
@@ -77,6 +76,8 @@
                             </label>
                         </div> -->
                         <div class="col-md-6 col-12 p-1">
+                            <h4 class="text-capitalize">Rekening tujuan</h4>
+
                             <label class="card p-3 mb-2 rekening-payment" for="payment-bca">
                                 <input type="radio" checked name="payment_channel" id="payment-bca" class="d-none" value="bca">
                                 <div class=" payment-image">
@@ -102,6 +103,10 @@
                                     </div>
                                 </div>
                             </label>
+                        </div>
+                        <div class="col-md-6 col-6 p-md-2">
+                            <h4 class="text-capitalize">Bayar dengan kode QR </h4>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#qr-modal">Tampilkan Kode QR</button>
                         </div>
                     </div>
                     <hr>
@@ -171,4 +176,23 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="qr-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Transaksi Dengan kode QR </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body row mx-0">
+          <div class="col-md-8 mx-auto">
+              <img src="<?= base_url('assets/front/images/qr-code.jpg')?>" class="text-center mt-2" alt="">
+          </div>
+      </div>
+    </div>
+  </div>
 </div>
