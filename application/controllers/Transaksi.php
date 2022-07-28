@@ -17,6 +17,13 @@ class Transaksi extends CI_Controller
     {
         return base_url() . 'assets/backend/js/';
     }
+
+    function delete($id = 0){
+        $this->query->delete_data('transaksi_detail', array('transaksi_id' => $id));
+        $this->query->delete_data('transaksi', array('id' => $id));
+        redirect(site_url('Admin/transaksi'));
+    }
+
     function get_transaksi($page = 0)
     {
         $limit                = $this->input->post('limit');
