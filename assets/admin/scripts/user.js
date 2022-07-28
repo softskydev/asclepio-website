@@ -51,8 +51,13 @@ function loadPagination(pagno) {
 
 function createTable(response) {
     var html = '';
+    var link = global_url + 'User/delete';
     $.each(response.data, function(i, item) {
         html += "<tr>" +
+            "<td>"+
+            '<a class="btn btn-danger btn-xs action" onclick="return confirm(\'Anda yakin ingin menghapus data '+item.nama_lengkap+'?\')" href="'+link+'/'+item.id+'">'
+            +'<i class="fa fa-trash" style="color:white;"></i></a>'
+            +"</td>" +
             "<td>" +
             "<p>" + item.nama_lengkap + "</p><small>" + item.email + "</small>" +
             "</td>" +

@@ -38,6 +38,8 @@
         <table class="table" style="width: 125%;">
             <thead>
                 <tr>
+                    <th></th>
+                    <th><span>Nama Peserta</span></th>
                     <th><span>Nama Peserta</span></th>
                     <th><span>Universitas</span></th>
                     <th><span>Instansi</span></th>
