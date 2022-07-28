@@ -24,6 +24,11 @@ class User extends CI_Controller
         return preg_replace($from, $to, $content, 1);
     }
 
+    function delete($id = 0){
+        $this->query->delete_data('user', array('id' => $id));
+        redirect(site_url('Admin/user'));
+    }
+
     function get_user($page = 0)
     {
         $limit = $this->input->post('limit');
