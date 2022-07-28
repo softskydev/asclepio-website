@@ -714,8 +714,4 @@ class Front extends CI_Controller
     function SkillsLabCertificate(){ 
         $this->load->view('front/skills_lab_certificate');
     }
-
-    function manualL(){
-        $this->load->view('front/manual');
-    }
 }
